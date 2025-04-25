@@ -13,7 +13,9 @@ const TourSchema = new mongoose.Schema({
         enum: ['available', 'full', 'cancelled'], 
         default: 'available' 
     },
-    image_url: String,
+    images: [{
+      type: String,
+    }]
   }, { timestamps: { createdAt: 'created_at' } });
   
 module.exports = mongoose.model('Tour', TourSchema);
