@@ -5,11 +5,8 @@ const TourSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  short_description: {
-    type: String,
-    required: true,
-  },
-  full_description: {
+  slug: { type: String, unique: true },
+  description: {
     type: String,
     required: true,
   },
@@ -26,10 +23,6 @@ const TourSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: true,
-  },
-  discount_price: {
-    type: Number,
-    default: 0,
   },
   available_slots: {
     type: Number,

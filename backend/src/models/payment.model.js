@@ -19,6 +19,11 @@ const PaymentSchema = new mongoose.Schema({
       type: Date, 
       default: Date.now 
     },
+    amount: { 
+      type: Number, 
+      required: true,
+      default: 0
+    },
   });
   
 module.exports = mongoose.model('Payment', PaymentSchema);

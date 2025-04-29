@@ -1,17 +1,34 @@
 const mongoose = require('mongoose');
 
 const PromotionSchema = new mongoose.Schema({
-    promotion_id: { 
+    title: { 
         type: String, 
-        unique: true 
+        required: true 
     },
-    value: Number,
-    tour_id: { 
+    description: {
+        type: String,
+    },
+    discount_type: {
+        type: String,
+        enum: ['percentage', 'amount'], // giảm % hay giảm số tiền cố định
+        required: true,
+    },
+    discount_value: {
+        type: Number,
+        required: true,
+    },
+    start_date: {
+        type: Date,
+        required: true,
+    },
+    end_date: {
+        type: Date,
+        required: true,
+    },
+    applicable_tour_ids: [{ 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Tour' 
-    },
-    time_remain: Number,
-  });
-  
-  module.exports = mongoose.model('Promotion', PromotionSchema);
-  
+    }],
+}, { timestamps: true });
+
+module.exports = mongoose.model('Promotion', PromotionSchema);

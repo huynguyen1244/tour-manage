@@ -11,6 +11,15 @@ const RefundSchema = new mongoose.Schema({
         enum: ['pending', 'approved', 'rejected'], 
         default: 'pending' 
     },
+    refund_method: { 
+        type: String, 
+        enum: ['credit_card', 'bank_transfer', 'cash'], 
+        required: true
+      },
+    reason: { 
+        type: String,
+        default: ''  // Có thể là lý do từ khách hàng hoặc quản trị viên
+      },
     refund_date: { 
         type: Date, 
         default: Date.now 

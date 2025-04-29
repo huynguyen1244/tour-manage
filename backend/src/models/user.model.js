@@ -9,6 +9,10 @@ const UserSchema = new mongoose.Schema({
     password_hash: String,
     phone: String,
     address: String,
+    is_active: {
+        type: Boolean, 
+        default: false 
+    },
     role: { 
         type: String, 
         enum: ['customer', 'admin', 'staff'], 
