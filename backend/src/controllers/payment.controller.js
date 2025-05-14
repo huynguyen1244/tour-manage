@@ -1,50 +1,94 @@
-const paymentService = require('../services/payment.service');
+const paymentService = require("../services/payment.service");
 
 const getPayments = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
     const payments = await paymentService.getAllPayments();
+    await session.commitTransaction();
+
     res.json(payments);
   } catch (err) {
+    await session.abortTransaction();
+
     res.status(500).json({ error: err.message });
+  } finally {
+    session.endSession();
   }
 };
 
 const getPayment = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
     const payment = await paymentService.getPaymentById(req.params.id);
-    if (!payment) return res.status(404).json({ error: 'Payment not found' });
+    if (!payment) return res.status(404).json({ error: "Payment not found" });
+    await session.commitTransaction();
+
     res.json(payment);
   } catch (err) {
+    await session.abortTransaction();
+
     res.status(500).json({ error: err.message });
+  } finally {
+    session.endSession();
   }
 };
 
 const createPayment = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
     const newPayment = await paymentService.createPayment(req.body);
+    await session.commitTransaction();
+
     res.status(201).json(newPayment);
   } catch (err) {
+    await session.abortTransaction();
+
     res.status(400).json({ error: err.message });
+  } finally {
+    session.endSession();
   }
 };
 
 const updatePayment = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
-    const updatedPayment = await paymentService.updatePayment(req.params.id, req.body);
-    if (!updatedPayment) return res.status(404).json({ error: 'Payment not found' });
+    const updatedPayment = await paymentService.updatePayment(
+      req.params.id,
+      req.body
+    );
+    if (!updatedPayment)
+      return res.status(404).json({ error: "Payment not found" });
+    await session.commitTransaction();
+
     res.json(updatedPayment);
   } catch (err) {
+    await session.abortTransaction();
+
     res.status(400).json({ error: err.message });
+  } finally {
+    session.endSession();
   }
 };
 
 const deletePayment = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
     const deleted = await paymentService.deletePayment(req.params.id);
-    if (!deleted) return res.status(404).json({ error: 'Payment not found' });
-    res.json({ message: 'Payment deleted successfully' });
+    if (!deleted) return res.status(404).json({ error: "Payment not found" });
+    await session.commitTransaction();
+
+    res.json({ message: "Payment deleted successfully" });
   } catch (err) {
+    await session.abortTransaction();
+
     res.status(500).json({ error: err.message });
+  } finally {
+    session.endSession();
   }
 };
 
@@ -53,5 +97,5 @@ module.exports = {
   getPayment,
   createPayment,
   updatePayment,
-  deletePayment
+  deletePayment,
 };
