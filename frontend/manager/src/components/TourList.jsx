@@ -1,40 +1,87 @@
-import React, { useState } from 'react';
-import AddTourForm from './AddTourForm'; // Giả sử bạn đã tạo component AddTourForm
-import TourDetail from './TourDetail'; // Import component TourDetail
+import { useState } from "react";
+import AddTourForm from "./AddTourForm";
+import TourDetail from "./TourDetail";
 
 const TourList = ({ tours }) => {
-  // State để hiển thị form thêm tour
   const [showForm, setShowForm] = useState(false);
-
-  // State để hiển thị chi tiết tour
   const [selectedTour, setSelectedTour] = useState(null);
 
-  // Hàm để toggle form
+  const [searchTerm, setSearchTerm] = useState("");
+  const [destinationFilter, setDestinationFilter] = useState("");
+
+  // Toggle hiển thị form tạo tour
   const toggleForm = () => {
-    setShowForm(!showForm);
+    if (selectedTour) {
+      setSelectedTour(null); // Đóng form chi tiết nếu đang mở
+    }
+    setShowForm((prev) => !prev);
   };
 
-  // Hàm để set tour được chọn khi nhấn nút "Xem Chi Tiết"
+  // Hiển thị hoặc ẩn chi tiết tour
   const viewTourDetail = (tour) => {
-    setSelectedTour(tour); // Lưu thông tin tour vào state
+    if (selectedTour && selectedTour.id === tour.id) {
+      // Nhấn lần 2 để đóng
+      setSelectedTour(null);
+    } else {
+      setSelectedTour(tour);
+      setShowForm(false); // Đóng form tạo tour nếu đang mở
+    }
   };
 
-  // Hàm để đóng chi tiết tour
-  const closeTourDetail = () => {
-    setSelectedTour(null);
-  };
+  const closeTourDetail = () => setSelectedTour(null);
+
+  const uniqueDestinations = [
+    ...new Set(tours.map((tour) => tour.destination)),
+  ];
+
+  const filteredTours = tours.filter((tour) => {
+    const matchesSearch =
+      tour.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tour.destination.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = destinationFilter
+      ? tour.destination === destinationFilter
+      : true;
+    return matchesSearch && matchesFilter;
+  });
 
   return (
     <div className="bg-white shadow-md rounded-lg p-4">
-      {/* Nút Tạo Tour */}
-      <button 
-        className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 mr-2"
-        onClick={toggleForm} // Khi nhấn vào, toggle trạng thái của form
-      >
-        Tạo Tour
-      </button>
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+        <input
+          type="text"
+          placeholder="Tìm tour theo tên hoặc điểm đến..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="border px-3 py-1 rounded w-full md:w-1/3"
+        />
 
-      {/* Nếu showForm là true, hiển thị form */}
+        <select
+          value={destinationFilter}
+          onChange={(e) => setDestinationFilter(e.target.value)}
+          className="border px-3 py-1 rounded w-full md:w-1/4"
+        >
+          <option value="">Tất cả điểm đến</option>
+          {uniqueDestinations.map((dest, idx) => (
+            <option key={idx} value={dest}>
+              {dest}
+            </option>
+          ))}
+        </select>
+
+        <button
+          className={`px-4 py-1 rounded w-full md:w-auto text-white transition-colors ${
+            showForm
+              ? "bg-gray-500 hover:bg-gray-600"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
+          onClick={toggleForm}
+        >
+          {showForm ? "Đóng Form" : "Tạo Tour"}
+        </button>
+      </div>
+
+      {/* Form thêm tour */}
       {showForm && <AddTourForm />}
 
       {/* Bảng danh sách tour */}
@@ -49,35 +96,58 @@ const TourList = ({ tours }) => {
           </tr>
         </thead>
         <tbody>
-          {tours.map((tour) => (
-            <tr key={tour.id} className="hover:bg-gray-100">
-              <td className="border border-gray-300 px-4 py-2">{tour.id}</td>
-              <td className="border border-gray-300 px-4 py-2">{tour.title}</td>
-              <td className="border border-gray-300 px-4 py-2">{tour.destination}</td>
-              <td className="border border-gray-300 px-4 py-2">${tour.price}</td>
-              <td className="border border-gray-300 px-4 py-2">
-                <button 
-                  className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 mr-2"
-                  onClick={() => viewTourDetail(tour)} // Khi nhấn, hiển thị chi tiết tour
-                >
-                  Xem Chi Tiết
-                </button>
-                <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 mr-2">
-                  Edit
-                </button>
-                <button className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 mr-2">
-                  Delete
-                </button>
-                {/* Nút xem chi tiết tour */}
-                
+          {filteredTours.length > 0 ? (
+            filteredTours.map((tour) => (
+              <tr key={tour.id} className="hover:bg-gray-100">
+                <td className="border border-gray-300 px-4 py-2">{tour.id}</td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {tour.title}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  {tour.destination}
+                </td>
+                <td className="border border-gray-300 px-4 py-2">
+                  ${tour.price}
+                </td>
+                <td className="border border-gray-300 px-4 py-2 space-x-2">
+                  <button
+                    className={`px-3 py-1 rounded-md text-white ${
+                      selectedTour?.id === tour.id
+                        ? "bg-gray-500 hover:bg-gray-600"
+                        : "bg-green-500 hover:bg-green-600"
+                    }`}
+                    onClick={() => viewTourDetail(tour)}
+                  >
+                    {selectedTour?.id === tour.id
+                      ? "Đóng Chi Tiết"
+                      : "Xem Chi Tiết"}
+                  </button>
+                  <button className="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">
+                    Edit
+                  </button>
+                  <button className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan="5"
+                className="text-center py-4 text-gray-500 italic border border-gray-300"
+              >
+                Không tìm thấy tour phù hợp
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
-      {/* Hiển thị chi tiết tour nếu có */}
-      {selectedTour && <TourDetail tour={selectedTour} close={closeTourDetail} />}
+      {/* Chi tiết tour */}
+      {selectedTour && (
+        <TourDetail tour={selectedTour} close={closeTourDetail} />
+      )}
     </div>
   );
 };

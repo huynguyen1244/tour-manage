@@ -1,4 +1,3 @@
-import React from "react";
 import { FaSignOutAlt, FaUserCircle } from "react-icons/fa"; // Import thêm icon
 
 function Header() {

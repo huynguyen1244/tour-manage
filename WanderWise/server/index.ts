@@ -56,8 +56,8 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // Use environment variable for port if available, otherwise default to 5000
-  const port = process.env.PORT ? parseInt(process.env.PORT) : 5000;
+  // Use environment variable for port if available, otherwise default to 3000
+  const port = process.env.PORT ? parseInt(process.env.PORT) : 3000;
   // Use localhost (127.0.0.1) instead of 0.0.0.0 for Windows compatibility
   const host = process.env.HOST || "127.0.0.1";
 
