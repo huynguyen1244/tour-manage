@@ -9,7 +9,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, ChevronDown, Menu, X, Globe } from "lucide-react";
+import {
+  User,
+  ChevronDown,
+  Menu,
+  X,
+  Globe,
+  Settings,
+  Palette,
+  Moon,
+  Sun,
+  Monitor,
+  UserCog,
+  Bell,
+  Shield,
+  Languages,
+  HelpCircle,
+  LogOut,
+  Edit,
+  CreditCard,
+  Key,
+} from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const Header = () => {
@@ -17,16 +37,45 @@ const Header = () => {
   const { user, logoutMutation } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [theme, setTheme] = useState("system"); // "light", "dark", "system"
 
   const handleLogout = () => {
     logoutMutation.mutate();
   };
 
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme);
+    // Apply theme logic here
+    const root = document.documentElement;
+
+    if (newTheme === "dark") {
+      root.classList.add("dark");
+    } else if (newTheme === "light") {
+      root.classList.remove("dark");
+    } else {
+      // System theme
+      const systemPrefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      if (systemPrefersDark) {
+        root.classList.add("dark");
+      } else {
+        root.classList.remove("dark");
+      }
+    }
+
+    localStorage.setItem("theme", newTheme);
+  };
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       setIsScrolled(scrollPosition > 0);
     };
+
+    // Initialize theme
+    const savedTheme = localStorage.getItem("theme") || "system";
+    setTheme(savedTheme);
+    handleThemeChange(savedTheme);
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -106,8 +155,169 @@ const Header = () => {
                 Contact
               </Link>
             </nav>
-          </div>
+          </div>{" "}
           <div className="flex items-center space-x-4">
+            {" "}
+            {/* Page Settings Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-muted-foreground hover:text-primary"
+                >
+                  <Settings className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {/* Theme Section */}
+                <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
+                  Theme
+                </div>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => handleThemeChange("light")}
+                >
+                  <Sun className="h-4 w-4 mr-2" />
+                  Light Mode
+                  {theme === "light" && (
+                    <span className="ml-auto text-primary">✓</span>
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => handleThemeChange("dark")}
+                >
+                  <Moon className="h-4 w-4 mr-2" />
+                  Dark Mode
+                  {theme === "dark" && (
+                    <span className="ml-auto text-primary">✓</span>
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => handleThemeChange("system")}
+                >
+                  <Monitor className="h-4 w-4 mr-2" />
+                  System
+                  {theme === "system" && (
+                    <span className="ml-auto text-primary">✓</span>
+                  )}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {/* Appearance Section */}
+                <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
+                  Appearance
+                </div>{" "}
+                <DropdownMenuItem asChild>
+                  <Link href="/color-theme" className="cursor-pointer w-full">
+                    <Palette className="h-4 w-4 mr-2" />
+                    Color Theme
+                  </Link>
+                </DropdownMenuItem>{" "}
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/language-settings"
+                    className="cursor-pointer w-full"
+                  >
+                    <Languages className="h-4 w-4 mr-2" />
+                    Language
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {/* Account Section */}
+                {user && (
+                  <>
+                    <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
+                      Account
+                    </div>{" "}
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/account-settings"
+                        className="cursor-pointer w-full"
+                      >
+                        <UserCog className="h-4 w-4 mr-2" />
+                        Account Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="cursor-pointer w-full">
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/payment-methods"
+                        className="cursor-pointer w-full"
+                      >
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        Payment Methods
+                      </Link>
+                    </DropdownMenuItem>{" "}
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/change-password"
+                        className="cursor-pointer w-full"
+                      >
+                        <Key className="h-4 w-4 mr-2" />
+                        Change Password
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/notifications"
+                        className="cursor-pointer w-full"
+                      >
+                        <Bell className="h-4 w-4 mr-2" />
+                        Notifications
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/privacy-security"
+                        className="cursor-pointer w-full"
+                      >
+                        <Shield className="h-4 w-4 mr-2" />
+                        Privacy & Security
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
+                {/* General Section */}{" "}
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/help-and-support"
+                    className="cursor-pointer w-full"
+                  >
+                    <HelpCircle className="h-4 w-4 mr-2" />
+                    Help & Support
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href="/general-settings"
+                    className="cursor-pointer w-full"
+                  >
+                    <Settings className="h-4 w-4 mr-2" />
+                    General Settings
+                  </Link>
+                </DropdownMenuItem>
+                {user && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      className="cursor-pointer text-red-600 hover:text-red-700 hover:bg-red-50"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <div className="hidden md:block">
               {user ? (
                 <DropdownMenu>
@@ -196,7 +406,9 @@ const Header = () => {
             <Link
               href="/destinations"
               className={`block py-2 font-medium ${
-                location === "/destinations" ? "text-primary" : "text-foreground"
+                location === "/destinations"
+                  ? "text-primary"
+                  : "text-foreground"
               } hover:text-primary transition`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
@@ -210,7 +422,7 @@ const Header = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               About
-            </Link>
+            </Link>{" "}
             <Link
               href="/contact"
               className={`block py-2 font-medium ${
@@ -219,23 +431,162 @@ const Header = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Contact
-            </Link>
+            </Link>{" "}
+            {/* Page Settings for Mobile */}
+            <div className="pt-2 border-t border-gray-200">
+              <div className="py-2 font-medium text-foreground">Settings</div>
+              {/* Theme Settings */}
+              <div className="pl-4 space-y-2">
+                <div className="text-sm font-medium text-muted-foreground mb-2">
+                  Theme
+                </div>
+                <button
+                  className={`flex items-center w-full text-left py-1 text-sm hover:text-primary ${
+                    theme === "light" ? "text-primary" : "text-muted-foreground"
+                  }`}
+                  onClick={() => handleThemeChange("light")}
+                >
+                  <Sun className="h-4 w-4 mr-2" />
+                  Light Mode
+                  {theme === "light" && <span className="ml-auto">✓</span>}
+                </button>
+                <button
+                  className={`flex items-center w-full text-left py-1 text-sm hover:text-primary ${
+                    theme === "dark" ? "text-primary" : "text-muted-foreground"
+                  }`}
+                  onClick={() => handleThemeChange("dark")}
+                >
+                  <Moon className="h-4 w-4 mr-2" />
+                  Dark Mode
+                  {theme === "dark" && <span className="ml-auto">✓</span>}
+                </button>
+                <button
+                  className={`flex items-center w-full text-left py-1 text-sm hover:text-primary ${
+                    theme === "system"
+                      ? "text-primary"
+                      : "text-muted-foreground"
+                  }`}
+                  onClick={() => handleThemeChange("system")}
+                >
+                  <Monitor className="h-4 w-4 mr-2" />
+                  System
+                  {theme === "system" && <span className="ml-auto">✓</span>}
+                </button>
+              </div>
+              {/* Appearance Settings */}
+              <div className="pl-4 space-y-2 mt-3">
+                <div className="text-sm font-medium text-muted-foreground mb-2">
+                  Appearance
+                </div>{" "}
+                <Link
+                  href="/color-theme"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                >
+                  <Palette className="h-4 w-4 mr-2" />
+                  Color Theme
+                </Link>{" "}
+                <Link
+                  href="/language-settings"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                >
+                  <Languages className="h-4 w-4 mr-2" />
+                  Language
+                </Link>
+              </div>
+              {/* Account Settings for Mobile */}
+              {user && (
+                <div className="pl-4 space-y-2 mt-3">
+                  <div className="text-sm font-medium text-muted-foreground mb-2">
+                    Account
+                  </div>{" "}
+                  <Link
+                    href="/account-settings"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                  >
+                    <UserCog className="h-4 w-4 mr-2" />
+                    Account Settings
+                  </Link>
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                  >
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit Profile
+                  </Link>
+                  <Link
+                    href="/payment-methods"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                  >
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    Payment Methods
+                  </Link>{" "}
+                  <Link
+                    href="/change-password"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                  >
+                    <Key className="h-4 w-4 mr-2" />
+                    Change Password
+                  </Link>
+                  <Link
+                    href="/notifications"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                  >
+                    <Bell className="h-4 w-4 mr-2" />
+                    Notifications
+                  </Link>
+                  <Link
+                    href="/privacy-security"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    Privacy & Security
+                  </Link>
+                </div>
+              )}
+              {/* General Settings */}{" "}
+              <div className="pl-4 space-y-2 mt-3">
+                <Link
+                  href="/help-and-support"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                >
+                  <HelpCircle className="h-4 w-4 mr-2" />
+                  Help & Support
+                </Link>
+                <Link
+                  href="/general-settings"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
+                >
+                  <Settings className="h-4 w-4 mr-2" />
+                  General Settings
+                </Link>
+              </div>
+            </div>
             <div className="pt-3 border-t border-gray-200">
               {user ? (
                 <>
-                  <Link href="/profile" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button
-                      variant="outline"
-                      className="w-full mb-2"
-                    >
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Button variant="outline" className="w-full mb-2">
                       My Profile
                     </Button>
                   </Link>
-                  <Link href="/bookings" onClick={() => setIsMobileMenuOpen(false)}>
-                    <Button
-                      variant="outline"
-                      className="w-full mb-2"
-                    >
+                  <Link
+                    href="/bookings"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Button variant="outline" className="w-full mb-2">
                       My Bookings
                     </Button>
                   </Link>
