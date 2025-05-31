@@ -1,9 +1,12 @@
 const promotionService = require("../services/promotion.service");
+const mongoose = require("mongoose");
 
 const getPromotions = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const promotions = await promotionService.getAllPromotions();
     await session.commitTransaction();
 
@@ -21,6 +24,8 @@ const getPromotion = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const promotion = await promotionService.getPromotionById(req.params.id);
     if (!promotion)
       return res.status(404).json({ error: "Promotion not found" });
@@ -40,6 +45,8 @@ const createPromotion = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const newPromotion = await promotionService.createPromotion(req.body);
     await session.commitTransaction();
 
@@ -57,6 +64,8 @@ const updatePromotion = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const updatedPromotion = await promotionService.updatePromotion(
       req.params.id,
       req.body
@@ -79,6 +88,8 @@ const deletePromotion = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const deleted = await promotionService.deletePromotion(req.params.id);
     if (!deleted) return res.status(404).json({ error: "Promotion not found" });
     await session.commitTransaction();

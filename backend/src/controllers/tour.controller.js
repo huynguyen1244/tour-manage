@@ -1,8 +1,10 @@
 const tourService = require("../services/tour.service");
+const mongoose = require("mongoose");
 
 const getAllTours = async (req, res) => {
   const session = await mongoose.startSession();
   try {
+    session.startTransaction();
     const tours = await tourService.getAllTours();
     await session.commitTransaction();
     res.json(tours);
@@ -16,8 +18,8 @@ const getAllTours = async (req, res) => {
 
 const getTourById = async (req, res) => {
   const session = await mongoose.startSession();
-
   try {
+    session.startTransaction();
     const tour = await tourService.getTourById(req.params.id);
     if (!tour) return res.status(404).json({ message: "Tour not found" });
     await session.commitTransaction();
@@ -34,8 +36,8 @@ const getTourById = async (req, res) => {
 
 const createTour = async (req, res) => {
   const session = await mongoose.startSession();
-
   try {
+    session.startTransaction();
     const newTour = await tourService.createTour(req.body);
     await session.commitTransaction();
 
@@ -51,8 +53,8 @@ const createTour = async (req, res) => {
 
 const updateTour = async (req, res) => {
   const session = await mongoose.startSession();
-
   try {
+    session.startTransaction();
     const updatedTour = await tourService.updateTour(req.params.id, req.body);
     if (!updatedTour)
       return res.status(404).json({ message: "Tour not found" });
@@ -70,8 +72,8 @@ const updateTour = async (req, res) => {
 
 const deleteTour = async (req, res) => {
   const session = await mongoose.startSession();
-
   try {
+    session.startTransaction();
     const deleted = await tourService.deleteTour(req.params.id);
     if (!deleted) return res.status(404).json({ message: "Tour not found" });
     await session.commitTransaction();

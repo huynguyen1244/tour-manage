@@ -1,10 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 
-// Khai báo trực tiếp secret key
-const jwtSecret = process.env.JWT_SECRET_USER;
-const jwtSecretManager = process.env.JWT_SECRET_MANAGER;
-
 // Gán cờ isAdmin cho route admin/manager
 const isManager = (req, res, next) => {
   req.isAdmin = true;
@@ -19,15 +15,13 @@ const verifyToken = async (req, res, next) => {
       return res.status(401).json({ message: "Bạn chưa đăng nhập" });
     }
 
-    const secret = req.isAdmin ? jwtSecretManager : jwtSecret;
-    const payload = jwt.verify(token, secret);
+    const payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    const userData = await User.findOne(
+      { _id: payload.id, email: payload.email },
+      { passwordHash: 0 }
+    );
 
-    const userData = await User.findOne({
-      where: { id: payload.id, email: payload.email },
-      attributes: { exclude: ["passwordHash"] },
-    });
-
-    if (!userData || !userData.isActive) {
+    if (!userData || !userData.is_active) {
       return res.status(401).json({ message: "Tài khoản không hợp lệ" });
     }
 

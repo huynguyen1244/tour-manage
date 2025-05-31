@@ -1,9 +1,12 @@
 const bookingService = require("../services/booking.service");
+const mongoose = require("mongoose");
 
 const getBookings = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const bookings = await bookingService.getAllBookings();
     await session.commitTransaction();
 
@@ -21,6 +24,8 @@ const getBooking = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const booking = await bookingService.getBookingById(req.params.id);
     if (!booking) return res.status(404).json({ error: "Booking not found" });
     await session.commitTransaction();
@@ -39,7 +44,10 @@ const createBooking = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
-    const newBooking = await bookingService.createBooking(req.body);
+    session.startTransaction();
+
+    const user_id = req.user._id;
+    const newBooking = await bookingService.createBooking(user_id, req.body);
     await session.commitTransaction();
 
     res.status(201).json(newBooking);
@@ -56,6 +64,8 @@ const updateBooking = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const updatedBooking = await bookingService.updateBooking(
       req.params.id,
       req.body
@@ -78,6 +88,8 @@ const deleteBooking = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const deleted = await bookingService.deleteBooking(req.params.id);
     if (!deleted) return res.status(404).json({ error: "Booking not found" });
     await session.commitTransaction();

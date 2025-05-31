@@ -1,9 +1,12 @@
 const notificationService = require("../services/notification.service");
+const mongoose = require("mongoose");
 
 const getNotifications = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const notifications = await notificationService.getAllNotifications();
     await session.commitTransaction();
 
@@ -21,6 +24,8 @@ const getNotification = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const notification = await notificationService.getNotificationById(
       req.params.id
     );
@@ -42,6 +47,8 @@ const createNotification = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const newNotification = await notificationService.createNotification(
       req.body
     );
@@ -61,6 +68,8 @@ const updateNotification = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const updatedNotification = await notificationService.updateNotification(
       req.params.id,
       req.body
@@ -83,6 +92,8 @@ const deleteNotification = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const deleted = await notificationService.deleteNotification(req.params.id);
     if (!deleted)
       return res.status(404).json({ error: "Notification not found" });

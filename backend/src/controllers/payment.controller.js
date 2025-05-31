@@ -1,9 +1,12 @@
 const paymentService = require("../services/payment.service");
+const mongoose = require("mongoose");
 
 const getPayments = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const payments = await paymentService.getAllPayments();
     await session.commitTransaction();
 
@@ -21,6 +24,8 @@ const getPayment = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const payment = await paymentService.getPaymentById(req.params.id);
     if (!payment) return res.status(404).json({ error: "Payment not found" });
     await session.commitTransaction();
@@ -39,6 +44,8 @@ const createPayment = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const newPayment = await paymentService.createPayment(req.body);
     await session.commitTransaction();
 
@@ -56,6 +63,8 @@ const updatePayment = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const updatedPayment = await paymentService.updatePayment(
       req.params.id,
       req.body
@@ -78,6 +87,8 @@ const deletePayment = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const deleted = await paymentService.deletePayment(req.params.id);
     if (!deleted) return res.status(404).json({ error: "Payment not found" });
     await session.commitTransaction();

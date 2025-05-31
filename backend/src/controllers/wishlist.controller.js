@@ -1,9 +1,12 @@
 const wishlistService = require("../services/wishlist.service");
+const mongoose = require("mongoose");
 
 const getAllWishlists = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const wishlists = await wishlistService.getAllWishlists();
     await session.commitTransaction();
 
@@ -21,6 +24,8 @@ const getWishlistByUserId = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const wishlist = await wishlistService.getWishlistByUserId(
       req.params.userId
     );
@@ -41,6 +46,8 @@ const addTourToWishlist = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const { userId, tourId } = req.body;
     const wishlist = await wishlistService.addTourToWishlist(userId, tourId);
     await session.commitTransaction();
@@ -59,6 +66,8 @@ const removeTourFromWishlist = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const { userId, tourId } = req.body;
     const wishlist = await wishlistService.removeTourFromWishlist(
       userId,

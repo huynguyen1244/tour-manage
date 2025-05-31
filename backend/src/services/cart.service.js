@@ -1,11 +1,7 @@
-const Cart = require('../models/cart.model');
+const Cart = require("../models/cart.model");
 
-const getAllCarts = async () => {
-  return await Cart.find().populate('user_id tour_id');
-};
-
-const getCartById = async (id) => {
-  return await Cart.findById(id).populate('user_id tour_id');
+const getAllCarts = async (user_id) => {
+  return await Cart.find({ user_id }).populate("user_id");
 };
 
 const createCart = async (cartData) => {
@@ -23,8 +19,7 @@ const deleteCart = async (id) => {
 
 module.exports = {
   getAllCarts,
-  getCartById,
   createCart,
   updateCart,
-  deleteCart
+  deleteCart,
 };

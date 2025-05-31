@@ -1,9 +1,12 @@
 const reviewService = require("../services/review.service");
+const mongoose = require("mongoose");
 
 const getReviews = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const reviews = await reviewService.getAllReviews();
     await session.commitTransaction();
 
@@ -21,6 +24,8 @@ const getReview = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const review = await reviewService.getReviewById(req.params.id);
     if (!review) return res.status(404).json({ error: "Review not found" });
     await session.commitTransaction();
@@ -39,6 +44,8 @@ const createReview = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const newReview = await reviewService.createReview(req.body);
     await session.commitTransaction();
 
@@ -56,6 +63,8 @@ const updateReview = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const updatedReview = await reviewService.updateReview(
       req.params.id,
       req.body
@@ -78,6 +87,8 @@ const deleteReview = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const deleted = await reviewService.deleteReview(req.params.id);
     if (!deleted) return res.status(404).json({ error: "Review not found" });
     await session.commitTransaction();

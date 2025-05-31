@@ -34,13 +34,13 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user || !user.isActive) {
+    if (!user || !user.is_active) {
       return res
         .status(400)
         .json({ message: "Email hoặc mật khẩu không đúng" });
     }
 
-    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    const isMatch = await bcrypt.compare(password, user.password_hash);
     if (!isMatch) {
       return res
         .status(400)
@@ -52,7 +52,13 @@ const login = async (req, res, next) => {
 
     // Bạn có thể lưu refreshToken vào DB hoặc Redis nếu muốn kiểm soát revoke token
 
-    res.json({ accessToken, refreshToken });
+    res.json({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      accessToken,
+      refreshToken,
+    });
   } catch (error) {
     next(error);
   }

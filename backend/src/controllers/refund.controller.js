@@ -1,9 +1,12 @@
 const refundService = require("../services/refund.service");
+const mongoose = require("mongoose");
 
 const getRefunds = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const refunds = await refundService.getAllRefunds();
     await session.commitTransaction();
 
@@ -21,6 +24,8 @@ const getRefund = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const refund = await refundService.getRefundById(req.params.id);
     if (!refund) return res.status(404).json({ error: "Refund not found" });
     await session.commitTransaction();
@@ -39,6 +44,8 @@ const createRefund = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const newRefund = await refundService.createRefund(req.body);
     await session.commitTransaction();
 
@@ -56,6 +63,8 @@ const updateRefund = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const updatedRefund = await refundService.updateRefund(
       req.params.id,
       req.body
@@ -78,6 +87,8 @@ const deleteRefund = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const deleted = await refundService.deleteRefund(req.params.id);
     if (!deleted) return res.status(404).json({ error: "Refund not found" });
     await session.commitTransaction();

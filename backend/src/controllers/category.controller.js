@@ -1,9 +1,12 @@
 const categoryService = require("../services/category.service");
+const mongoose = require("mongoose");
 
 const getAllCategories = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const categories = await categoryService.getAllCategories();
     await session.commitTransaction();
 
@@ -21,6 +24,8 @@ const getCategoryById = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const category = await categoryService.getCategoryById(req.params.id);
     if (!category) return res.status(404).json({ error: "Category not found" });
     await session.commitTransaction();
@@ -39,7 +44,11 @@ const addCategory = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
-    const newCategory = await categoryService.addCategory(req.body);
+    session.startTransaction();
+
+    const files = req.files;
+
+    const newCategory = await categoryService.addCategory(files, req.body);
     await session.commitTransaction();
 
     res.status(201).json(newCategory);
@@ -56,9 +65,14 @@ const updateCategory = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
+    const files = req.files;
+
     const updatedCategory = await categoryService.updateCategory(
       req.params.id,
-      req.body
+      req.body,
+      files
     );
     if (!updatedCategory)
       return res.status(404).json({ error: "Category not found" });
@@ -78,6 +92,8 @@ const deleteCategory = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
+    session.startTransaction();
+
     const deleted = await categoryService.deleteCategory(req.params.id);
     if (!deleted) return res.status(404).json({ error: "Category not found" });
     await session.commitTransaction();
@@ -92,58 +108,10 @@ const deleteCategory = async (req, res) => {
   }
 };
 
-const addTourToCategory = async (req, res) => {
-  const session = await mongoose.startSession();
-
-  try {
-    const { categoryId, tourId } = req.body;
-    const updatedCategory = await categoryService.addTourToCategory(
-      categoryId,
-      tourId
-    );
-    if (!updatedCategory)
-      return res.status(404).json({ error: "Category not found" });
-    await session.commitTransaction();
-
-    res.json(updatedCategory);
-  } catch (err) {
-    await session.abortTransaction();
-
-    res.status(400).json({ error: err.message });
-  } finally {
-    session.endSession();
-  }
-};
-
-const removeTourFromCategory = async (req, res) => {
-  const session = await mongoose.startSession();
-
-  try {
-    const { categoryId, tourId } = req.body;
-    const updatedCategory = await categoryService.removeTourFromCategory(
-      categoryId,
-      tourId
-    );
-    if (!updatedCategory)
-      return res.status(404).json({ error: "Category not found" });
-    await session.commitTransaction();
-
-    res.json(updatedCategory);
-  } catch (err) {
-    await session.abortTransaction();
-
-    res.status(400).json({ error: err.message });
-  } finally {
-    session.endSession();
-  }
-};
-
 module.exports = {
   getAllCategories,
   getCategoryById,
   addCategory,
   updateCategory,
   deleteCategory,
-  addTourToCategory,
-  removeTourFromCategory,
 };
