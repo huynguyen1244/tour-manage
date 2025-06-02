@@ -1,112 +1,75 @@
+const VNPayService = require("../services/payment/vnpay.payment");
 const paymentService = require("../services/payment.service");
-const mongoose = require("mongoose");
 
-const getPayments = async (req, res) => {
-  const session = await mongoose.startSession();
+class PaymentController {
+  /**
+   * Tạo yêu cầu thanh toán VNPay
+   */
+  static async createPayment(req, res) {
+    try {
+      const { amount, orderId, orderInfo, ipAddr, bankCode, locale } = req.body;
 
-  try {
-    session.startTransaction();
+      if (!amount || !orderId || !orderInfo) {
+        return res.status(400).json({
+          success: false,
+          message: "Thiếu thông tin thanh toán cho VNPay",
+        });
+      }
 
-    const payments = await paymentService.getAllPayments();
-    await session.commitTransaction();
+      // Gọi service tạo URL thanh toán VNPay
+      const paymentUrl = VNPayService.createPaymentUrl({
+        amount,
+        orderId,
+        orderInfo,
+        ipAddr: ipAddr || req.ip || "127.0.0.1",
+        bankCode,
+        locale,
+      });
 
-    res.json(payments);
-  } catch (err) {
-    await session.abortTransaction();
-
-    res.status(500).json({ error: err.message });
-  } finally {
-    session.endSession();
+      return res.status(200).json({
+        success: true,
+        data: { redirectUrl: paymentUrl },
+      });
+    } catch (error) {
+      console.error("VNPay create payment error:", error);
+      return res.status(500).json({
+        success: false,
+        message: `Lỗi khi tạo thanh toán VNPay: ${
+          error.message || "Không xác định"
+        }`,
+      });
+    }
   }
-};
 
-const getPayment = async (req, res) => {
-  const session = await mongoose.startSession();
+  /**
+   * Xử lý callback từ VNPay
+   */
+  static async vnpayCallback(req, res) {
+    try {
+      const vnpParams = req.query;
+      const isValid = VNPayService.verifyReturnUrl(vnpParams);
+      const orderId = vnpParams.vnp_TxnRef; // giữ nguyên string hoặc convert tuỳ bạn
 
-  try {
-    session.startTransaction();
+      if (isValid) {
+        // Cập nhật trạng thái payment thành completed
+        await paymentService.updatePaymentStatus(orderId, "completed");
 
-    const payment = await paymentService.getPaymentById(req.params.id);
-    if (!payment) return res.status(404).json({ error: "Payment not found" });
-    await session.commitTransaction();
+        // Có thể thêm xử lý logic đơn hàng ở đây nếu cần
 
-    res.json(payment);
-  } catch (err) {
-    await session.abortTransaction();
-
-    res.status(500).json({ error: err.message });
-  } finally {
-    session.endSession();
+        return res.redirect(
+          `http://localhost:3000/payment-success?orderId=${orderId}`
+        );
+      } else {
+        await paymentService.updatePaymentStatus(orderId, "failed");
+        return res.redirect(
+          `http://localhost:3000/payment-failed?orderId=${orderId}`
+        );
+      }
+    } catch (error) {
+      console.error("VNPay callback error:", error);
+      return res.redirect(`http://localhost:3000/payment-failed`);
+    }
   }
-};
+}
 
-const createPayment = async (req, res) => {
-  const session = await mongoose.startSession();
-
-  try {
-    session.startTransaction();
-
-    const newPayment = await paymentService.createPayment(req.body);
-    await session.commitTransaction();
-
-    res.status(201).json(newPayment);
-  } catch (err) {
-    await session.abortTransaction();
-
-    res.status(400).json({ error: err.message });
-  } finally {
-    session.endSession();
-  }
-};
-
-const updatePayment = async (req, res) => {
-  const session = await mongoose.startSession();
-
-  try {
-    session.startTransaction();
-
-    const updatedPayment = await paymentService.updatePayment(
-      req.params.id,
-      req.body
-    );
-    if (!updatedPayment)
-      return res.status(404).json({ error: "Payment not found" });
-    await session.commitTransaction();
-
-    res.json(updatedPayment);
-  } catch (err) {
-    await session.abortTransaction();
-
-    res.status(400).json({ error: err.message });
-  } finally {
-    session.endSession();
-  }
-};
-
-const deletePayment = async (req, res) => {
-  const session = await mongoose.startSession();
-
-  try {
-    session.startTransaction();
-
-    const deleted = await paymentService.deletePayment(req.params.id);
-    if (!deleted) return res.status(404).json({ error: "Payment not found" });
-    await session.commitTransaction();
-
-    res.json({ message: "Payment deleted successfully" });
-  } catch (err) {
-    await session.abortTransaction();
-
-    res.status(500).json({ error: err.message });
-  } finally {
-    session.endSession();
-  }
-};
-
-module.exports = {
-  getPayments,
-  getPayment,
-  createPayment,
-  updatePayment,
-  deletePayment,
-};
+module.exports = PaymentController;

@@ -1,39 +1,48 @@
-const Wishlist = require('../models/wishlist.model');
+const Wishlist = require("../models/wishlist.model");
 
-const getAllWishlists = async () => {
-  return await Wishlist.find().populate('tours');
-}
+// Lấy tất cả wishlist của 1 người dùng
+const getAllWishlists = async (user_id) => {
+  return await Wishlist.findOne({ user_id }).populate("tours");
+};
 
-const getWishlistByUserId = async (userId) => {
-    return await Wishlist.findOne({ userId }).populate('tours');
-  }
+// Thêm tour vào wishlist của người dùng
+const addTourToWishlist = async (user_id, tour_id) => {
+  let wishlist = await Wishlist.findOne({ user_id });
 
-const addTourToWishlist = async (userId, tourId) => {
-  const wishlist = await Wishlist.findOne({ userId });
   if (!wishlist) {
-    const newWishlist = new Wishlist({ userId, tours: [tourId] });
-    return await newWishlist.save();
+    // Nếu chưa có wishlist -> tạo mới
+    wishlist = new Wishlist({ user_id, tours: [tour_id] });
   } else {
-    if (!wishlist.tours.includes(tourId)) {
-      wishlist.tours.push(tourId);
-      return await wishlist.save();
+    // Nếu chưa có tour đó trong wishlist thì thêm vào
+    if (
+      !wishlist.tour_id.some((tour) => tour.toString() === tour_id.toString())
+    ) {
+      wishlist.tour_id.push(tour_id);
     }
-    return wishlist;
   }
-}
 
-const removeTourFromWishlist = async (userId, tourId) => {
-  const wishlist = await Wishlist.findOne({ userId });
-  if (wishlist) {
-    wishlist.tours = wishlist.tours.filter(tour => tour.toString() !== tourId.toString());
-    return await wishlist.save();
-  }
-  return null;
-}
+  return await wishlist.save();
+};
+
+// Xoá tour khỏi wishlist của người dùng
+const removeTourFromWishlist = async (user_id, tour_id) => {
+  const wishlist = await Wishlist.findOne({ user_id });
+
+  if (!wishlist) return null;
+
+  const initialLength = wishlist.tour_id.length;
+
+  wishlist.tour_id = wishlist.tour_id.filter(
+    (tour) => tour.toString() !== tour_id.toString()
+  );
+
+  if (wishlist.tour_id.length === initialLength) return wishlist; // Không có gì bị xoá
+
+  return await wishlist.save();
+};
 
 module.exports = {
   getAllWishlists,
-  getWishlistByUserId,
   addTourToWishlist,
-  removeTourFromWishlist
+  removeTourFromWishlist,
 };

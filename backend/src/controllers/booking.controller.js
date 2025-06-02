@@ -1,13 +1,22 @@
 const bookingService = require("../services/booking.service");
+const paymentService = require("../services/payment.service");
 const mongoose = require("mongoose");
 
+// Lấy toàn bộ booking
+// Admin xem tất cả, user chỉ xem booking của mình
 const getBookings = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
-    const bookings = await bookingService.getAllBookings();
+    let bookings;
+    if (req.user.role === "admin") {
+      bookings = await bookingService.getAllBookings();
+    } else {
+      bookings = await bookingService.getBookingsByUserId(req.user._id);
+    }
+
     await session.commitTransaction();
 
     res.json(bookings);
@@ -20,6 +29,8 @@ const getBookings = async (req, res) => {
   }
 };
 
+// Lấy booking theo id
+// User chỉ xem được booking của mình, admin xem được tất
 const getBooking = async (req, res) => {
   const session = await mongoose.startSession();
 
@@ -28,6 +39,14 @@ const getBooking = async (req, res) => {
 
     const booking = await bookingService.getBookingById(req.params.id);
     if (!booking) return res.status(404).json({ error: "Booking not found" });
+
+    if (
+      req.user.role !== "admin" &&
+      booking.user_id.toString() !== req.user._id.toString()
+    ) {
+      return res.status(403).json({ error: "Forbidden: Access denied" });
+    }
+
     await session.commitTransaction();
 
     res.json(booking);
@@ -40,6 +59,7 @@ const getBooking = async (req, res) => {
   }
 };
 
+// Tạo booking kèm payment (user tạo booking cho chính mình)
 const createBooking = async (req, res) => {
   const session = await mongoose.startSession();
 
@@ -47,31 +67,91 @@ const createBooking = async (req, res) => {
     session.startTransaction();
 
     const user_id = req.user._id;
-    const newBooking = await bookingService.createBooking(user_id, req.body);
+    const { cartId, payment_method } = req.body;
+
+    // 1. Lấy dữ liệu giỏ hàng
+    const cart = await cartService.getCartById(cartId, user_id);
+    if (!cart) {
+      await session.abortTransaction();
+      return res.status(404).json({ error: "Cart not found or unauthorized" });
+    }
+
+    // 2. Tạo booking dựa trên dữ liệu giỏ hàng
+    const bookingData = {
+      user: user_id,
+      tours: cart.tours, // hoặc tên trường chứa danh sách tour trong cart
+      total_price: cart.totalPrice, // hoặc tính tổng tiền từ cart
+      // Thêm các thông tin khác nếu cần
+    };
+
+    const newBooking = await bookingService.createBooking(
+      user_id,
+      bookingData,
+      session
+    );
+
+    // 3. Tạo payment cho booking
+    const paymentData = {
+      booking_id: newBooking._id,
+      payment_method,
+      amount: newBooking.total_price,
+    };
+
+    const newPayment = await paymentService.createPayment(paymentData, session);
+
+    // 4. Nếu muốn, có thể xóa giỏ hàng đã dùng
+    await cartService.deleteCart(cartId, user_id, session);
+
     await session.commitTransaction();
 
-    res.status(201).json(newBooking);
+    res.status(201).json({ booking: newBooking, payment: newPayment });
   } catch (err) {
     await session.abortTransaction();
-
     res.status(400).json({ error: err.message });
   } finally {
     session.endSession();
   }
 };
 
+// Cập nhật booking
+// User chỉ sửa được booking của mình, admin sửa được tất cả
 const updateBooking = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
+    const booking = await bookingService.getBookingById(req.params.id);
+    if (!booking) return res.status(404).json({ error: "Booking not found" });
+
+    if (
+      req.user.role !== "admin" &&
+      booking.user_id.toString() !== req.user._id.toString()
+    ) {
+      return res.status(403).json({ error: "Forbidden: Access denied" });
+    }
+
     const updatedBooking = await bookingService.updateBooking(
       req.params.id,
       req.body
     );
-    if (!updatedBooking)
-      return res.status(404).json({ error: "Booking not found" });
+
+    // Cập nhật payment liên quan nếu cần
+    if (
+      req.body.payment_method !== undefined ||
+      req.body.total_price !== undefined
+    ) {
+      const updateData = {};
+      if (req.body.payment_method)
+        updateData.payment_method = req.body.payment_method;
+      if (req.body.total_price) updateData.amount = req.body.total_price;
+
+      await paymentService.updatePaymentByBookingId(
+        updatedBooking._id,
+        updateData
+      );
+    }
+
     await session.commitTransaction();
 
     res.json(updatedBooking);
@@ -84,17 +164,30 @@ const updateBooking = async (req, res) => {
   }
 };
 
+// Xóa booking
+// Chỉ admin mới được xóa
 const deleteBooking = async (req, res) => {
+  if (req.user.role !== "admin") {
+    return res
+      .status(403)
+      .json({ error: "Forbidden: Only admin can delete bookings" });
+  }
+
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
-    const deleted = await bookingService.deleteBooking(req.params.id);
-    if (!deleted) return res.status(404).json({ error: "Booking not found" });
+    const deletedBooking = await bookingService.deleteBooking(req.params.id);
+    if (!deletedBooking)
+      return res.status(404).json({ error: "Booking not found" });
+
+    // Xóa payment liên quan
+    await paymentService.deletePaymentByBookingId(deletedBooking._id);
+
     await session.commitTransaction();
 
-    res.json({ message: "Booking deleted successfully" });
+    res.json({ message: "Booking and related payment deleted successfully" });
   } catch (err) {
     await session.abortTransaction();
 

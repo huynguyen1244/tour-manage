@@ -71,7 +71,12 @@ const TourSchema = new mongoose.Schema(
     ],
     images: [
       {
-        type: String,
+        url: {
+          type: String,
+        },
+        public_id: {
+          type: String,
+        },
       },
     ],
     status: {

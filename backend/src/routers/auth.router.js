@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const auth = require("../controllers/auth.controller");
-
+const { verifyToken } = require("../middlewares/authenticate.middleware");
 // Đăng ký
 router.post("/register", auth.register);
-
+router.post("/verify-otp", auth.verifyOtp);
 // Đăng nhập
 router.post("/login", auth.login);
 
+router.put("/change-password", verifyToken, auth.changePassword);
 // Làm mới access token bằng refresh token
 router.post("/refresh-token", auth.refreshToken);
 

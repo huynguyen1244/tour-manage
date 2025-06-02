@@ -7,32 +7,12 @@ const getAllWishlists = async (req, res) => {
   try {
     session.startTransaction();
 
-    const wishlists = await wishlistService.getAllWishlists();
+    const user_id = req.user.id;
+
+    const wishlists = await wishlistService.getAllWishlists(user_id);
     await session.commitTransaction();
 
     res.json(wishlists);
-  } catch (err) {
-    await session.abortTransaction();
-
-    res.status(500).json({ error: err.message });
-  } finally {
-    session.endSession();
-  }
-};
-
-const getWishlistByUserId = async (req, res) => {
-  const session = await mongoose.startSession();
-
-  try {
-    session.startTransaction();
-
-    const wishlist = await wishlistService.getWishlistByUserId(
-      req.params.userId
-    );
-    if (!wishlist) return res.status(404).json({ error: "Wishlist not found" });
-    await session.commitTransaction();
-
-    res.json(wishlist);
   } catch (err) {
     await session.abortTransaction();
 
@@ -48,8 +28,12 @@ const addTourToWishlist = async (req, res) => {
   try {
     session.startTransaction();
 
-    const { userId, tourId } = req.body;
-    const wishlist = await wishlistService.addTourToWishlist(userId, tourId);
+    const user_id = req.user.id;
+
+    const wishlist = await wishlistService.addTourToWishlist(
+      user_id,
+      req.params.id
+    );
     await session.commitTransaction();
 
     res.status(201).json(wishlist);
@@ -68,10 +52,10 @@ const removeTourFromWishlist = async (req, res) => {
   try {
     session.startTransaction();
 
-    const { userId, tourId } = req.body;
+    const user_id = req.user.id;
     const wishlist = await wishlistService.removeTourFromWishlist(
-      userId,
-      tourId
+      user_id,
+      req.params.id
     );
     if (!wishlist) return res.status(404).json({ error: "Wishlist not found" });
     await session.commitTransaction();
@@ -88,7 +72,6 @@ const removeTourFromWishlist = async (req, res) => {
 
 module.exports = {
   getAllWishlists,
-  getWishlistByUserId,
   addTourToWishlist,
   removeTourFromWishlist,
 };

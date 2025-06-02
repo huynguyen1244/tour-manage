@@ -38,7 +38,8 @@ const createTour = async (req, res) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    const newTour = await tourService.createTour(req.body);
+    const files = req.files;
+    const newTour = await tourService.createTour(req.body, files);
     await session.commitTransaction();
 
     res.status(201).json(newTour);
@@ -55,7 +56,12 @@ const updateTour = async (req, res) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    const updatedTour = await tourService.updateTour(req.params.id, req.body);
+    const files = req.files;
+    const updatedTour = await tourService.updateTour(
+      req.params.id,
+      req.body,
+      files
+    );
     if (!updatedTour)
       return res.status(404).json({ message: "Tour not found" });
     await session.commitTransaction();

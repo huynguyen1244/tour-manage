@@ -1,5 +1,17 @@
 const Category = require("../models/category.model");
 const Tour = require("../models/tour.model");
+const cloudinary = require("cloudinary").v2;
+
+// Hàm xóa ảnh trên Cloudinary theo mảng images [{url, public_id}]
+const deleteImagesOnCloudinary = async (images) => {
+  if (!images || images.length === 0) return;
+
+  const promises = images.map((img) =>
+    cloudinary.uploader.destroy(img.public_id)
+  );
+
+  await Promise.all(promises);
+};
 
 const getAllCategories = async () => {
   return await Category.find();
@@ -21,7 +33,17 @@ const addCategory = async (files, categoryData) => {
     .replace(/ /g, "-")
     .replace(/[^\w-]+/g, "")
     .replace(/[^a-zA-Z0-9-_]/g, "");
-  const images = files.map((file) => file.path);
+
+  // Upload ảnh lên Cloudinary và lấy url + public_id
+  const images = await Promise.all(
+    files.map(async (file) => {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: "tours/categories",
+      });
+      return { url: result.secure_url, public_id: result.public_id };
+    })
+  );
+
   const newCategory = new Category({
     name,
     slug,
@@ -34,11 +56,24 @@ const addCategory = async (files, categoryData) => {
 const updateCategory = async (categoryId, categoryData, files) => {
   let updateData = { ...categoryData };
 
-  if (files && files.length > 0) {
-    // Lấy đường dẫn ảnh mới
-    const images = files.map((file) => file.path);
+  const category = await Category.findById(categoryId);
+  if (!category) throw new Error("Category not found");
 
-    // Thay thế ảnh cũ bằng ảnh mới
+  if (files && files.length > 0) {
+    // Xóa ảnh cũ trên Cloudinary
+    await deleteImagesOnCloudinary(category.images);
+
+    // Upload ảnh mới lên Cloudinary
+    const images = await Promise.all(
+      files.map(async (file) => {
+        const result = await cloudinary.uploader.upload(file.path, {
+          folder: "tours/categories",
+        });
+        return { url: result.secure_url, public_id: result.public_id };
+      })
+    );
+
+    // Cập nhật ảnh mới
     updateData.images = images;
   }
 
@@ -65,6 +100,13 @@ const updateCategory = async (categoryId, categoryData, files) => {
 };
 
 const deleteCategory = async (categoryId) => {
+  const category = await Category.findById(categoryId);
+  if (!category) throw new Error("Category not found");
+
+  // Xóa ảnh trên Cloudinary trước
+  await deleteImagesOnCloudinary(category.images);
+
+  // Xóa category
   return await Category.findByIdAndDelete(categoryId);
 };
 

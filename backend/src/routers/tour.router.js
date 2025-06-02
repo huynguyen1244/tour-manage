@@ -9,20 +9,23 @@ const {
   authorization,
   RoleManager,
 } = require("../middlewares/manager.middleware");
+const { upload } = require("../utility/media");
 
 const router = express.Router();
 
+// public routes
 router.get("/", tourController.getAllTours);
 router.get("/:id", tourController.getTourById);
 
+// manager routes
 router.use(isManager);
 router.use(verifyToken);
 router.use(
   authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff)
 );
 
-router.post("/", tourController.createTour);
-router.put("/:id", tourController.updateTour);
+router.post("/", upload.any(), tourController.createTour);
+router.put("/:id", upload.any(), tourController.updateTour);
 router.delete("/:id", tourController.deleteTour);
 
 module.exports = router;
