@@ -5,7 +5,8 @@ const getAllTours = async (req, res) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    const tours = await tourService.getAllTours();
+    const filter = req.query;
+    const tours = await tourService.getAllTours(filter);
     await session.commitTransaction();
     res.json(tours);
   } catch (error) {
@@ -94,10 +95,32 @@ const deleteTour = async (req, res) => {
   }
 };
 
+const deleteTourImage = async (req, res) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const deleted = await tourService.deleteTourImage(
+      req.params.tour_id,
+      req.params.image_id
+    );
+    if (!deleted) return res.status(404).json({ message: "Tour not found" });
+    await session.commitTransaction();
+
+    res.json({ message: "Tour deleted successfully" });
+  } catch (error) {
+    await session.abortTransaction();
+
+    res.status(500).json({ error: error.message });
+  } finally {
+    session.endSession();
+  }
+};
+
 module.exports = {
   getAllTours,
   getTourById,
   createTour,
   updateTour,
   deleteTour,
+  deleteTourImage,
 };

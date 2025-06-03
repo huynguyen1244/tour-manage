@@ -70,6 +70,50 @@ class PaymentController {
       return res.redirect(`http://localhost:3000/payment-failed`);
     }
   }
+
+  static async refundPayment(req, res) {
+    try {
+      const { orderId, amountRefund, transDate, user, ipAddr } = req.body;
+
+      if (!orderId || !amountRefund || !transDate || !user) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Thiếu thông tin bắt buộc: orderId, amountRefund, transDate hoặc user",
+        });
+      }
+
+      // Gọi service refund với object đầy đủ tham số
+      const refundResult = await VNPayService.refund({
+        orderId,
+        amount: amountRefund,
+        transDate,
+        user,
+        ipAddr,
+      });
+
+      // Kiểm tra kết quả trả về từ VNPayService.refund
+      if (refundResult && refundResult.vnp_ResponseCode === "00") {
+        return res.status(200).json({
+          success: true,
+          message: "Hoàn tiền thành công",
+          data: refundResult,
+        });
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: refundResult.vnp_ResponseMessage || "Hoàn tiền thất bại",
+          data: refundResult,
+        });
+      }
+    } catch (error) {
+      console.error("Refund payment error:", error);
+      return res.status(500).json({
+        success: false,
+        message: `Lỗi khi hoàn tiền: ${error.message || "Không xác định"}`,
+      });
+    }
+  }
 }
 
 module.exports = PaymentController;

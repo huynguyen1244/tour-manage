@@ -1,55 +1,50 @@
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
-// Hàm khởi tạo transporter sử dụng Ethereal test account tự tạo
-async function createTestTransporter() {
-  let testAccount = await nodemailer.createTestAccount();
+function createRealTransporter() {
   return nodemailer.createTransport({
-    host: testAccount.smtp.host,
-    port: testAccount.smtp.port,
-    secure: testAccount.smtp.secure,
+    service: "gmail",
     auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS,
     },
   });
 }
 
-// Gửi mail reset password dùng Ethereal
-async function sendResetPasswordEmail(toEmail, resetLink) {
-  const transporter = await createTestTransporter();
+// Gửi mail xác nhận OTP
+async function sendVerificationEmail(toEmail, otpCode) {
+  const transporter = createRealTransporter();
 
   let info = await transporter.sendMail({
-    from: `"Test App" <test@example.com>`,
+    from: `"Xác thực tài khoản" <your_email@gmail.com>`,
+    to: toEmail,
+    subject: "Mã xác thực OTP của bạn",
+    html: `
+      <p>Chào bạn,</p>
+      <p>Đây là mã OTP để xác thực tài khoản của bạn:</p>
+      <h2>${otpCode}</h2>
+      <p>Mã có hiệu lực trong 1 giờ. Vui lòng không chia sẻ mã này với bất kỳ ai.</p>
+    `,
+  });
+
+  console.log("Verification email sent: %s", info.messageId);
+}
+
+// Gửi mail đặt lại mật khẩu
+async function sendResetPasswordEmail(toEmail, resetLink) {
+  const transporter = createRealTransporter();
+
+  let info = await transporter.sendMail({
+    from: `"Test App" <your_email@gmail.com>`,
     to: toEmail,
     subject: "Đặt lại mật khẩu",
     html: `<p>Nhấn vào liên kết sau để đặt lại mật khẩu:</p><a href="${resetLink}">${resetLink}</a>`,
   });
 
   console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-}
-
-// Gửi mail xác nhận email dùng Ethereal
-async function sendVerificationEmail(toEmail, verifyLink) {
-  const transporter = await createTestTransporter();
-
-  let info = await transporter.sendMail({
-    from: `"Test App" <test@example.com>`,
-    to: toEmail,
-    subject: "Xác nhận địa chỉ email của bạn",
-    html: `
-      <p>Chào bạn,</p>
-      <p>Vui lòng nhấn vào link bên dưới để xác nhận email và kích hoạt tài khoản của bạn:</p>
-      <a href="${verifyLink}">${verifyLink}</a>
-      <p>Link có hiệu lực trong 1 giờ.</p>
-    `,
-  });
-
-  console.log("Verification email sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 }
 
 module.exports = {
-  sendResetPasswordEmail,
   sendVerificationEmail,
+  sendResetPasswordEmail,
 };

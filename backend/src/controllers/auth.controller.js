@@ -13,6 +13,7 @@ const {
 } = require("../utility/mail.util");
 const otpStore = require("../utility/otp-store"); // Giả sử bạn có một utility để lưu trữ OTP tạm thời
 
+// api đăng ký người dùng
 const register = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
@@ -33,11 +34,7 @@ const register = async (req, res, next) => {
       expiresAt: Date.now() + 10 * 60 * 1000, // 10 phút
     });
 
-    await sendVerificationEmail(
-      email,
-      "Xác minh tài khoản",
-      `<p>Mã OTP xác minh tài khoản của bạn là: <b>${otp}</b>. Có hiệu lực trong 10 phút.</p>`
-    );
+    await sendVerificationEmail(email, otp);
 
     res.status(201).json({
       message:
@@ -48,6 +45,7 @@ const register = async (req, res, next) => {
   }
 };
 
+// api xác minh OTP
 const verifyOtp = async (req, res, next) => {
   try {
     const { email, otp } = req.body;
@@ -72,6 +70,7 @@ const verifyOtp = async (req, res, next) => {
   }
 };
 
+// api đăng nhập người dùng
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -105,6 +104,7 @@ const login = async (req, res, next) => {
   }
 };
 
+// api làm mới access token bằng refresh token
 const refreshToken = async (req, res, next) => {
   try {
     const { refreshToken } = req.body;
@@ -131,6 +131,7 @@ const refreshToken = async (req, res, next) => {
   }
 };
 
+// api đổi mật khẩu
 const changePassword = async (req, res, next) => {
   try {
     const { oldPassword, newPassword } = req.body;
@@ -153,6 +154,7 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+// api gửi email quên mật khẩu
 const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -179,6 +181,7 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
+// api đặt lại mật khẩu bằng token
 const resetPassword = async (req, res, next) => {
   try {
     const { token } = req.params;

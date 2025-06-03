@@ -1,5 +1,5 @@
 const express = require("express");
-const bookingController = require("../controllers/booking.controller");
+const customerController = require("../controllers/customer.controller");
 const {
   verifyToken,
   isManager,
@@ -11,34 +11,31 @@ const {
 
 const router = express.Router();
 
-// Api đưa ra các booking
+// Api của khách hàng
+router.get("/get-infor", verifyToken, customerController.getCustomerById);
+router.put("/update-infor", verifyToken, customerController.updateCustomer);
+// Api của nhân viên quản lý khách hàng
+
 router.get(
   "/",
   isManager,
   verifyToken,
   authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
-  bookingController.getBookings
+  customerController.getAllCustomers
 );
-
-// Api lấy thông tin booking theo id
-router.get("/:id", verifyToken, bookingController.getBooking);
-
-// Api tạo mới booking
-router.post("/", verifyToken, bookingController.createBooking);
-// Api cập nhật thông tin booking
 router.put(
   "/:id",
   isManager,
   verifyToken,
   authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
-  bookingController.updateBooking
+  customerController.blockCustomer
 );
 router.delete(
   "/:id",
   isManager,
   verifyToken,
   authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
-  bookingController.deleteBooking
+  customerController.deleteCustomer
 );
 
 module.exports = router;

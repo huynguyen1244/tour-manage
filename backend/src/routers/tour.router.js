@@ -27,5 +27,6 @@ router.use(
 router.post("/", upload.any(), tourController.createTour);
 router.put("/:id", upload.any(), tourController.updateTour);
 router.delete("/:id", tourController.deleteTour);
+router.delete("/:tour_id/images/:image_id", tourController.deleteTourImage);
 
 module.exports = router;
