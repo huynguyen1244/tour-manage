@@ -59,32 +59,32 @@ const GeneralSettingsPage = () => {
       <div className="space-y-6">
         <div className="flex items-center space-x-2">
           <Settings className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">General Settings</h1>
+          <h1 className="text-2xl font-bold">Cài Đặt Chung</h1>
         </div>
 
         <Tabs defaultValue="general" className="w-full">
           <TabsList className="grid grid-cols-4 w-full mb-6">
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            <TabsTrigger value="accessibility">Accessibility</TabsTrigger>
-            <TabsTrigger value="privacy">Privacy & Data</TabsTrigger>
+            <TabsTrigger value="general">Chung</TabsTrigger>
+            <TabsTrigger value="notifications">Thông Báo</TabsTrigger>
+            <TabsTrigger value="accessibility">Trợ Năng</TabsTrigger>
+            <TabsTrigger value="privacy">Quyền Riêng Tư & Dữ Liệu</TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Application Settings</CardTitle>
+                <CardTitle>Cài Đặt Ứng Dụng</CardTitle>
                 <CardDescription>
-                  Customize how the application works for you.
+                  Tùy chỉnh cách ứng dụng hoạt động cho bạn.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium">Auto-save preferences</h3>
+                      <h3 className="font-medium">Tự động lưu tùy chọn</h3>
                       <p className="text-sm text-muted-foreground">
-                        Automatically save your search filters and preferences
+                        Tự động lưu bộ lọc tìm kiếm và tùy chọn của bạn
                       </p>
                     </div>
                     <Switch checked={autoSave} onCheckedChange={setAutoSave} />
@@ -93,7 +93,7 @@ const GeneralSettingsPage = () => {
                   <Separator />
 
                   <div className="space-y-4">
-                    <h3 className="font-medium">Default currency</h3>
+                    <h3 className="font-medium">Tiền tệ mặc định</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <select
                         className="w-full p-2 border rounded-md"
@@ -105,6 +105,7 @@ const GeneralSettingsPage = () => {
                         <option value="jpy">JPY (¥)</option>
                         <option value="aud">AUD ($)</option>
                         <option value="cad">CAD ($)</option>
+                        <option value="vnd">VND (₫)</option>
                       </select>
                     </div>
                   </div>
@@ -112,15 +113,15 @@ const GeneralSettingsPage = () => {
                   <Separator />
 
                   <div className="space-y-4">
-                    <h3 className="font-medium">Distance unit</h3>
+                    <h3 className="font-medium">Đơn vị khoảng cách</h3>
                     <div className="flex items-center space-x-4">
                       <label className="flex items-center space-x-2">
                         <input type="radio" name="distance" defaultChecked />
-                        <span>Kilometers</span>
+                        <span>Kilômét</span>
                       </label>
                       <label className="flex items-center space-x-2">
                         <input type="radio" name="distance" />
-                        <span>Miles</span>
+                        <span>Dặm</span>
                       </label>
                     </div>
                   </div>
@@ -128,7 +129,7 @@ const GeneralSettingsPage = () => {
                   <Separator />
 
                   <div className="space-y-4">
-                    <h3 className="font-medium">Temperature unit</h3>
+                    <h3 className="font-medium">Đơn vị nhiệt độ</h3>
                     <div className="flex items-center space-x-4">
                       <label className="flex items-center space-x-2">
                         <input type="radio" name="temperature" defaultChecked />
@@ -146,16 +147,16 @@ const GeneralSettingsPage = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Account Settings</CardTitle>
+                <CardTitle>Cài Đặt Tài Khoản</CardTitle>
                 <CardDescription>
-                  Update your account information and preferences.
+                  Cập nhật thông tin tài khoản và tùy chọn của bạn.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <Label htmlFor="current-email">Current Email</Label>
+                      <Label htmlFor="current-email">Email Hiện Tại</Label>
                       <Input
                         id="current-email"
                         value="user@example.com"
@@ -163,41 +164,43 @@ const GeneralSettingsPage = () => {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="new-email">New Email</Label>
+                      <Label htmlFor="new-email">Email Mới</Label>
                       <Input
                         id="new-email"
-                        placeholder="Enter new email address"
+                        placeholder="Nhập địa chỉ email mới"
                       />
                     </div>
                   </div>
 
                   <div className="flex items-center space-x-2 mt-2">
-                    <Button variant="outline">Update Email</Button>
+                    <Button variant="outline">Cập Nhật Email</Button>
                   </div>
 
                   <Separator className="my-4" />
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                      <Label htmlFor="current-password">Current Password</Label>
+                      <Label htmlFor="current-password">
+                        Mật Khẩu Hiện Tại
+                      </Label>
                       <Input
                         id="current-password"
                         type="password"
-                        placeholder="Enter current password"
+                        placeholder="Nhập mật khẩu hiện tại"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="new-password">New Password</Label>
+                      <Label htmlFor="new-password">Mật Khẩu Mới</Label>
                       <Input
                         id="new-password"
                         type="password"
-                        placeholder="Enter new password"
+                        placeholder="Nhập mật khẩu mới"
                       />
                     </div>
                   </div>
 
                   <div className="flex items-center space-x-2 mt-2">
-                    <Button variant="outline">Change Password</Button>
+                    <Button variant="outline">Thay Đổi Mật Khẩu</Button>
                   </div>
                 </div>
               </CardContent>
@@ -207,9 +210,9 @@ const GeneralSettingsPage = () => {
           <TabsContent value="notifications" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Notification Settings</CardTitle>
+                <CardTitle>Cài Đặt Thông Báo</CardTitle>
                 <CardDescription>
-                  Choose how and when you want to be notified.
+                  Chọn cách thức và thời điểm bạn muốn được thông báo.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -218,9 +221,9 @@ const GeneralSettingsPage = () => {
                     <div className="flex items-center space-x-2">
                       <Bell className="h-5 w-5 text-primary" />
                       <div>
-                        <h3 className="font-medium">Email Notifications</h3>
+                        <h3 className="font-medium">Thông Báo Qua Email</h3>
                         <p className="text-sm text-muted-foreground">
-                          Receive booking confirmations and updates via email
+                          Nhận xác nhận đặt chỗ và cập nhật qua email
                         </p>
                       </div>
                     </div>
@@ -236,9 +239,9 @@ const GeneralSettingsPage = () => {
                     <div className="flex items-center space-x-2">
                       <Bell className="h-5 w-5 text-primary" />
                       <div>
-                        <h3 className="font-medium">Push Notifications</h3>
+                        <h3 className="font-medium">Thông Báo Đẩy</h3>
                         <p className="text-sm text-muted-foreground">
-                          Receive real-time alerts on your device
+                          Nhận cảnh báo thời gian thực trên thiết bị của bạn
                         </p>
                       </div>
                     </div>
@@ -254,9 +257,9 @@ const GeneralSettingsPage = () => {
                     <div className="flex items-center space-x-2">
                       <Bell className="h-5 w-5 text-primary" />
                       <div>
-                        <h3 className="font-medium">Marketing Emails</h3>
+                        <h3 className="font-medium">Email Tiếp Thị</h3>
                         <p className="text-sm text-muted-foreground">
-                          Receive special offers and promotions
+                          Nhận ưu đãi đặc biệt và khuyến mãi
                         </p>
                       </div>
                     </div>
@@ -269,19 +272,19 @@ const GeneralSettingsPage = () => {
                   <Separator />
 
                   <div className="space-y-4">
-                    <h3 className="font-medium">Notification Frequency</h3>
+                    <h3 className="font-medium">Tần Suất Thông Báo</h3>
                     <div className="space-y-2">
                       <label className="flex items-center space-x-2">
                         <input type="radio" name="frequency" defaultChecked />
-                        <span>Real-time</span>
+                        <span>Thời gian thực</span>
                       </label>
                       <label className="flex items-center space-x-2">
                         <input type="radio" name="frequency" />
-                        <span>Daily digest</span>
+                        <span>Thông báo hàng ngày</span>
                       </label>
                       <label className="flex items-center space-x-2">
                         <input type="radio" name="frequency" />
-                        <span>Weekly digest</span>
+                        <span>Thông báo hàng tuần</span>
                       </label>
                     </div>
                   </div>
@@ -293,9 +296,9 @@ const GeneralSettingsPage = () => {
           <TabsContent value="accessibility" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Accessibility Settings</CardTitle>
+                <CardTitle>Cài Đặt Trợ Năng</CardTitle>
                 <CardDescription>
-                  Customize the application to meet your accessibility needs.
+                  Tùy chỉnh ứng dụng để đáp ứng nhu cầu trợ năng của bạn.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -304,9 +307,9 @@ const GeneralSettingsPage = () => {
                     <div className="flex items-center space-x-2">
                       <Eye className="h-5 w-5 text-primary" />
                       <div>
-                        <h3 className="font-medium">High Contrast Mode</h3>
+                        <h3 className="font-medium">Chế Độ Tương Phản Cao</h3>
                         <p className="text-sm text-muted-foreground">
-                          Increase contrast for better visibility
+                          Tăng độ tương phản để hiển thị tốt hơn
                         </p>
                       </div>
                     </div>
@@ -322,9 +325,9 @@ const GeneralSettingsPage = () => {
                     <div className="flex items-center space-x-2">
                       <Eye className="h-5 w-5 text-primary" />
                       <div>
-                        <h3 className="font-medium">Large Text</h3>
+                        <h3 className="font-medium">Văn Bản Lớn</h3>
                         <p className="text-sm text-muted-foreground">
-                          Use larger text throughout the application
+                          Sử dụng văn bản lớn hơn trong toàn bộ ứng dụng
                         </p>
                       </div>
                     </div>
@@ -340,9 +343,9 @@ const GeneralSettingsPage = () => {
                     <div className="flex items-center space-x-2">
                       <RefreshCw className="h-5 w-5 text-primary" />
                       <div>
-                        <h3 className="font-medium">Reduce Animations</h3>
+                        <h3 className="font-medium">Giảm Hiệu Ứng</h3>
                         <p className="text-sm text-muted-foreground">
-                          Minimize motion and animations
+                          Giảm thiểu chuyển động và hiệu ứng
                         </p>
                       </div>
                     </div>
@@ -356,7 +359,7 @@ const GeneralSettingsPage = () => {
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-medium">Font Size</h3>
+                      <h3 className="font-medium">Kích Thước Chữ</h3>
                       <span className="text-sm">{fontSize[0]}px</span>
                     </div>
                     <Slider
@@ -367,9 +370,9 @@ const GeneralSettingsPage = () => {
                       onValueChange={handleFontSizeChange}
                     />
                     <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Small</span>
-                      <span>Medium</span>
-                      <span>Large</span>
+                      <span>Nhỏ</span>
+                      <span>Vừa</span>
+                      <span>Lớn</span>
                     </div>
                   </div>
                 </div>
@@ -380,9 +383,9 @@ const GeneralSettingsPage = () => {
           <TabsContent value="privacy" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Privacy & Data</CardTitle>
+                <CardTitle>Quyền Riêng Tư & Dữ Liệu</CardTitle>
                 <CardDescription>
-                  Manage your privacy settings and personal data.
+                  Quản lý cài đặt quyền riêng tư và dữ liệu cá nhân của bạn.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -391,9 +394,9 @@ const GeneralSettingsPage = () => {
                     <div className="flex items-center space-x-2">
                       <Lock className="h-5 w-5 text-primary" />
                       <div>
-                        <h3 className="font-medium">Save Search History</h3>
+                        <h3 className="font-medium">Lưu Lịch Sử Tìm Kiếm</h3>
                         <p className="text-sm text-muted-foreground">
-                          Store your recent searches for quicker access
+                          Lưu trữ các tìm kiếm gần đây để truy cập nhanh hơn
                         </p>
                       </div>
                     </div>
@@ -408,12 +411,12 @@ const GeneralSettingsPage = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Key className="h-5 w-5 text-primary" />
-                      <h3 className="font-medium">Two-Factor Authentication</h3>
+                      <h3 className="font-medium">Xác Thực Hai Yếu Tố</h3>
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Add an extra layer of security to your account
+                      Thêm một lớp bảo mật cho tài khoản của bạn
                     </p>
-                    <Button variant="outline">Enable 2FA</Button>
+                    <Button variant="outline">Bật 2FA</Button>
                   </div>
 
                   <Separator />
@@ -421,12 +424,12 @@ const GeneralSettingsPage = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Download className="h-5 w-5 text-primary" />
-                      <h3 className="font-medium">Download Your Data</h3>
+                      <h3 className="font-medium">Tải Xuống Dữ Liệu Của Bạn</h3>
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Get a copy of all the data we have about you
+                      Nhận một bản sao của tất cả dữ liệu chúng tôi có về bạn
                     </p>
-                    <Button variant="outline">Request Data</Button>
+                    <Button variant="outline">Yêu Cầu Dữ Liệu</Button>
                   </div>
 
                   <Separator />
@@ -434,12 +437,13 @@ const GeneralSettingsPage = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
                       <Trash2 className="h-5 w-5 text-destructive" />
-                      <h3 className="font-medium">Delete Account</h3>
+                      <h3 className="font-medium">Xóa Tài Khoản</h3>
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">
-                      Permanently delete your account and all associated data
+                      Xóa vĩnh viễn tài khoản của bạn và tất cả dữ liệu liên
+                      quan
                     </p>
-                    <Button variant="destructive">Delete My Account</Button>
+                    <Button variant="destructive">Xóa Tài Khoản Của Tôi</Button>
                   </div>
                 </div>
               </CardContent>
@@ -449,9 +453,9 @@ const GeneralSettingsPage = () => {
 
         <div className="flex justify-between">
           <Button variant="outline" onClick={resetSettings}>
-            Reset All Settings
+            Đặt Lại Tất Cả Cài Đặt
           </Button>
-          <Button>Save Changes</Button>{" "}
+          <Button>Lưu Thay Đổi</Button>{" "}
         </div>
       </div>
     </>

@@ -16,10 +16,10 @@ const AboutPage = () => {
   return (
     <>
       <Helmet>
-        <title>About Us | TravelTour</title>
+        <title>Giới Thiệu | WanderWise</title>
         <meta
           name="description"
-          content="Learn about TravelTour - your trusted partner for exceptional travel experiences around the world."
+          content="Tìm hiểu về WanderWise - đối tác đáng tin cậy cho những trải nghiệm du lịch đặc biệt trên khắp thế giới."
         />
       </Helmet>
 
@@ -34,10 +34,10 @@ const AboutPage = () => {
         >
           <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
             <h1 className="text-3xl md:text-5xl font-bold font-poppins mb-4 text-center">
-              About TravelTour
+              Giới Thiệu WanderWise
             </h1>
             <p className="text-lg md:text-xl max-w-2xl text-center">
-              Crafting unforgettable travel experiences since 2010
+              Tạo nên những trải nghiệm du lịch không thể quên từ năm 2010
             </p>
           </div>
         </div>
@@ -47,25 +47,28 @@ const AboutPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
             <div>
               <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-6">
-                Our Story
+                Câu Chuyện Của Chúng Tôi
               </h2>
               <p className="text-muted-foreground mb-4">
-                Founded in 2010, TravelTour began with a simple vision: to create authentic
-                travel experiences that go beyond the ordinary tourist attractions and connect
-                travelers with the heart and soul of each destination.
+                Được thành lập vào năm 2010, WanderWise bắt đầu với một tầm nhìn
+                đơn giản: tạo ra những trải nghiệm du lịch chân thực vượt ra
+                ngoài những điểm thu hút khách du lịch thông thường và kết nối
+                du khách với trái tim và tâm hồn của từng điểm đến.
               </p>
               <p className="text-muted-foreground mb-4">
-                What started as a small team of passionate travelers has grown into a global
-                community of exploration enthusiasts. Our founders, Alex and Maria Rodriguez,
-                both avid travelers themselves, noticed a gap in the market for immersive,
-                culturally rich travel experiences that weren't just about checking landmarks
-                off a list.
+                Bắt đầu từ một nhóm nhỏ những người đam mê du lịch, chúng tôi đã
+                phát triển thành một cộng đồng khám phá toàn cầu. Những người
+                sáng lập của chúng tôi, Alex và Maria Rodriguez, cũng là những
+                du khách cuồng nhiệt, đã nhận thấy khoảng trống trên thị trường
+                cho những trải nghiệm du lịch phong phú về văn hóa, không chỉ
+                đơn thuần là tham quan các danh lam thắng cảnh.
               </p>
               <p className="text-muted-foreground">
-                Today, we offer curated tours to over 50 destinations worldwide, each
-                carefully designed to provide an authentic and memorable experience. We're
-                proud to have helped more than 50,000 travelers create lasting memories and
-                connections around the globe.
+                Ngày nay, chúng tôi cung cấp các tour được tuyển chọn đến hơn 50
+                điểm đến trên toàn thế giới, mỗi tour được thiết kế cẩn thận để
+                mang lại trải nghiệm chân thực và đáng nhớ. Chúng tôi tự hào đã
+                giúp hơn 50.000 du khách tạo ra những kỷ niệm và kết nối lâu dài
+                trên khắp thế giới.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -95,16 +98,16 @@ const AboutPage = () => {
 
         {/* Our Mission */}
         <div className="bg-muted py-16 px-4">
-          <div className="container mx-auto">
-            <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="container mx-auto">            <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-4">
-                Our Mission & Values
+                Sứ Mệnh & Giá Trị Của Chúng Tôi
               </h2>
               <p className="text-muted-foreground">
-                At TravelTour, we believe that travel has the power to transform lives,
-                broaden perspectives, and create meaningful connections across cultures.
-                Our mission is to facilitate these transformative experiences while ensuring
-                that our operations positively impact the communities we visit.
+                Tại WanderWise, chúng tôi tin rằng du lịch có sức mạnh thay đổi
+                cuộc sống, mở rộng tầm nhìn và tạo ra những kết nối ý nghĩa
+                giữa các nền văn hóa. Sứ mệnh của chúng tôi là tạo điều kiện cho
+                những trải nghiệm biến đổi này trong khi đảm bảo hoạt động của
+                chúng tôi tác động tích cực đến các cộng đồng mà chúng tôi ghé thăm.
               </p>
             </div>
 
@@ -113,11 +116,12 @@ const AboutPage = () => {
                 <CardContent className="p-6 text-center">
                   <div className="bg-primary/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <Map className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Authentic Experiences</h3>
+                  </div>                  <h3 className="font-semibold text-lg mb-2">
+                    Trải Nghiệm Chân Thực
+                  </h3>
                   <p className="text-muted-foreground">
-                    We design itineraries that go beyond tourist spots to reveal the true
-                    character and culture of each destination.
+                    Chúng tôi thiết kế hành trình vượt ra ngoài các điểm du lịch
+                    thông thường để khám phá tính cách và văn hóa thực sự của từng điểm đến.
                   </p>
                 </CardContent>
               </Card>
@@ -126,11 +130,12 @@ const AboutPage = () => {
                 <CardContent className="p-6 text-center">
                   <div className="bg-primary/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Community Impact</h3>
+                  </div>                  <h3 className="font-semibold text-lg mb-2">
+                    Tác Động Cộng Đồng
+                  </h3>
                   <p className="text-muted-foreground">
-                    We partner with local businesses and guides to ensure our tours
-                    contribute positively to the communities we visit.
+                    Chúng tôi hợp tác với các doanh nghiệp địa phương và hướng dẫn viên
+                    để đảm bảo các tour của chúng tôi đóng góp tích cực cho cộng đồng mà chúng tôi ghé thăm.
                   </p>
                 </CardContent>
               </Card>
@@ -139,11 +144,12 @@ const AboutPage = () => {
                 <CardContent className="p-6 text-center">
                   <div className="bg-primary/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <GlobeLock className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Sustainable Travel</h3>
+                  </div>                  <h3 className="font-semibold text-lg mb-2">
+                    Du Lịch Bền Vững
+                  </h3>
                   <p className="text-muted-foreground">
-                    We're committed to minimizing our environmental footprint and promoting
-                    responsible, sustainable tourism practices.
+                    Chúng tôi cam kết giảm thiểu tác động môi trường và thúc đẩy
+                    các hoạt động du lịch có trách nhiệm và bền vững.
                   </p>
                 </CardContent>
               </Card>
@@ -152,11 +158,11 @@ const AboutPage = () => {
                 <CardContent className="p-6 text-center">
                   <div className="bg-primary/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <Star className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">Excellence</h3>
+                  </div>                  
+                  <h3 className="font-semibold text-lg mb-2">Xuất Sắc</h3>
                   <p className="text-muted-foreground">
-                    We strive for excellence in every aspect of our service, from itinerary
-                    planning to on-the-ground support.
+                    Chúng tôi phấn đấu đạt được sự xuất sắc trong mọi khía cạnh
+                    của dịch vụ, từ lập kế hoạch hành trình đến hỗ trợ thực địa.
                   </p>
                 </CardContent>
               </Card>
@@ -165,14 +171,13 @@ const AboutPage = () => {
         </div>
 
         {/* Why Choose Us */}
-        <div className="container mx-auto py-16 px-4">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+        <div className="container mx-auto py-16 px-4">          <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-4">
-              Why Choose TravelTour?
+              Tại Sao Chọn WanderWise?
             </h2>
             <p className="text-muted-foreground">
-              With thousands of travel companies to choose from, here's why travelers
-              continue to trust us with their most precious moments.
+              Với hàng nghìn công ty du lịch để lựa chọn, đây là lý do tại sao
+              du khách tiếp tục tin tưởng chúng tôi với những khoảnh khắc quý giá nhất của họ.
             </p>
           </div>
 
@@ -181,11 +186,12 @@ const AboutPage = () => {
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Award className="h-6 w-6 text-primary" />
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-2">Award-Winning Service</h3>
+              <div>                <h3 className="font-semibold text-lg mb-2">
+                  Dịch Vụ Đạt Giải Thưởng
+                </h3>
                 <p className="text-muted-foreground">
-                  Recognized with multiple industry awards for our exceptional service
-                  and innovative tour designs.
+                  Được công nhận với nhiều giải thưởng ngành về dịch vụ
+                  xuất sắc và thiết kế tour sáng tạo.
                 </p>
               </div>
             </div>
@@ -194,11 +200,13 @@ const AboutPage = () => {
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Users className="h-6 w-6 text-primary" />
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-2">Expert Local Guides</h3>
+              <div>                <h3 className="font-semibold text-lg mb-2">
+                  Hướng Dẫn Viên Địa Phương Chuyên Nghiệp
+                </h3>
                 <p className="text-muted-foreground">
-                  Our guides are passionate locals with deep knowledge of their regions,
-                  offering insights you won't find in guidebooks.
+                  Hướng dẫn viên của chúng tôi là những người địa phương đầy
+                  đam mê với kiến thức sâu sắc về khu vực của họ, mang đến những
+                  hiểu biết mà bạn không thể tìm thấy trong sách hướng dẫn.
                 </p>
               </div>
             </div>
@@ -207,11 +215,12 @@ const AboutPage = () => {
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Smile className="h-6 w-6 text-primary" />
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-2">98% Customer Satisfaction</h3>
+              <div>                <h3 className="font-semibold text-lg mb-2">
+                  98% Khách Hàng Hài Lòng
+                </h3>
                 <p className="text-muted-foreground">
-                  We're proud of our consistently high ratings and the positive feedback
-                  we receive from satisfied travelers.
+                  Chúng tôi tự hào về những đánh giá cao nhất quán và phản hồi
+                  tích cực mà chúng tôi nhận được từ những du khách hài lòng.
                 </p>
               </div>
             </div>
@@ -220,11 +229,11 @@ const AboutPage = () => {
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Headphones className="h-6 w-6 text-primary" />
               </div>
-              <div>
-                <h3 className="font-semibold text-lg mb-2">24/7 Support</h3>
+              <div>                
+                <h3 className="font-semibold text-lg mb-2">Hỗ Trợ 24/7</h3>
                 <p className="text-muted-foreground">
-                  Our dedicated support team is available around the clock to assist with
-                  any questions or concerns during your journey.
+                  Đội ngũ hỗ trợ chuyên dụng của chúng tôi luôn sẵn sàng 24/7
+                  để hỗ trợ bất kỳ câu hỏi hoặc quan ngại nào trong suốt hành trình của bạn.
                 </p>
               </div>
             </div>
@@ -232,12 +241,14 @@ const AboutPage = () => {
             <div className="flex items-start">
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Clock className="h-6 w-6 text-primary" />
-              </div>
+              </div>              
               <div>
-                <h3 className="font-semibold text-lg mb-2">Flexible Scheduling</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  Lịch Trình Linh Hoạt
+                </h3>
                 <p className="text-muted-foreground">
-                  We offer a range of departure dates and can often accommodate custom
-                  timing to fit your schedule.
+                  Chúng tôi cung cấp nhiều ngày khởi hành và thường có thể
+                  điều chỉnh thời gian phù hợp với lịch trình của bạn.
                 </p>
               </div>
             </div>
@@ -245,32 +256,34 @@ const AboutPage = () => {
             <div className="flex items-start">
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Map className="h-6 w-6 text-primary" />
-              </div>
+              </div>              
               <div>
-                <h3 className="font-semibold text-lg mb-2">Unique Itineraries</h3>
+                <h3 className="font-semibold text-lg mb-2">
+                  Hành Trình Độc Đáo
+                </h3>
                 <p className="text-muted-foreground">
-                  Our carefully crafted itineraries blend popular highlights with hidden
-                  gems for a truly unique travel experience.
+                  Hành trình được tạo ra cẩn thận của chúng tôi kết hợp những
+                  điểm nổi bật phổ biến với những viên ngọc ẩn để mang lại trải nghiệm du lịch thực sự độc đáo.
                 </p>
               </div>
             </div>
-          </div>
-
-          <div className="flex justify-center mt-12">
-            <Button size="lg">Browse Our Tours</Button>
-          </div>
+          </div>          
+          <
+            div className="flex justify-center mt-12">
+            <Button size="lg">Khám Phá Các Tour</Button>
+          </>
         </div>
 
         {/* Team Section */}
         <div className="bg-muted py-16 px-4">
-          <div className="container mx-auto">
+          <div className="container mx-auto">            
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-4">
-                Meet Our Leadership Team
+                Gặp Gỡ Đội Ngũ Lãnh Đạo
               </h2>
               <p className="text-muted-foreground">
-                The passionate individuals behind TravelTour who work tirelessly to create
-                exceptional travel experiences.
+                Những cá nhân đầy đam mê đằng sau WanderWise, những người làm việc
+                không mệt mỏi để tạo ra những trải nghiệm du lịch đặc biệt.
               </p>
             </div>
 
@@ -283,10 +296,12 @@ const AboutPage = () => {
                 />
                 <CardContent className="p-6">
                   <h3 className="font-semibold text-lg">Alex Rodriguez</h3>
-                  <p className="text-primary font-medium text-sm mb-2">Co-Founder & CEO</p>
+                  <p className="text-primary font-medium text-sm mb-2">
+                    Co-Founder & CEO
+                  </p>
                   <p className="text-muted-foreground text-sm">
-                    A lifelong traveler who has visited over 70 countries, Alex leads our
-                    company vision and strategic direction.
+                    Một người du lịch suốt đời đã thăm hơn 70 quốc gia, 
+                    Alex dẫn dắt tầm nhìn và hướng đi chiến lược của công ty chúng tôi.
                   </p>
                 </CardContent>
               </Card>
@@ -298,11 +313,13 @@ const AboutPage = () => {
                   className="w-full h-64 object-cover"
                 />
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg">Maria Rodriguez</h3>
-                  <p className="text-primary font-medium text-sm mb-2">Co-Founder & COO</p>
+                  <h3 className="font-semibold text-lg">Maria Rodriguez</h3>                  
+                  <p className="text-primary font-medium text-sm mb-2">
+                    Đồng Sáng Lập & COO
+                  </p>
                   <p className="text-muted-foreground text-sm">
-                    With a background in cultural anthropology, Maria ensures our tours provide
-                    authentic cultural immersion.
+                    Với nền tảng về nhân học văn hóa, Maria đảm bảo
+                    các tour của chúng tôi mang lại sự hòa nhập văn hóa chân thực.
                   </p>
                 </CardContent>
               </Card>
@@ -314,11 +331,13 @@ const AboutPage = () => {
                   className="w-full h-64 object-cover"
                 />
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg">David Chen</h3>
-                  <p className="text-primary font-medium text-sm mb-2">Tour Director</p>
+                  <h3 className="font-semibold text-lg">David Chen</h3>                  
+                  <p className="text-primary font-medium text-sm mb-2">
+                    Giám Đốc Tour
+                  </p>
                   <p className="text-muted-foreground text-sm">
-                    With 15 years of experience leading tours across Asia and Oceania, David
-                    oversees our tour operations and guide training.
+                    Với 15 năm kinh nghiệm dẫn tour trên khắp châu Á và
+                    châu Đại Dương, David giám sát hoạt động tour và đào tạo hướng dẫn viên của chúng tôi.
                   </p>
                 </CardContent>
               </Card>
@@ -330,11 +349,13 @@ const AboutPage = () => {
                   className="w-full h-64 object-cover"
                 />
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg">Sophia Martinez</h3>
-                  <p className="text-primary font-medium text-sm mb-2">Sustainability Director</p>
+                  <h3 className="font-semibold text-lg">Sophia Martinez</h3>                  
+                  <p className="text-primary font-medium text-sm mb-2">
+                    Giám Đốc Phát Triển Bền Vững
+                  </p>
                   <p className="text-muted-foreground text-sm">
-                    A passionate environmentalist, Sophia leads our initiatives to minimize
-                    our ecological footprint and promote responsible tourism.
+                    Một nhà môi trường đầy đam mê, Sophia dẫn dắt các sáng kiến của chúng tôi
+                    để giảm thiểu dấu chân sinh thái và thúc đẩy du lịch có trách nhiệm.
                   </p>
                 </CardContent>
               </Card>

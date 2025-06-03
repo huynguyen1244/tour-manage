@@ -36,11 +36,11 @@ const TourBookingForm = ({ tour }: TourBookingFormProps) => {
   const [numberOfTravelers, setNumberOfTravelers] = useState<string>("2");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookingData, setBookingData] = useState<BookingFormData | null>(null);
-  
+
   const { user } = useAuth();
   const { toast } = useToast();
   const [_, setLocation] = useLocation();
-  
+
   // Fetch available tour dates
   const {
     data: tourDates,
@@ -49,7 +49,7 @@ const TourBookingForm = ({ tour }: TourBookingFormProps) => {
   } = useQuery<TourDate[]>({
     queryKey: [`/api/tours/${tour.id}/dates`],
   });
-  
+
   // Book tour mutation
   const bookTourMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -59,51 +59,51 @@ const TourBookingForm = ({ tour }: TourBookingFormProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/bookings"] });
       toast({
-        title: "Booking successful!",
-        description: "Your tour has been booked successfully.",
+        title: "Đặt tour thành công!",
+        description: "Tour của bạn đã được đặt thành công.",
       });
       setIsModalOpen(false);
       setLocation("/bookings");
     },
     onError: (error: Error) => {
       toast({
-        title: "Booking failed",
+        title: "Đặt tour thất bại",
         description: error.message,
         variant: "destructive",
       });
     },
   });
-  
+
   const handleBookNow = () => {
     if (!user) {
       toast({
-        title: "Authentication required",
-        description: "Please login or register to book a tour.",
+        title: "Yêu cầu xác thực",
+        description: "Vui lòng đăng nhập hoặc đăng ký để đặt tour.",
         variant: "destructive",
       });
       setLocation("/auth");
       return;
     }
-    
+
     if (!selectedDateId) {
       toast({
-        title: "Date selection required",
-        description: "Please select a tour date to continue.",
+        title: "Cần chọn ngày",
+        description: "Vui lòng chọn ngày tour để tiếp tục.",
         variant: "destructive",
       });
       return;
     }
-    
+
     const selectedDate = tourDates?.find(
       (date) => date.id === parseInt(selectedDateId)
     );
-    
+
     if (!selectedDate) return;
-    
+
     const travelers = parseInt(numberOfTravelers);
     const price = selectedDate.discountedPrice || selectedDate.price;
     const totalPrice = price * travelers;
-    
+
     setBookingData({
       tourId: tour.id,
       tourDateId: selectedDate.id,
@@ -112,35 +112,35 @@ const TourBookingForm = ({ tour }: TourBookingFormProps) => {
       endDate: format(new Date(selectedDate.endDate), "PPP"),
       totalPrice,
     });
-    
+
     setIsModalOpen(true);
   };
-  
+
   const handleConfirmBooking = () => {
     if (!bookingData) return;
-    
+
     const bookingPayload = {
       tourId: bookingData.tourId,
       tourDateId: bookingData.tourDateId,
       numberOfTravelers: bookingData.numberOfTravelers,
       totalPrice: bookingData.totalPrice,
     };
-    
+
     bookTourMutation.mutate(bookingPayload);
   };
-  
+
   const discount = tour.discountedPrice
     ? Math.round(((tour.price - tour.discountedPrice) / tour.price) * 100)
     : 0;
-    
+
   const selectedDate = selectedDateId
     ? tourDates?.find((date) => date.id === parseInt(selectedDateId))
     : null;
-    
+
   const price = selectedDate
     ? selectedDate.discountedPrice || selectedDate.price
     : tour.discountedPrice || tour.price;
-    
+
   const travelers = parseInt(numberOfTravelers);
   const subtotal = price * travelers;
   const taxes = subtotal * 0.06; // 6% tax
@@ -160,28 +160,29 @@ const TourBookingForm = ({ tour }: TourBookingFormProps) => {
                   ${tour.price}
                 </span>
                 <span className="ml-auto bg-green-100 text-secondary text-xs font-medium px-2 py-1 rounded">
-                  Save {discount}%
+                  Tiết kiệm {discount}%
                 </span>
               </>
             )}
           </div>
-          <p className="text-sm text-muted-foreground">Per person</p>
+          <p className="text-sm text-muted-foreground">Mỗi người</p>
         </div>
-
         <div className="mb-4">
           <label className="block text-sm font-medium text-foreground mb-1">
-            Tour Date
+            Ngày Tour
           </label>
           <div className="relative">
             <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             {isLoading ? (
               <Skeleton className="h-10 w-full" />
             ) : error ? (
-              <div className="text-red-500 text-sm">Failed to load tour dates</div>
+              <div className="text-red-500 text-sm">
+                Không thể tải ngày tour
+              </div>
             ) : (
               <Select value={selectedDateId} onValueChange={setSelectedDateId}>
                 <SelectTrigger className="pl-10">
-                  <SelectValue placeholder="Select a date" />
+                  <SelectValue placeholder="Chọn ngày" />
                 </SelectTrigger>
                 <SelectContent>
                   {tourDates?.map((date) => (
@@ -190,7 +191,7 @@ const TourBookingForm = ({ tour }: TourBookingFormProps) => {
                       {format(new Date(date.endDate), "MMM d, yyyy")}{" "}
                       {date.availableSpots < 5 && (
                         <span className="text-red-500 ml-1">
-                          (Only {date.availableSpots} spots left)
+                          (Chỉ còn {date.availableSpots} chỗ)
                         </span>
                       )}
                     </SelectItem>
@@ -203,7 +204,7 @@ const TourBookingForm = ({ tour }: TourBookingFormProps) => {
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-foreground mb-1">
-            Number of Travelers
+            Số Người Du Lịch
           </label>
           <div className="relative">
             <Select
@@ -211,15 +212,15 @@ const TourBookingForm = ({ tour }: TourBookingFormProps) => {
               onValueChange={setNumberOfTravelers}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select travelers" />
+                <SelectValue placeholder="Chọn số người" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">1 Adult</SelectItem>
-                <SelectItem value="2">2 Adults</SelectItem>
-                <SelectItem value="3">3 Adults</SelectItem>
-                <SelectItem value="4">4 Adults</SelectItem>
-                <SelectItem value="5">5 Adults</SelectItem>
-                <SelectItem value="6">6 Adults</SelectItem>
+                <SelectItem value="1">1 Người lớn</SelectItem>
+                <SelectItem value="2">2 Người lớn</SelectItem>
+                <SelectItem value="3">3 Người lớn</SelectItem>
+                <SelectItem value="4">4 Người lớn</SelectItem>
+                <SelectItem value="5">5 Người lớn</SelectItem>
+                <SelectItem value="6">6 Người lớn</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -228,7 +229,9 @@ const TourBookingForm = ({ tour }: TourBookingFormProps) => {
         <div className="mb-6">
           <div className="flex justify-between text-sm mb-1">
             <span className="font-medium text-foreground">Tour Price</span>
-            <span className="text-foreground">${price.toFixed(2)} x {travelers}</span>
+            <span className="text-foreground">
+              ${price.toFixed(2)} x {travelers}
+            </span>
           </div>
           {tour.discountedPrice && (
             <div className="flex justify-between text-sm mb-1">

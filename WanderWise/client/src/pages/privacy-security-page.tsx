@@ -76,21 +76,21 @@ const PrivacySecurityPage = () => {
       id: 1,
       device: "MacBook Pro - Chrome",
       location: "New York, NY",
-      lastActive: "Active now",
+      lastActive: "Đang hoạt động",
       current: true,
     },
     {
       id: 2,
       device: "iPhone 14 - Safari",
       location: "New York, NY",
-      lastActive: "2 hours ago",
+      lastActive: "2 giờ trước",
       current: false,
     },
     {
       id: 3,
       device: "Windows PC - Edge",
       location: "Los Angeles, CA",
-      lastActive: "3 days ago",
+      lastActive: "3 ngày trước",
       current: false,
     },
   ]);
@@ -98,17 +98,17 @@ const PrivacySecurityPage = () => {
   const [dataRequests] = useState([
     {
       id: 1,
-      type: "Export Data",
-      status: "completed",
+      type: "Xuất Dữ Liệu",
+      status: "hoàn thành",
       date: "2024-01-15",
-      description: "Account data export",
+      description: "Xuất dữ liệu tài khoản",
     },
     {
       id: 2,
-      type: "Delete Data",
-      status: "pending",
+      type: "Xóa Dữ Liệu",
+      status: "đang chờ",
       date: "2024-01-20",
-      description: "Request to delete booking history",
+      description: "Yêu cầu xóa lịch sử đặt chỗ",
     },
   ]);
 
@@ -129,10 +129,10 @@ const PrivacySecurityPage = () => {
   return (
     <>
       <Helmet>
-        <title>Privacy & Security | TravelTour</title>
+        <title>Quyền Riêng Tư & Bảo Mật | TravelTour</title>
         <meta
           name="description"
-          content="Manage your privacy settings and security preferences."
+          content="Quản lý cài đặt quyền riêng tư và tùy chọn bảo mật của bạn."
         />
       </Helmet>
 
@@ -142,10 +142,11 @@ const PrivacySecurityPage = () => {
             {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold font-poppins text-foreground mb-2">
-                Privacy & Security
+                Quyền Riêng Tư & Bảo Mật
               </h1>
               <p className="text-muted-foreground">
-                Control your privacy settings and manage your account security.
+                Kiểm soát cài đặt quyền riêng tư và quản lý bảo mật tài khoản
+                của bạn.
               </p>
             </div>
 
@@ -156,12 +157,11 @@ const PrivacySecurityPage = () => {
                   <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-green-900 mb-1">
-                      Security Status: Good
+                      Trạng Thái Bảo Mật: Tốt
                     </h3>
                     <p className="text-sm text-green-800">
-                      Your account has strong security settings. Consider
-                      enabling two-factor authentication for additional
-                      protection.
+                      Tài khoản của bạn có cài đặt bảo mật mạnh. Hãy xem xét bật
+                      xác thực hai yếu tố để bảo vệ thêm.
                     </p>
                   </div>
                 </div>
@@ -173,16 +173,16 @@ const PrivacySecurityPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Lock className="h-5 w-5 mr-2" />
-                  Account Security
+                  Bảo Mật Tài Khoản
                 </CardTitle>
                 <CardDescription>
-                  Manage your password and authentication settings.
+                  Quản lý mật khẩu và cài đặt xác thực của bạn.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="currentPassword">Current Password</Label>
+                    <Label htmlFor="currentPassword">Mật Khẩu Hiện Tại</Label>
                     <div className="relative">
                       <Input
                         id="currentPassword"
@@ -206,11 +206,11 @@ const PrivacySecurityPage = () => {
                     </div>
                     <div className="flex justify-between items-center mt-2">
                       <span className="text-sm text-muted-foreground">
-                        Last changed: 3 months ago
+                        Đã thay đổi: 3 tháng trước
                       </span>
                       <Button variant="outline" size="sm">
                         <Key className="h-4 w-4 mr-2" />
-                        Change Password
+                        Đổi Mật Khẩu
                       </Button>
                     </div>
                   </div>
@@ -221,10 +221,10 @@ const PrivacySecurityPage = () => {
                     <div>
                       <h3 className="font-medium flex items-center">
                         <Smartphone className="h-4 w-4 mr-2" />
-                        Two-Factor Authentication
+                        Xác Thực Hai Yếu Tố
                       </h3>
                       <p className="text-sm text-muted-foreground">
-                        Add an extra layer of security to your account
+                        Thêm một lớp bảo mật cho tài khoản của bạn
                       </p>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -233,7 +233,7 @@ const PrivacySecurityPage = () => {
                           variant="outline"
                           className="text-orange-600 border-orange-600"
                         >
-                          Recommended
+                          Đề Xuất
                         </Badge>
                       )}
                       <Switch
@@ -246,7 +246,7 @@ const PrivacySecurityPage = () => {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">
-                        Login Notifications
+                        Thông Báo Đăng Nhập
                       </span>
                       <Switch
                         checked={securitySettings.loginNotifications}
@@ -257,7 +257,7 @@ const PrivacySecurityPage = () => {
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">
-                        Suspicious Activity Alerts
+                        Cảnh Báo Hoạt Động Đáng Ngờ
                       </span>
                       <Switch
                         checked={securitySettings.suspiciousActivityAlerts}
@@ -270,7 +270,9 @@ const PrivacySecurityPage = () => {
                       />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium">Auto Logout</span>
+                      <span className="text-sm font-medium">
+                        Đăng Xuất Tự Động
+                      </span>
                       <Switch
                         checked={securitySettings.autoLogout}
                         onCheckedChange={(checked) =>
@@ -281,7 +283,7 @@ const PrivacySecurityPage = () => {
                   </div>
 
                   <div>
-                    <Label>Session Timeout (minutes)</Label>
+                    <Label>Thời Gian Phiên (phút)</Label>
                     <Select
                       value={securitySettings.sessionTimeout}
                       onValueChange={(value) =>
@@ -292,11 +294,11 @@ const PrivacySecurityPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="15">15 minutes</SelectItem>
-                        <SelectItem value="30">30 minutes</SelectItem>
-                        <SelectItem value="60">1 hour</SelectItem>
-                        <SelectItem value="120">2 hours</SelectItem>
-                        <SelectItem value="never">Never</SelectItem>
+                        <SelectItem value="15">15 phút</SelectItem>
+                        <SelectItem value="30">30 phút</SelectItem>
+                        <SelectItem value="60">1 giờ</SelectItem>
+                        <SelectItem value="120">2 giờ</SelectItem>
+                        <SelectItem value="never">Không bao giờ</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -309,10 +311,11 @@ const PrivacySecurityPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Globe className="h-5 w-5 mr-2" />
-                  Active Sessions
+                  Phiên Đăng Nhập Đang Hoạt Động
                 </CardTitle>
                 <CardDescription>
-                  Manage your active login sessions across devices.
+                  Quản lý các phiên đăng nhập đang hoạt động của bạn trên các
+                  thiết bị.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -346,7 +349,7 @@ const PrivacySecurityPage = () => {
                                 variant="secondary"
                                 className="ml-2 text-xs"
                               >
-                                Current
+                                Hiện Tại
                               </Badge>
                             )}
                           </div>
@@ -361,7 +364,7 @@ const PrivacySecurityPage = () => {
                       {!session.current && (
                         <Button variant="outline" size="sm">
                           <UserX className="h-4 w-4 mr-2" />
-                          Revoke
+                          Thu Hồi
                         </Button>
                       )}
                     </div>
@@ -369,7 +372,7 @@ const PrivacySecurityPage = () => {
                 </div>
                 <div className="mt-4">
                   <Button variant="outline" className="w-full">
-                    Sign Out All Other Sessions
+                    Đăng Xuất Tất Cả Các Phiên Khác
                   </Button>
                 </div>
               </CardContent>
@@ -380,15 +383,15 @@ const PrivacySecurityPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Eye className="h-5 w-5 mr-2" />
-                  Privacy Settings
+                  Cài Đặt Quyền Riêng Tư
                 </CardTitle>
                 <CardDescription>
-                  Control how your information is shared and used.
+                  Kiểm soát cách thông tin của bạn được chia sẻ và sử dụng.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <Label>Profile Visibility</Label>
+                  <Label>Hiển Thị Hồ Sơ</Label>
                   <Select
                     value={privacySettings.profileVisibility}
                     onValueChange={(value) =>
@@ -399,9 +402,9 @@ const PrivacySecurityPage = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="public">Public</SelectItem>
-                      <SelectItem value="friends">Friends Only</SelectItem>
-                      <SelectItem value="private">Private</SelectItem>
+                      <SelectItem value="public">Công Khai</SelectItem>
+                      <SelectItem value="friends">Chỉ Bạn Bè</SelectItem>
+                      <SelectItem value="private">Riêng Tư</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -411,7 +414,7 @@ const PrivacySecurityPage = () => {
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">
-                      Show Booking History
+                      Hiển Thị Lịch Sử Đặt Chỗ
                     </span>
                     <Switch
                       checked={privacySettings.showBookingHistory}
@@ -422,7 +425,7 @@ const PrivacySecurityPage = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">
-                      Share Activity Status
+                      Chia Sẻ Trạng Thái Hoạt Động
                     </span>
                     <Switch
                       checked={privacySettings.shareActivityStatus}
@@ -433,7 +436,7 @@ const PrivacySecurityPage = () => {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">
-                      Allow Marketing Communications
+                      Cho Phép Nhận Thông Tin Tiếp Thị
                     </span>
                     <Switch
                       checked={privacySettings.allowMarketing}
@@ -443,9 +446,7 @@ const PrivacySecurityPage = () => {
                     />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">
-                      Location Tracking
-                    </span>
+                    <span className="text-sm font-medium">Theo Dõi Vị Trí</span>
                     <Switch
                       checked={privacySettings.locationTracking}
                       onCheckedChange={(checked) =>
@@ -462,19 +463,19 @@ const PrivacySecurityPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Download className="h-5 w-5 mr-2" />
-                  Data Management
+                  Quản Lý Dữ Liệu
                 </CardTitle>
                 <CardDescription>
-                  Download or delete your personal data.
+                  Tải xuống hoặc xóa dữ liệu cá nhân của bạn.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Button variant="outline" className="h-auto flex-col p-6">
                     <Download className="h-6 w-6 mb-2" />
-                    <span className="font-medium">Export Data</span>
+                    <span className="font-medium">Xuất Dữ Liệu</span>
                     <span className="text-xs text-muted-foreground text-center">
-                      Download your account data
+                      Tải xuống dữ liệu tài khoản của bạn
                     </span>
                   </Button>
 
@@ -486,10 +487,10 @@ const PrivacySecurityPage = () => {
                       >
                         <Trash2 className="h-6 w-6 mb-2 text-red-600" />
                         <span className="font-medium text-red-600">
-                          Delete Account
+                          Xóa Tài Khoản
                         </span>
                         <span className="text-xs text-muted-foreground text-center">
-                          Permanently delete your account
+                          Xóa vĩnh viễn tài khoản của bạn
                         </span>
                       </Button>
                     </DialogTrigger>
@@ -497,27 +498,27 @@ const PrivacySecurityPage = () => {
                       <DialogHeader>
                         <DialogTitle className="flex items-center text-red-600">
                           <AlertTriangle className="h-5 w-5 mr-2" />
-                          Delete Account
+                          Xóa Tài Khoản
                         </DialogTitle>
                         <DialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your account and remove all your data from our
-                          servers.
+                          Hành động này không thể hoàn tác. Điều này sẽ xóa vĩnh
+                          viễn tài khoản của bạn và xóa tất cả dữ liệu của bạn
+                          khỏi máy chủ của chúng tôi.
                         </DialogDescription>
                       </DialogHeader>
                       <div className="py-4">
                         <p className="text-sm text-muted-foreground">
-                          To confirm, type <strong>DELETE</strong> in the box
-                          below:
+                          Để xác nhận, hãy gõ <strong>DELETE</strong> vào ô bên
+                          dưới:
                         </p>
                         <Input
                           className="mt-2"
-                          placeholder="Type DELETE to confirm"
+                          placeholder="Gõ DELETE để xác nhận"
                         />
                       </div>
                       <DialogFooter>
-                        <Button variant="outline">Cancel</Button>
-                        <Button variant="destructive">Delete Account</Button>
+                        <Button variant="outline">Hủy</Button>
+                        <Button variant="destructive">Xóa Tài Khoản</Button>
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
@@ -525,7 +526,9 @@ const PrivacySecurityPage = () => {
 
                 {/* Data Requests History */}
                 <div>
-                  <h3 className="font-medium mb-3">Recent Data Requests</h3>
+                  <h3 className="font-medium mb-3">
+                    Lịch Sử Yêu Cầu Dữ Liệu Gần Đây
+                  </h3>
                   <div className="space-y-2">
                     {dataRequests.map((request) => (
                       <div
@@ -562,7 +565,7 @@ const PrivacySecurityPage = () => {
 
             {/* Save Settings */}
             <div className="flex justify-end">
-              <Button>Save Privacy & Security Settings</Button>
+              <Button>Lưu Cài Đặt Quyền Riêng Tư & Bảo Mật</Button>
             </div>
           </div>
         </div>

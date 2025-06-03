@@ -139,27 +139,27 @@ const PaymentMethodsPage = () => {
 
   return (
     <>
+      {" "}
       <Helmet>
-        <title>Payment Methods | TravelTour</title>
+        <title>Phương Thức Thanh Toán | TravelTour</title>
         <meta
           name="description"
-          content="Manage your payment methods for booking tours."
+          content="Quản lý phương thức thanh toán cho việc đặt tour."
         />
       </Helmet>
-
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto">
             {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold font-poppins text-foreground mb-2">
-                Payment Methods
+                Phương Thức Thanh Toán
               </h1>
               <p className="text-muted-foreground">
-                Manage your saved payment methods for quick and secure bookings.
+                Quản lý phương thức thanh toán đã lưu để đặt tour nhanh chóng và
+                bảo mật.
               </p>
             </div>
-
             {/* Security Notice */}
             <Card className="mb-6 border-blue-200 bg-blue-50">
               <CardContent className="pt-6">
@@ -167,17 +167,17 @@ const PaymentMethodsPage = () => {
                   <Shield className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-blue-900 mb-1">
-                      Secure & Encrypted
+                      Bảo Mật & Mã Hóa
                     </h3>
                     <p className="text-sm text-blue-800">
-                      Your payment information is encrypted and securely stored.
-                      We never store your full card number or CVV.
+                      Thông tin thanh toán của bạn được mã hóa và lưu trữ an
+                      toàn. Chúng tôi không lưu trữ toàn bộ số thẻ hoặc mã CVV
+                      của bạn.
                     </p>
                   </div>
                 </div>
               </CardContent>
             </Card>
-
             {/* Payment Methods List */}
             <div className="space-y-4 mb-6">
               {paymentMethods.map((method) => (
@@ -193,14 +193,14 @@ const PaymentMethodsPage = () => {
                             </span>
                             {method.isDefault && (
                               <Badge variant="secondary" className="text-xs">
-                                Default
+                                Mặc định
                               </Badge>
                             )}
                           </div>
                           <div className="flex items-center space-x-3 text-sm text-muted-foreground mt-1">
                             <span className="flex items-center">
                               <Calendar className="h-3 w-3 mr-1" />
-                              Expires {method.expiryDate}
+                              Hết hạn {method.expiryDate}
                             </span>
                             <span className="flex items-center">
                               <Building className="h-3 w-3 mr-1" />
@@ -217,7 +217,7 @@ const PaymentMethodsPage = () => {
                             size="sm"
                             onClick={() => handleSetDefault(method.id)}
                           >
-                            Set as Default
+                            Đặt làm mặc định
                           </Button>
                         )}
 
@@ -230,7 +230,7 @@ const PaymentMethodsPage = () => {
                           <DropdownMenuContent align="end">
                             <DropdownMenuItem>
                               <Edit3 className="h-4 w-4 mr-2" />
-                              Edit
+                              Chỉnh sửa
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               className="text-destructive"
@@ -238,7 +238,7 @@ const PaymentMethodsPage = () => {
                               disabled={method.isDefault}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
-                              Delete
+                              Xóa
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -247,27 +247,27 @@ const PaymentMethodsPage = () => {
                   </CardContent>
                 </Card>
               ))}
-            </div>
-
+            </div>{" "}
             {/* Add New Payment Method */}
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="w-full sm:w-auto">
                   <Plus className="h-4 w-4 mr-2" />
-                  Add New Payment Method
+                  Thêm Phương Thức Thanh Toán Mới
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                  <DialogTitle>Add Payment Method</DialogTitle>
+                  <DialogTitle>Thêm Phương Thức Thanh Toán</DialogTitle>
                   <DialogDescription>
-                    Add a new credit or debit card for your bookings.
+                    Thêm thẻ tín dụng hoặc thẻ ghi nợ mới cho việc đặt tour của
+                    bạn.
                   </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="cardNumber">Card Number</Label>
+                    <Label htmlFor="cardNumber">Số Thẻ</Label>
                     <Input
                       id="cardNumber"
                       placeholder="1234 5678 9012 3456"
@@ -280,7 +280,7 @@ const PaymentMethodsPage = () => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="expiryDate">Expiry Date</Label>
+                      <Label htmlFor="expiryDate">Ngày Hết Hạn</Label>
                       <Input
                         id="expiryDate"
                         placeholder="MM/YY"
@@ -294,7 +294,7 @@ const PaymentMethodsPage = () => {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="cvv">CVV</Label>
+                      <Label htmlFor="cvv">Mã CVV</Label>
                       <Input
                         id="cvv"
                         placeholder="123"
@@ -307,10 +307,10 @@ const PaymentMethodsPage = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="cardholderName">Cardholder Name</Label>
+                    <Label htmlFor="cardholderName">Tên Chủ Thẻ</Label>
                     <Input
                       id="cardholderName"
-                      placeholder="John Doe"
+                      placeholder="Nguyễn Văn A"
                       value={formData.cardholderName}
                       onChange={(e) =>
                         setFormData({
@@ -322,7 +322,7 @@ const PaymentMethodsPage = () => {
                   </div>
 
                   <div>
-                    <Label htmlFor="billingZip">Billing ZIP Code</Label>
+                    <Label htmlFor="billingZip">Mã Bưu Điện</Label>
                     <Input
                       id="billingZip"
                       placeholder="12345"
@@ -339,21 +339,21 @@ const PaymentMethodsPage = () => {
                     variant="outline"
                     onClick={() => setIsAddDialogOpen(false)}
                   >
-                    Cancel
+                    Hủy bỏ
                   </Button>
-                  <Button onClick={handleAddCard}>Add Card</Button>
+                  <Button onClick={handleAddCard}>Thêm Thẻ</Button>
                 </DialogFooter>
               </DialogContent>
-            </Dialog>
-
+            </Dialog>{" "}
             {/* Additional Info */}
             <Card className="mt-8">
               <CardHeader>
                 <CardTitle className="text-lg">
-                  Accepted Payment Methods
+                  Các Phương Thức Thanh Toán Được Chấp Nhận
                 </CardTitle>
                 <CardDescription>
-                  We accept the following payment methods for your convenience.
+                  Chúng tôi chấp nhận các phương thức thanh toán sau đây để
+                  thuận tiện cho bạn.
                 </CardDescription>
               </CardHeader>
               <CardContent>

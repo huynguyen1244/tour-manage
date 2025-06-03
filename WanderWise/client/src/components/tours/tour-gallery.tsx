@@ -84,7 +84,7 @@ const TourGallery = ({ images, title }: TourGalleryProps) => {
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center transition-opacity group-hover:opacity-100">
               <div className="text-white text-center">
                 <Images className="h-6 w-6 mx-auto mb-1" />
-                <p className="font-medium">See all photos</p>
+                <p className="font-medium">Xem tất cả ảnh</p>
               </div>
             </div>
           </div>
@@ -94,7 +94,7 @@ const TourGallery = ({ images, title }: TourGalleryProps) => {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold">{title} Gallery</DialogTitle>
+            <DialogTitle className="text-xl font-bold">{title} Bộ sưu tập</DialogTitle>
           </DialogHeader>
           <Carousel className="w-full max-w-3xl mx-auto">
             <CarouselContent>
@@ -114,7 +114,7 @@ const TourGallery = ({ images, title }: TourGalleryProps) => {
             <CarouselNext />
           </Carousel>
           <Button variant="outline" onClick={() => setDialogOpen(false)} className="mx-auto">
-            Close Gallery
+            Đóng bộ sưu tập
           </Button>
         </DialogContent>
       </Dialog>

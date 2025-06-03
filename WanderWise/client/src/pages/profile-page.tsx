@@ -67,13 +67,13 @@ const ProfilePage = () => {
       });
 
       toast({
-        title: "Profile updated",
-        description: "Your profile information has been updated successfully.",
+        title: "Hồ sơ đã cập nhật",
+        description: "Thông tin hồ sơ của bạn đã được cập nhật thành công.",
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Update failed",
+        title: "Cập nhật thất bại",
         description: error.message,
         variant: "destructive",
       });
@@ -97,20 +97,20 @@ const ProfilePage = () => {
   return (
     <>
       <Helmet>
-        <title>My Profile | TravelTour</title>
+        <title>Hồ Sơ Của Tôi | TravelTour</title>
         <meta
           name="description"
-          content="Manage your TravelTour account and profile information."
+          content="Quản lý tài khoản TravelTour và thông tin hồ sơ của bạn."
         />
       </Helmet>
 
       <div className="container mx-auto px-4 py-12">
         <div className="mb-8">
           <h1 className="text-3xl font-bold font-poppins text-foreground mb-2">
-            My Profile
+            Hồ Sơ Của Tôi
           </h1>
           <p className="text-muted-foreground">
-            Manage your account and personal information
+            Quản lý tài khoản và thông tin cá nhân của bạn
           </p>{" "}
         </div>
 
@@ -144,21 +144,21 @@ const ProfilePage = () => {
                     className="justify-start data-[state=active]:bg-muted w-full px-3"
                   >
                     <User className="h-4 w-4 mr-2" />
-                    Personal Info
+                    Thông Tin Cá Nhân
                   </TabsTrigger>
                   <TabsTrigger
                     value="security"
                     className="justify-start data-[state=active]:bg-muted w-full px-3"
                   >
                     <Shield className="h-4 w-4 mr-2" />
-                    Security
+                    Bảo Mật
                   </TabsTrigger>
                   <TabsTrigger
                     value="preferences"
                     className="justify-start data-[state=active]:bg-muted w-full px-3"
                   >
                     <Mail className="h-4 w-4 mr-2" />
-                    Preferences
+                    Tùy Chọn
                   </TabsTrigger>
                 </TabsList>
 
@@ -169,7 +169,7 @@ const ProfilePage = () => {
                     onClick={handleLogout}
                   >
                     <LogOut className="h-4 w-4 mr-2" />
-                    Logout
+                    Đăng Xuất
                   </Button>
                 </div>
               </div>
@@ -177,7 +177,7 @@ const ProfilePage = () => {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium">
-                    Quick Links
+                    Truy Cập Nhanh
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
@@ -186,14 +186,14 @@ const ProfilePage = () => {
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href="/bookings">View My Bookings</Link>
+                    <Link href="/bookings">Xem Đặt Tour Của Tôi</Link>
                   </Button>
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href="/tours">Browse Tours</Link>
+                    <Link href="/tours">Duyệt Các Tour</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -204,9 +204,9 @@ const ProfilePage = () => {
               <TabsContent value="profile" className="mt-0">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Personal Information</CardTitle>
+                    <CardTitle>Thông Tin Cá Nhân</CardTitle>
                     <CardDescription>
-                      Update your personal details and contact information.
+                      Cập nhật thông tin cá nhân và thông tin liên hệ của bạn.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -221,9 +221,9 @@ const ProfilePage = () => {
                             name="firstName"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>First Name</FormLabel>
+                                <FormLabel>Tên</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="John" {...field} />
+                                  <Input placeholder="Văn" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -234,9 +234,9 @@ const ProfilePage = () => {
                             name="lastName"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Last Name</FormLabel>
+                                <FormLabel>Họ</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="Doe" {...field} />
+                                  <Input placeholder="Nguyễn" {...field} />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -249,19 +249,20 @@ const ProfilePage = () => {
                           name="phoneNumber"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Phone Number</FormLabel>
+                              <FormLabel>Số Điện Thoại</FormLabel>
                               <FormControl>
                                 <div className="relative">
                                   <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                   <Input
-                                    placeholder="+1 (555) 123-4567"
+                                    placeholder="+84 123 456 789"
                                     className="pl-10"
                                     {...field}
                                   />
                                 </div>
                               </FormControl>
                               <FormDescription>
-                                Used for booking confirmations and tour updates.
+                                Được sử dụng cho xác nhận đặt chỗ và cập nhật
+                                tour.
                               </FormDescription>
                               <FormMessage />
                             </FormItem>
@@ -274,8 +275,8 @@ const ProfilePage = () => {
                             disabled={updateProfileMutation.isPending}
                           >
                             {updateProfileMutation.isPending
-                              ? "Saving Changes..."
-                              : "Save Changes"}
+                              ? "Đang Lưu..."
+                              : "Lưu Thay Đổi"}
                           </Button>
                         </div>
                       </form>
@@ -285,28 +286,28 @@ const ProfilePage = () => {
 
                 <Card className="mt-6">
                   <CardHeader>
-                    <CardTitle>Account Information</CardTitle>
+                    <CardTitle>Thông Tin Tài Khoản</CardTitle>
                     <CardDescription>
-                      View your account details.
+                      Xem chi tiết tài khoản của bạn.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <div className="text-sm font-medium text-muted-foreground mb-1">
-                          Username
+                          Tên Người Dùng
                         </div>
                         <div className="font-medium">{user?.username}</div>
                       </div>
                       <div>
                         <div className="text-sm font-medium text-muted-foreground mb-1">
-                          Email Address
+                          Địa Chỉ Email
                         </div>
                         <div className="font-medium">{user?.email}</div>
                       </div>
                       <div>
                         <div className="text-sm font-medium text-muted-foreground mb-1">
-                          Account Created
+                          Tài Khoản Được Tạo
                         </div>
                         <div className="font-medium">
                           {user?.createdAt
@@ -321,42 +322,42 @@ const ProfilePage = () => {
               <TabsContent value="security" className="mt-0">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Account Security</CardTitle>
+                    <CardTitle>Bảo Mật Tài Khoản</CardTitle>
                     <CardDescription>
-                      Manage your password and security settings.
+                      Quản lý mật khẩu và cài đặt bảo mật của bạn.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Alert className="mb-6">
                       <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>Feature Coming Soon</AlertTitle>
+                      <AlertTitle>Tính Năng Sắp Ra Mắt</AlertTitle>
                       <AlertDescription>
-                        Password change functionality will be available in a
-                        future update.
+                        Chức năng thay đổi mật khẩu sẽ có trong bản cập nhật
+                        tương lai.
                       </AlertDescription>
                     </Alert>
 
                     <div className="space-y-4">
                       <div>
-                        <h3 className="text-lg font-medium mb-2">Password</h3>
+                        <h3 className="text-lg font-medium mb-2">Mật Khẩu</h3>
                         <p className="text-muted-foreground mb-4">
-                          Password last changed: Never
+                          Mật khẩu thay đổi lần cuối: Chưa bao giờ
                         </p>
                         <Button variant="outline" disabled>
-                          Change Password
+                          Thay Đổi Mật Khẩu
                         </Button>
                       </div>
 
                       <div className="pt-6 border-t border-border">
                         <h3 className="text-lg font-medium mb-2">
-                          Two-Factor Authentication
+                          Xác Thực Hai Yếu Tố
                         </h3>
                         <p className="text-muted-foreground mb-4">
-                          Add an extra layer of security to your account by
-                          enabling two-factor authentication.
+                          Thêm một lớp bảo mật cho tài khoản của bạn bằng cách
+                          bật xác thực hai yếu tố.
                         </p>
                         <Button variant="outline" disabled>
-                          Enable 2FA
+                          Bật 2FA
                         </Button>
                       </div>
                     </div>
@@ -366,29 +367,29 @@ const ProfilePage = () => {
               <TabsContent value="preferences" className="mt-0">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Email Preferences</CardTitle>
+                    <CardTitle>Tùy Chọn Email</CardTitle>
                     <CardDescription>
-                      Manage how we communicate with you.
+                      Quản lý cách chúng tôi liên lạc với bạn.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Alert className="mb-6">
                       <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>Feature Coming Soon</AlertTitle>
+                      <AlertTitle>Tính Năng Sắp Ra Mắt</AlertTitle>
                       <AlertDescription>
-                        Email preference settings will be available in a future
-                        update.
+                        Cài đặt tùy chọn email sẽ có trong bản cập nhật tương
+                        lai.
                       </AlertDescription>
                     </Alert>
 
                     <div className="space-y-4">
                       <p className="text-muted-foreground">
-                        Configure which types of emails you receive from us,
-                        including promotional offers, booking confirmations, and
-                        travel alerts.
+                        Cấu hình loại email bạn nhận được từ chúng tôi, bao gồm
+                        các ưu đãi khuyến mãi, xác nhận đặt tour, và thông báo
+                        du lịch.
                       </p>
                       <Button variant="outline" disabled>
-                        Update Preferences
+                        Cập Nhật Tùy Chọn
                       </Button>
                     </div>
                   </CardContent>

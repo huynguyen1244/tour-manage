@@ -56,7 +56,6 @@ const BookingHistoryPage = () => {
   } = useQuery<BookingWithTour[]>({
     queryKey: ["/api/bookings"],
   });
-
   const cancelBookingMutation = useMutation({
     mutationFn: async (bookingId: number) => {
       const res = await apiRequest("POST", `/api/bookings/${bookingId}/cancel`);
@@ -65,14 +64,14 @@ const BookingHistoryPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/bookings"] });
       toast({
-        title: "Booking Cancelled",
-        description: "Your booking has been successfully cancelled.",
+        title: "Đã Hủy Đặt Tour",
+        description: "Đặt tour của bạn đã được hủy thành công.",
       });
       setBookingToCancel(null);
     },
     onError: (error: Error) => {
       toast({
-        title: "Cancellation Failed",
+        title: "Hủy Thất Bại",
         description: error.message,
         variant: "destructive",
       });
@@ -88,55 +87,55 @@ const BookingHistoryPage = () => {
       cancelBookingMutation.mutate(bookingToCancel);
     }
   };
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "confirmed":
         return (
           <Badge className="bg-green-100 text-green-800 hover:bg-green-200">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Confirmed
+            Đã Xác Nhận
           </Badge>
         );
       case "cancelled":
         return (
           <Badge variant="outline" className="text-muted-foreground">
             <XCircle className="h-3 w-3 mr-1" />
-            Cancelled
+            Đã Hủy
           </Badge>
         );
       case "completed":
         return (
           <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">
             <CheckCircle className="h-3 w-3 mr-1" />
-            Completed
+            Hoàn Thành
           </Badge>
         );
       default:
         return (
           <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200">
             <AlertTriangle className="h-3 w-3 mr-1" />
-            Pending
+            Đang Chờ
           </Badge>
         );
     }
   };
   return (
     <>
+      {" "}
       <Helmet>
-        <title>My Bookings | TravelTour</title>
+        <title>Lịch Sử Đặt Tour | TravelTour</title>
         <meta
           name="description"
-          content="View and manage your tour bookings with TravelTour."
+          content="Xem và quản lý các đặt tour của bạn với TravelTour."
         />
       </Helmet>{" "}
       <div className="container mx-auto p-6">
         <div className="mb-8">
           <h1 className="text-3xl font-bold font-poppins text-foreground mb-2">
-            My Bookings
+            Đặt Tour Của Tôi
           </h1>
           <p className="text-muted-foreground">
-            View and manage your tour reservations
+            Xem và quản lý các đặt tour của bạn
           </p>
         </div>
 
@@ -170,28 +169,29 @@ const BookingHistoryPage = () => {
         ) : error ? (
           <div className="text-center py-10">
             <AlertCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
-            <h2 className="text-xl font-bold mb-2">Error Loading Bookings</h2>
+            <h2 className="text-xl font-bold mb-2">Lỗi Khi Tải Đặt Tour</h2>
             <p className="text-muted-foreground mb-6">
-              We couldn't load your bookings. Please try again.
+              Chúng tôi không thể tải lịch sử đặt tour của bạn. Vui lòng thử
+              lại.
             </p>
             <Button
               onClick={() =>
                 queryClient.invalidateQueries({ queryKey: ["/api/bookings"] })
               }
             >
-              Retry
+              Thử Lại
             </Button>
           </div>
         ) : bookings?.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-4xl mb-4">🌍</div>
-            <h2 className="text-xl font-bold mb-2">No Bookings Yet</h2>
+            <h2 className="text-xl font-bold mb-2">Chưa Có Đặt Tour Nào</h2>
             <p className="text-muted-foreground mb-6">
-              You haven't made any tour bookings yet. Start exploring our tours
-              to begin your next adventure!
+              Bạn chưa đặt tour nào. Bắt đầu khám phá các tour của chúng tôi để
+              bắt đầu cuộc phiêu lưu tiếp theo!
             </p>{" "}
             <Button asChild>
-              <Link href="/tours">Find Tours</Link>
+              <Link href="/tours">Tìm Tours</Link>
             </Button>
           </div>
         ) : (
@@ -217,10 +217,11 @@ const BookingHistoryPage = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid md:grid-cols-4 gap-4 text-sm">
+                    {" "}
                     <div className="flex flex-col p-3 bg-muted rounded-lg">
                       <div className="flex items-center text-muted-foreground mb-1">
                         <Calendar className="h-4 w-4 mr-2" />
-                        <span>Travel Dates</span>
+                        <span>Ngày Đi</span>
                       </div>
                       <div className="font-medium">
                         {format(
@@ -237,37 +238,37 @@ const BookingHistoryPage = () => {
                     <div className="flex flex-col p-3 bg-muted rounded-lg">
                       <div className="flex items-center text-muted-foreground mb-1">
                         <Users className="h-4 w-4 mr-2" />
-                        <span>Travelers</span>
+                        <span>Số Người</span>
                       </div>
                       <div className="font-medium">
                         {booking.numberOfTravelers}{" "}
-                        {booking.numberOfTravelers === 1 ? "Person" : "People"}
+                        {booking.numberOfTravelers === 1 ? "Người" : "Người"}
                       </div>
                     </div>
                     <div className="flex flex-col p-3 bg-muted rounded-lg">
                       <div className="flex items-center text-muted-foreground mb-1">
                         <Clock className="h-4 w-4 mr-2" />
-                        <span>Duration</span>
+                        <span>Thời Gian</span>
                       </div>
                       <div className="font-medium">
                         {booking.tour.duration}{" "}
-                        {booking.tour.duration === 1 ? "Day" : "Days"}
+                        {booking.tour.duration === 1 ? "Ngày" : "Ngày"}
                       </div>
                     </div>
                     <div className="flex flex-col p-3 bg-muted rounded-lg">
                       <div className="flex items-center text-muted-foreground mb-1">
                         <CreditCard className="h-4 w-4 mr-2" />
-                        <span>Total Price</span>
+                        <span>Tổng Tiền</span>
                       </div>
                       <div className="font-medium">
                         ${booking.totalPrice.toFixed(2)}
                       </div>
                     </div>
                   </div>
-                </CardContent>
+                </CardContent>{" "}
                 <CardFooter className="flex justify-between">
                   <Button variant="outline" asChild>
-                    <Link href={`/tours/${booking.tourId}`}>View Tour</Link>
+                    <Link href={`/tours/${booking.tourId}`}>Xem Tour</Link>
                   </Button>
                   {booking.status === "confirmed" && (
                     <Button
@@ -277,8 +278,8 @@ const BookingHistoryPage = () => {
                     >
                       {cancelBookingMutation.isPending &&
                       bookingToCancel === booking.id
-                        ? "Cancelling..."
-                        : "Cancel Booking"}
+                        ? "Đang Hủy..."
+                        : "Hủy Đặt Tour"}
                     </Button>
                   )}
                 </CardFooter>
@@ -286,27 +287,27 @@ const BookingHistoryPage = () => {
             ))}
           </div>
         )}
-      </div>
+      </div>{" "}
       <AlertDialog
         open={bookingToCancel !== null}
         onOpenChange={(open) => !open && setBookingToCancel(null)}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Cancel Booking</AlertDialogTitle>
+            <AlertDialogTitle>Hủy Đặt Tour</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to cancel this booking? This action cannot
-              be undone. You may be eligible for a refund according to our
-              cancellation policy.
+              Bạn có chắc chắn muốn hủy đặt tour này? Hành động này không thể
+              hoàn tác. Bạn có thể đủ điều kiện nhận hoàn tiền theo chính sách
+              hủy của chúng tôi.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Keep Booking</AlertDialogCancel>
+            <AlertDialogCancel>Giữ Đặt Tour</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmCancelBooking}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Yes, Cancel Booking
+              Có, Hủy Đặt Tour
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

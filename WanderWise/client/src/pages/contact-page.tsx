@@ -16,22 +16,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { 
-  Mail, 
-  MapPin, 
-  Phone, 
-  Clock, 
-  Globe, 
-  Send, 
-  CheckCircle 
+import {
+  Mail,
+  MapPin,
+  Phone,
+  Clock,
+  Globe,
+  Send,
+  CheckCircle,
 } from "lucide-react";
 
 const contactFormSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
+  name: z.string().min(2, { message: "Tên phải có ít nhất 2 ký tự" }),
+  email: z.string().email({ message: "Vui lòng nhập địa chỉ email hợp lệ" }),
   phone: z.string().optional(),
-  subject: z.string().min(5, { message: "Subject must be at least 5 characters" }),
-  message: z.string().min(10, { message: "Message must be at least 10 characters" }),
+  subject: z.string().min(5, { message: "Chủ đề phải có ít nhất 5 ký tự" }),
+  message: z.string().min(10, { message: "Tin nhắn phải có ít nhất 10 ký tự" }),
 });
 
 type ContactFormValues = z.infer<typeof contactFormSchema>;
@@ -54,27 +54,27 @@ const ContactPage = () => {
   const onSubmit = (data: ContactFormValues) => {
     // In a real application, you would send this data to your backend
     console.log(data);
-    
+
     // Simulate successful form submission
     setTimeout(() => {
       setFormSubmitted(true);
       toast({
-        title: "Message sent successfully",
-        description: "We'll get back to you as soon as possible.",
+        title: "Tin nhắn đã được gửi thành công",
+        description: "Chúng tôi sẽ liên hệ lại với bạn sớm nhất có thể.",
       });
     }, 1000);
   };
 
   return (
     <>
+      {" "}
       <Helmet>
-        <title>Contact Us | TravelTour</title>
+        <title>Liên Hệ | WanderWise</title>
         <meta
           name="description"
-          content="Get in touch with our travel experts. We're here to help you plan your perfect trip."
+          content="Liên hệ với các chuyên gia du lịch của chúng tôi. Chúng tôi ở đây để giúp bạn lập kế hoạch cho chuyến đi hoàn hảo."
         />
       </Helmet>
-
       <div className="min-h-screen bg-background">
         {/* Header Banner */}
         <div
@@ -84,12 +84,14 @@ const ContactPage = () => {
               "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1534536281715-e28d76689b4d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80')",
           }}
         >
+          {" "}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
             <h1 className="text-3xl md:text-5xl font-bold font-poppins mb-2 text-center">
-              Contact Us
+              Liên Hệ
             </h1>
             <p className="text-lg max-w-2xl text-center">
-              Our travel experts are ready to help you plan your perfect adventure
+              Các chuyên gia du lịch của chúng tôi sẵn sàng giúp bạn lên kế
+              hoạch cho cuộc phiêu lưu hoàn hảo
             </p>
           </div>
         </div>
@@ -103,9 +105,11 @@ const ContactPage = () => {
                 Get in Touch
               </h2>
               <p className="text-muted-foreground mb-8">
-                Have questions about our tours or need help planning your trip? Our friendly
-                team is here to assist you. Fill out the form or reach out to us directly using
-                the contact information below.
+                Có thắc mắc về các chuyến tham quan của chúng tôi hoặc cần giúp
+                đỡ trong việc lập kế hoạch cho chuyến đi của bạn? Đội ngũ thân
+                thiện của chúng tôi ở đây để hỗ trợ bạn. Hãy điền vào mẫu đơn
+                hoặc liên hệ với chúng tôi trực tiếp qua thông tin liên hệ bên
+                dưới.
               </p>
 
               <div className="space-y-6">
@@ -117,9 +121,9 @@ const ContactPage = () => {
                     <div>
                       <h3 className="font-medium text-lg mb-1">Our Address</h3>
                       <p className="text-muted-foreground">
-                        123 Adventure Avenue, <br />
-                        Explorer's District, <br />
-                        New York, NY 10001
+                        123 Lê Thanh Nghị, <br />
+                        Hai Bà Trưng, <br />
+                        Hà Nội
                       </p>
                     </div>
                   </CardContent>
@@ -131,9 +135,15 @@ const ContactPage = () => {
                       <Mail className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-lg mb-1">Email Us</h3>
-                      <p className="text-muted-foreground">info@traveltour.com</p>
-                      <p className="text-muted-foreground">bookings@traveltour.com</p>
+                      <h3 className="font-medium text-lg mb-1">
+                        Email cho chúng tôi
+                      </h3>
+                      <p className="text-muted-foreground">
+                        info@traveltour.com
+                      </p>
+                      <p className="text-muted-foreground">
+                        bookings@traveltour.com
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -144,7 +154,9 @@ const ContactPage = () => {
                       <Phone className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-lg mb-1">Call Us</h3>
+                      <h3 className="font-medium text-lg mb-1">
+                        Gọi chúng tôi
+                      </h3>
                       <p className="text-muted-foreground">+1 (555) 123-4567</p>
                       <p className="text-muted-foreground">+1 (800) TOUR-NOW</p>
                     </div>
@@ -157,9 +169,15 @@ const ContactPage = () => {
                       <Clock className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-lg mb-1">Business Hours</h3>
-                      <p className="text-muted-foreground">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                      <p className="text-muted-foreground">Saturday: 10:00 AM - 4:00 PM</p>
+                      <h3 className="font-medium text-lg mb-1">
+                        Thời gian hoạt động
+                      </h3>
+                      <p className="text-muted-foreground">
+                        Monday - Friday: 9:00 AM - 6:00 PM
+                      </p>
+                      <p className="text-muted-foreground">
+                        Saturday: 10:00 AM - 4:00 PM
+                      </p>
                       <p className="text-muted-foreground">Sunday: Closed</p>
                     </div>
                   </CardContent>
@@ -173,7 +191,9 @@ const ContactPage = () => {
                 <CardContent className="p-6 md:p-8">
                   <div className="flex items-center mb-6">
                     <Globe className="h-6 w-6 text-primary mr-2" />
-                    <h2 className="text-2xl font-bold font-poppins">Send us a Message</h2>
+                    <h2 className="text-2xl font-bold font-poppins">
+                      Gửi tin cho chúng tôi
+                    </h2>
                   </div>
 
                   {formSubmitted ? (
@@ -181,10 +201,10 @@ const ContactPage = () => {
                       <div className="bg-primary/10 p-4 rounded-full mb-4">
                         <CheckCircle className="h-12 w-12 text-primary" />
                       </div>
-                      <h3 className="text-xl font-bold mb-2">Thank You!</h3>
-                      <p className="text-center text-muted-foreground">
-                        Your message has been sent successfully. One of our travel experts
-                        will get back to you shortly.
+                      <h3 className="text-xl font-bold mb-2">Cảm ơn!</h3>
+                      <p className="text-muted-foreground mb-4 text-center">
+                        Tin nhắn của bạn đã được gửi thành công. Chúng tôi sẽ
+                        liên hệ lại với bạn sớm nhất có thể.
                       </p>
                       <Button
                         className="mt-6"
@@ -193,19 +213,22 @@ const ContactPage = () => {
                           form.reset();
                         }}
                       >
-                        Send Another Message
+                        Gửi tin nhắn khác
                       </Button>
                     </div>
                   ) : (
                     <Form {...form}>
-                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                      <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="space-y-4"
+                      >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <FormField
                             control={form.control}
                             name="name"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Full Name</FormLabel>
+                                <FormLabel>Tên đầy đủ</FormLabel>
                                 <FormControl>
                                   <Input placeholder="John Doe" {...field} />
                                 </FormControl>
@@ -218,7 +241,7 @@ const ContactPage = () => {
                             name="email"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Email Address</FormLabel>
+                                <FormLabel>Email</FormLabel>
                                 <FormControl>
                                   <Input
                                     type="email"
@@ -238,9 +261,12 @@ const ContactPage = () => {
                             name="phone"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Phone Number (Optional)</FormLabel>
+                                <FormLabel>Số điện thoại</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="+1 (555) 123-4567" {...field} />
+                                  <Input
+                                    placeholder="+1 (555) 123-4567"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -269,10 +295,10 @@ const ContactPage = () => {
                           name="message"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Your Message</FormLabel>
+                              <FormLabel>Tin nhắn của bạn</FormLabel>
                               <FormControl>
                                 <Textarea
-                                  placeholder="Tell us what you're looking for or ask us a question..."
+                                  placeholder="Nói cho chúng tôi biết về yêu cầu của bạn..."
                                   className="min-h-[150px]"
                                   {...field}
                                 />
@@ -301,8 +327,9 @@ const ContactPage = () => {
             <div className="text-center">
               <Globe className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <p className="text-muted-foreground max-w-md mx-auto">
-                Interactive map would be displayed here in a production environment.
-                This would show our office location.
+                Chúng tôi có mặt trên toàn cầu! Bạn có thể tìm thấy chúng tôi
+                tại nhiều địa điểm khác nhau. Hãy liên hệ với chúng tôi để biết
+                thêm thông tin chi tiết.
               </p>
             </div>
           </div>

@@ -14,6 +14,7 @@ const Footer = () => {
     <footer className="bg-gray-900 text-white pt-12 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-8">
+          {" "}
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4">
               <Globe className="h-8 w-8 text-primary mr-2" />
@@ -22,9 +23,10 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-400 mb-4">
-              Discover amazing tours around the world with our curated travel
-              experiences. We provide unforgettable adventures with local
-              guides, comfortable accommodations, and hassle-free planning.
+              Khám phá những tour du lịch tuyệt vời trên khắp thế giới với những
+              trải nghiệm du lịch được chọn lọc. Chúng tôi cung cấp những cuộc
+              phiêu lưu khó quên với hướng dẫn viên địa phương, chỗ ở thoải mái
+              và kế hoạch không phiền hà.
             </p>
             <div className="flex space-x-4">
               <a
@@ -46,17 +48,18 @@ const Footer = () => {
                 <Instagram size={18} />
               </a>
             </div>
-          </div>
-
+          </div>{" "}
           <div>
-            <h3 className="text-lg font-bold mb-4 font-poppins">Quick Links</h3>
+            <h3 className="text-lg font-bold mb-4 font-poppins">
+              Liên Kết Nhanh
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  Home
+                  Trang Chủ
                 </Link>
               </li>
               <li>
@@ -64,7 +67,7 @@ const Footer = () => {
                   href="/about"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  About Us
+                  Giới Thiệu
                 </Link>
               </li>
               <li>
@@ -80,7 +83,7 @@ const Footer = () => {
                   href="/destinations"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  Destinations
+                  Điểm Đến
                 </Link>
               </li>
               <li>
@@ -88,21 +91,20 @@ const Footer = () => {
                   href="/contact"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  Contact
+                  Liên Hệ
                 </Link>
               </li>
             </ul>
-          </div>
-
+          </div>{" "}
           <div>
-            <h3 className="text-lg font-bold mb-4 font-poppins">Support</h3>
+            <h3 className="text-lg font-bold mb-4 font-poppins">Hỗ Trợ</h3>
             <ul className="space-y-2">
               <li>
                 <a
                   href="#"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  FAQ
+                  Câu Hỏi Thường Gặp
                 </a>
               </li>
               <li>
@@ -110,7 +112,7 @@ const Footer = () => {
                   href="#"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  Help Center
+                  Trung Tâm Trợ Giúp
                 </a>
               </li>
               <li>
@@ -118,7 +120,7 @@ const Footer = () => {
                   href="#"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  Payment Options
+                  Phương Thức Thanh Toán
                 </a>
               </li>
               <li>
@@ -126,7 +128,7 @@ const Footer = () => {
                   href="#"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  Privacy Policy
+                  Chính Sách Bảo Mật
                 </a>
               </li>
               <li>
@@ -134,19 +136,20 @@ const Footer = () => {
                   href="#"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  Terms & Conditions
+                  Điều Khoản & Điều Kiện
                 </a>
               </li>
             </ul>
-          </div>
-
+          </div>{" "}
           <div>
-            <h3 className="text-lg font-bold mb-4 font-poppins">Contact Us</h3>
+            <h3 className="text-lg font-bold mb-4 font-poppins">
+              Liên Hệ Với Chúng Tôi
+            </h3>
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-primary mr-3 mt-1 flex-shrink-0" />
                 <span className="text-gray-400">
-                  123 Travel Street, Tourism City, 10001
+                  123 Đường Du Lịch, Thành Phố Du Lịch, 10001
                 </span>
               </li>
               <li className="flex items-center">
@@ -159,12 +162,12 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-        </div>
-
+        </div>{" "}
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {new Date().getFullYear()} TravelTour. All rights reserved.
+              © {new Date().getFullYear()} TravelTour. Tất cả các quyền được bảo
+              lưu.
             </p>
             <div className="flex items-center">
               <div className="flex space-x-3">

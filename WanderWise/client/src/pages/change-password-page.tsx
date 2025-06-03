@@ -36,21 +36,18 @@ import {
 
 const changePasswordSchema = z
   .object({
-    currentPassword: z.string().min(1, "Current password is required"),
+    currentPassword: z.string().min(1, "Mật khẩu hiện tại là bắt buộc"),
     newPassword: z
       .string()
-      .min(8, "Password must be at least 8 characters")
-      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
-      .regex(/\d/, "Password must contain at least one number")
-      .regex(
-        /[^A-Za-z0-9]/,
-        "Password must contain at least one special character"
-      ),
+      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
+      .regex(/[A-Z]/, "Mật khẩu phải chứa ít nhất một chữ hoa")
+      .regex(/[a-z]/, "Mật khẩu phải chứa ít nhất một chữ thường")
+      .regex(/\d/, "Mật khẩu phải chứa ít nhất một số")
+      .regex(/[^A-Za-z0-9]/, "Mật khẩu phải chứa ít nhất một ký tự đặc biệt"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords don't match",
+    message: "Mật khẩu không khớp",
     path: ["confirmPassword"],
   });
 
@@ -93,9 +90,9 @@ const ChangePasswordPage = () => {
   };
 
   const getStrengthText = (strength: number) => {
-    if (strength < 40) return "Weak";
-    if (strength < 70) return "Medium";
-    return "Strong";
+    if (strength < 40) return "Yếu";
+    if (strength < 70) return "Trung bình";
+    return "Mạnh";
   };
 
   const passwordStrength = calculatePasswordStrength(newPassword || "");
@@ -109,7 +106,7 @@ const ChangePasswordPage = () => {
       form.reset();
       setTimeout(() => setSuccess(false), 5000);
     } catch (error) {
-      console.error("Password change failed:", error);
+      console.error("Thay đổi mật khẩu thất bại:", error);
     } finally {
       setIsLoading(false);
     }
@@ -117,23 +114,23 @@ const ChangePasswordPage = () => {
 
   const passwordRequirements = [
     {
-      text: "At least 8 characters",
+      text: "Ít nhất 8 ký tự",
       met: (newPassword?.length || 0) >= 8,
     },
     {
-      text: "One uppercase letter",
+      text: "Một chữ cái viết hoa",
       met: /[A-Z]/.test(newPassword || ""),
     },
     {
-      text: "One lowercase letter",
+      text: "Một chữ cái viết thường",
       met: /[a-z]/.test(newPassword || ""),
     },
     {
-      text: "One number",
+      text: "Một số",
       met: /\d/.test(newPassword || ""),
     },
     {
-      text: "One special character",
+      text: "Một ký tự đặc biệt",
       met: /[^A-Za-z0-9]/.test(newPassword || ""),
     },
   ];
@@ -141,10 +138,10 @@ const ChangePasswordPage = () => {
   return (
     <>
       <Helmet>
-        <title>Change Password | TravelTour</title>
+        <title>Thay Đổi Mật Khẩu | TravelTour</title>
         <meta
           name="description"
-          content="Update your account password for enhanced security."
+          content="Cập nhật mật khẩu tài khoản của bạn để tăng cường bảo mật."
         />
       </Helmet>
 
@@ -154,11 +151,11 @@ const ChangePasswordPage = () => {
             {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold font-poppins text-foreground mb-2">
-                Change Password
+                Thay Đổi Mật Khẩu
               </h1>
               <p className="text-muted-foreground">
-                Update your password to keep your account secure. Use a strong
-                password that you don't use elsewhere.
+                Cập nhật mật khẩu của bạn để giữ an toàn cho tài khoản. Sử dụng
+                mật khẩu mạnh mà bạn không sử dụng ở nơi khác.
               </p>
             </div>
 
@@ -166,8 +163,8 @@ const ChangePasswordPage = () => {
               <Alert className="mb-6 border-green-200 bg-green-50">
                 <CheckCircle className="h-4 w-4 text-green-600" />
                 <AlertDescription className="text-green-800">
-                  Your password has been changed successfully. You'll remain
-                  logged in on this device.
+                  Mật khẩu của bạn đã được thay đổi thành công. Bạn sẽ vẫn được
+                  đăng nhập trên thiết bị này.
                 </AlertDescription>
               </Alert>
             )}
@@ -179,23 +176,20 @@ const ChangePasswordPage = () => {
                   <Shield className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-blue-900 mb-2">
-                      Password Security Tips
+                      Mẹo Bảo Mật Mật Khẩu
                     </h3>
                     <ul className="text-sm text-blue-800 space-y-1">
                       <li>
-                        • Use a unique password that you don't use on other
-                        sites
+                        • Sử dụng mật khẩu độc đáo mà bạn không dùng trên các
+                        trang khác
+                      </li>
+                      <li>• Kết hợp chữ cái, số và ký tự đặc biệt</li>
+                      <li>
+                        • Cân nhắc sử dụng trình quản lý mật khẩu để bảo mật tốt
+                        hơn
                       </li>
                       <li>
-                        • Include a mix of letters, numbers, and special
-                        characters
-                      </li>
-                      <li>
-                        • Consider using a password manager for better security
-                      </li>
-                      <li>
-                        • Avoid using personal information like names or
-                        birthdates
+                        • Tránh sử dụng thông tin cá nhân như tên hoặc ngày sinh
                       </li>
                     </ul>
                   </div>
@@ -208,10 +202,11 @@ const ChangePasswordPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Key className="h-5 w-5 mr-2" />
-                  Update Password
+                  Cập Nhật Mật Khẩu
                 </CardTitle>
                 <CardDescription>
-                  Enter your current password and choose a new strong password.
+                  Nhập mật khẩu hiện tại của bạn và chọn một mật khẩu mới mạnh
+                  mẽ.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -226,13 +221,13 @@ const ChangePasswordPage = () => {
                       name="currentPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Current Password</FormLabel>
+                          <FormLabel>Mật Khẩu Hiện Tại</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
                                 {...field}
                                 type={showCurrentPassword ? "text" : "password"}
-                                placeholder="Enter your current password"
+                                placeholder="Nhập mật khẩu hiện tại của bạn"
                               />
                               <Button
                                 type="button"
@@ -262,13 +257,13 @@ const ChangePasswordPage = () => {
                       name="newPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>New Password</FormLabel>
+                          <FormLabel>Mật Khẩu Mới</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
                                 {...field}
                                 type={showNewPassword ? "text" : "password"}
-                                placeholder="Enter your new password"
+                                placeholder="Nhập mật khẩu mới của bạn"
                               />
                               <Button
                                 type="button"
@@ -296,7 +291,7 @@ const ChangePasswordPage = () => {
                     {newPassword && (
                       <div className="space-y-3">
                         <div className="flex items-center justify-between text-sm">
-                          <span>Password strength:</span>
+                          <span>Độ mạnh của mật khẩu:</span>
                           <span
                             className={`font-medium ${
                               passwordStrength < 40
@@ -323,7 +318,7 @@ const ChangePasswordPage = () => {
                       <div>
                         <h4 className="text-sm font-medium mb-3 flex items-center">
                           <Info className="h-4 w-4 mr-2" />
-                          Password Requirements
+                          Yêu Cầu Mật Khẩu
                         </h4>
                         <div className="grid grid-cols-1 gap-2">
                           {passwordRequirements.map((req, index) => (
@@ -357,13 +352,13 @@ const ChangePasswordPage = () => {
                       name="confirmPassword"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Confirm New Password</FormLabel>
+                          <FormLabel>Xác Nhận Mật Khẩu Mới</FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input
                                 {...field}
                                 type={showConfirmPassword ? "text" : "password"}
-                                placeholder="Confirm your new password"
+                                placeholder="Xác nhận mật khẩu mới của bạn"
                               />
                               <Button
                                 type="button"
@@ -393,7 +388,7 @@ const ChangePasswordPage = () => {
                         disabled={isLoading || passwordStrength < 70}
                         className="sm:order-2"
                       >
-                        {isLoading ? "Changing Password..." : "Change Password"}
+                        {isLoading ? "Đang Đổi Mật Khẩu..." : "Đổi Mật Khẩu"}
                       </Button>
                       <Button
                         type="button"
@@ -401,7 +396,7 @@ const ChangePasswordPage = () => {
                         onClick={() => form.reset()}
                         className="sm:order-1"
                       >
-                        Cancel
+                        Hủy
                       </Button>
                     </div>
                   </form>
@@ -416,12 +411,13 @@ const ChangePasswordPage = () => {
                   <Clock className="h-5 w-5 text-amber-600 mr-3 mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-amber-900 mb-1">
-                      After Changing Your Password
+                      Sau Khi Đổi Mật Khẩu
                     </h3>
                     <p className="text-sm text-amber-800">
-                      You'll remain logged in on this device, but you may be
-                      signed out of other devices for security. You'll need to
-                      sign in again with your new password on those devices.
+                      Bạn sẽ vẫn đăng nhập trên thiết bị này, nhưng bạn có thể
+                      bị đăng xuất khỏi các thiết bị khác vì lý do bảo mật. Bạn
+                      sẽ cần đăng nhập lại bằng mật khẩu mới trên các thiết bị
+                      đó.
                     </p>
                   </div>
                 </div>

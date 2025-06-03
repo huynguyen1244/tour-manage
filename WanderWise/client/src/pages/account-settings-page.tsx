@@ -81,48 +81,48 @@ const AccountSettingsPage = () => {
 
   const quickActions = [
     {
-      title: "Edit Profile",
-      description: "Update your personal information",
+      title: "Chỉnh Sửa Hồ Sơ",
+      description: "Cập nhật thông tin cá nhân của bạn",
       icon: Edit,
       href: "/profile",
       color: "text-blue-600",
       bgColor: "bg-blue-50",
     },
     {
-      title: "Payment Methods",
-      description: "Manage your payment cards",
+      title: "Phương Thức Thanh Toán",
+      description: "Quản lý thẻ thanh toán của bạn",
       icon: CreditCard,
       href: "/payment-methods",
       color: "text-green-600",
       bgColor: "bg-green-50",
     },
     {
-      title: "Change Password",
-      description: "Update your account password",
+      title: "Thay Đổi Mật Khẩu",
+      description: "Cập nhật mật khẩu tài khoản của bạn",
       icon: Key,
       href: "/change-password",
       color: "text-orange-600",
       bgColor: "bg-orange-50",
     },
     {
-      title: "Notifications",
-      description: "Configure notification preferences",
+      title: "Thông Báo",
+      description: "Cấu hình tùy chọn thông báo",
       icon: Bell,
       href: "/notifications",
       color: "text-purple-600",
       bgColor: "bg-purple-50",
     },
     {
-      title: "Privacy & Security",
-      description: "Manage security and privacy settings",
+      title: "Quyền Riêng Tư & Bảo Mật",
+      description: "Quản lý cài đặt bảo mật và quyền riêng tư",
       icon: Shield,
       href: "/privacy-security",
       color: "text-red-600",
       bgColor: "bg-red-50",
     },
     {
-      title: "Color Theme",
-      description: "Customize your app appearance",
+      title: "Giao Diện Màu Sắc",
+      description: "Tùy chỉnh giao diện ứng dụng của bạn",
       icon: Palette,
       href: "/color-theme",
       color: "text-pink-600",
@@ -133,10 +133,10 @@ const AccountSettingsPage = () => {
   return (
     <>
       <Helmet>
-        <title>Account Settings | TravelTour</title>
+        <title>Cài Đặt Tài Khoản | TravelTour</title>
         <meta
           name="description"
-          content="Manage your account settings and preferences."
+          content="Quản lý cài đặt tài khoản và tùy chọn cá nhân của bạn."
         />
       </Helmet>
 
@@ -146,10 +146,10 @@ const AccountSettingsPage = () => {
             {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold font-poppins text-foreground mb-2">
-                Account Settings
+                Cài Đặt Tài Khoản
               </h1>
               <p className="text-muted-foreground">
-                Manage your account information and preferences.
+                Quản lý thông tin tài khoản và tùy chọn cá nhân của bạn.
               </p>
             </div>
 
@@ -160,15 +160,15 @@ const AccountSettingsPage = () => {
                   <CheckCircle className="h-5 w-5 text-green-600 mr-3 mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-green-900 mb-1">
-                      Account Active
+                      Tài Khoản Hoạt Động
                     </h3>
                     <p className="text-sm text-green-800">
-                      Your account is in good standing. All features are
-                      available.
+                      Tài khoản của bạn đang hoạt động tốt. Tất cả tính năng đều
+                      khả dụng.
                     </p>
                   </div>
                   <Badge variant="secondary" className="ml-auto">
-                    Verified
+                    Đã Xác Thực
                   </Badge>
                 </div>
               </CardContent>
@@ -182,16 +182,16 @@ const AccountSettingsPage = () => {
                   <CardHeader>
                     <CardTitle className="flex items-center">
                       <UserCog className="h-5 w-5 mr-2" />
-                      Personal Information
+                      Thông Tin Cá Nhân
                     </CardTitle>
                     <CardDescription>
-                      Update your personal details and contact information.
+                      Cập nhật thông tin cá nhân và thông tin liên hệ của bạn.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="firstName">First Name</Label>
+                        <Label htmlFor="firstName">Tên</Label>
                         <Input
                           id="firstName"
                           value={formData.firstName}
@@ -201,7 +201,7 @@ const AccountSettingsPage = () => {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="lastName">Last Name</Label>
+                        <Label htmlFor="lastName">Họ</Label>
                         <Input
                           id="lastName"
                           value={formData.lastName}
@@ -213,7 +213,7 @@ const AccountSettingsPage = () => {
                     </div>
 
                     <div>
-                      <Label htmlFor="email">Email Address</Label>
+                      <Label htmlFor="email">Địa Chỉ Email</Label>
                       <div className="flex items-center">
                         <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
                         <Input
@@ -229,7 +229,7 @@ const AccountSettingsPage = () => {
                     </div>
 
                     <div>
-                      <Label htmlFor="phone">Phone Number</Label>
+                      <Label htmlFor="phone">Số Điện Thoại</Label>
                       <div className="flex items-center">
                         <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
                         <Input
@@ -240,14 +240,14 @@ const AccountSettingsPage = () => {
                             handleInputChange("phone", e.target.value)
                           }
                           className="flex-1"
-                          placeholder="+1 (555) 123-4567"
+                          placeholder="+84 (123) 456-789"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                        <Label htmlFor="dateOfBirth">Ngày Sinh</Label>
                         <div className="flex items-center">
                           <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
                           <Input
@@ -262,7 +262,7 @@ const AccountSettingsPage = () => {
                         </div>
                       </div>
                       <div>
-                        <Label htmlFor="country">Country</Label>
+                        <Label htmlFor="country">Quốc Gia</Label>
                         <div className="flex items-center">
                           <Globe className="h-4 w-4 mr-2 text-muted-foreground" />
                           <Select
@@ -272,16 +272,17 @@ const AccountSettingsPage = () => {
                             }
                           >
                             <SelectTrigger className="flex-1">
-                              <SelectValue placeholder="Select country" />
+                              <SelectValue placeholder="Chọn quốc gia" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="us">United States</SelectItem>
+                              <SelectItem value="us">Hoa Kỳ</SelectItem>
                               <SelectItem value="ca">Canada</SelectItem>
-                              <SelectItem value="uk">United Kingdom</SelectItem>
-                              <SelectItem value="de">Germany</SelectItem>
-                              <SelectItem value="fr">France</SelectItem>
-                              <SelectItem value="jp">Japan</SelectItem>
-                              <SelectItem value="au">Australia</SelectItem>
+                              <SelectItem value="uk">Vương Quốc Anh</SelectItem>
+                              <SelectItem value="de">Đức</SelectItem>
+                              <SelectItem value="fr">Pháp</SelectItem>
+                              <SelectItem value="jp">Nhật Bản</SelectItem>
+                              <SelectItem value="au">Úc</SelectItem>
+                              <SelectItem value="vn">Việt Nam</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -289,7 +290,7 @@ const AccountSettingsPage = () => {
                     </div>
 
                     <div>
-                      <Label htmlFor="city">City</Label>
+                      <Label htmlFor="city">Thành Phố</Label>
                       <div className="flex items-center">
                         <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
                         <Input
@@ -299,26 +300,26 @@ const AccountSettingsPage = () => {
                             handleInputChange("city", e.target.value)
                           }
                           className="flex-1"
-                          placeholder="Enter your city"
+                          placeholder="Nhập thành phố của bạn"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <Label htmlFor="bio">Bio</Label>
+                      <Label htmlFor="bio">Tiểu Sử</Label>
                       <Textarea
                         id="bio"
                         value={formData.bio}
                         onChange={(e) =>
                           handleInputChange("bio", e.target.value)
                         }
-                        placeholder="Tell us about yourself..."
+                        placeholder="Hãy cho chúng tôi biết về bạn..."
                         rows={3}
                       />
                     </div>
 
                     <div>
-                      <Label htmlFor="website">Website</Label>
+                      <Label htmlFor="website">Trang Web</Label>
                       <Input
                         id="website"
                         type="url"
@@ -329,24 +330,28 @@ const AccountSettingsPage = () => {
                         placeholder="https://yourwebsite.com"
                       />
                     </div>
+
+                    <div className="flex justify-end">
+                      <Button>Lưu Thay Đổi</Button>
+                    </div>
                   </CardContent>
                 </Card>
 
                 {/* Account Preferences */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Account Preferences</CardTitle>
+                    <CardTitle>Tùy Chọn Tài Khoản</CardTitle>
                     <CardDescription>
-                      Configure how your account behaves and what information is
-                      shared.
+                      Cấu hình cách tài khoản của bạn hoạt động và thông tin nào
+                      được chia sẻ.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="font-medium">Email Notifications</span>
+                        <span className="font-medium">Thông Báo Qua Email</span>
                         <p className="text-sm text-muted-foreground">
-                          Receive important updates via email
+                          Nhận cập nhật quan trọng qua email
                         </p>
                       </div>
                       <Switch
@@ -361,9 +366,9 @@ const AccountSettingsPage = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="font-medium">SMS Notifications</span>
+                        <span className="font-medium">Thông Báo Qua SMS</span>
                         <p className="text-sm text-muted-foreground">
-                          Receive urgent alerts via text message
+                          Nhận cảnh báo khẩn cấp qua tin nhắn
                         </p>
                       </div>
                       <Switch
@@ -378,9 +383,9 @@ const AccountSettingsPage = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="font-medium">Public Profile</span>
+                        <span className="font-medium">Hồ Sơ Công Khai</span>
                         <p className="text-sm text-muted-foreground">
-                          Make your profile visible to other users
+                          Làm cho hồ sơ của bạn hiển thị với người dùng khác
                         </p>
                       </div>
                       <Switch
@@ -395,9 +400,11 @@ const AccountSettingsPage = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="font-medium">Show Online Status</span>
+                        <span className="font-medium">
+                          Hiển Thị Trạng Thái Trực Tuyến
+                        </span>
                         <p className="text-sm text-muted-foreground">
-                          Let others see when you're online
+                          Để người khác thấy khi bạn đang trực tuyến
                         </p>
                       </div>
                       <Switch
@@ -412,9 +419,9 @@ const AccountSettingsPage = () => {
 
                     <div className="flex items-center justify-between">
                       <div>
-                        <span className="font-medium">Marketing Emails</span>
+                        <span className="font-medium">Email Tiếp Thị</span>
                         <p className="text-sm text-muted-foreground">
-                          Receive promotional content and offers
+                          Nhận nội dung và ưu đãi quảng cáo
                         </p>
                       </div>
                       <Switch
@@ -429,8 +436,8 @@ const AccountSettingsPage = () => {
 
                 {/* Save Changes */}
                 <div className="flex justify-end space-x-2">
-                  <Button variant="outline">Cancel</Button>
-                  <Button>Save Changes</Button>
+                  <Button variant="outline">Hủy</Button>
+                  <Button>Lưu Thay Đổi</Button>
                 </div>
               </div>
 
@@ -438,9 +445,9 @@ const AccountSettingsPage = () => {
               <div className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Quick Actions</CardTitle>
+                    <CardTitle>Thao Tác Nhanh</CardTitle>
                     <CardDescription>
-                      Jump to specific settings sections.
+                      Chuyển đến các mục cài đặt cụ thể.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
@@ -472,37 +479,37 @@ const AccountSettingsPage = () => {
                 {/* Account Stats */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Account Overview</CardTitle>
+                    <CardTitle>Tổng Quan Tài Khoản</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        Member Since
+                        Ngày Tham Gia
                       </span>
-                      <span className="text-sm font-medium">Jan 2024</span>
+                      <span className="text-sm font-medium">Tháng 1, 2024</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        Total Bookings
+                        Tổng Số Đặt Chỗ
                       </span>
                       <span className="text-sm font-medium">12</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        Countries Visited
+                        Quốc Gia Đã Thăm
                       </span>
                       <span className="text-sm font-medium">8</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        Loyalty Points
+                        Điểm Thưởng
                       </span>
                       <span className="text-sm font-medium">2,450</span>
                     </div>
                     <Separator />
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        Account Status
+                        Trạng Thái Tài Khoản
                       </span>
                       <Badge variant="default" className="text-xs">
                         Premium
