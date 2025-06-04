@@ -98,30 +98,34 @@ const AboutPage = () => {
 
         {/* Our Mission */}
         <div className="bg-muted py-16 px-4">
-          <div className="container mx-auto">            <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="container mx-auto">
+            {" "}
+            <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-4">
                 Sứ Mệnh & Giá Trị Của Chúng Tôi
               </h2>
               <p className="text-muted-foreground">
                 Tại WanderWise, chúng tôi tin rằng du lịch có sức mạnh thay đổi
-                cuộc sống, mở rộng tầm nhìn và tạo ra những kết nối ý nghĩa
-                giữa các nền văn hóa. Sứ mệnh của chúng tôi là tạo điều kiện cho
+                cuộc sống, mở rộng tầm nhìn và tạo ra những kết nối ý nghĩa giữa
+                các nền văn hóa. Sứ mệnh của chúng tôi là tạo điều kiện cho
                 những trải nghiệm biến đổi này trong khi đảm bảo hoạt động của
-                chúng tôi tác động tích cực đến các cộng đồng mà chúng tôi ghé thăm.
+                chúng tôi tác động tích cực đến các cộng đồng mà chúng tôi ghé
+                thăm.
               </p>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card>
                 <CardContent className="p-6 text-center">
                   <div className="bg-primary/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <Map className="h-8 w-8 text-primary" />
-                  </div>                  <h3 className="font-semibold text-lg mb-2">
+                  </div>{" "}
+                  <h3 className="font-semibold text-lg mb-2">
                     Trải Nghiệm Chân Thực
                   </h3>
                   <p className="text-muted-foreground">
                     Chúng tôi thiết kế hành trình vượt ra ngoài các điểm du lịch
-                    thông thường để khám phá tính cách và văn hóa thực sự của từng điểm đến.
+                    thông thường để khám phá tính cách và văn hóa thực sự của
+                    từng điểm đến.
                   </p>
                 </CardContent>
               </Card>
@@ -130,12 +134,14 @@ const AboutPage = () => {
                 <CardContent className="p-6 text-center">
                   <div className="bg-primary/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-primary" />
-                  </div>                  <h3 className="font-semibold text-lg mb-2">
+                  </div>{" "}
+                  <h3 className="font-semibold text-lg mb-2">
                     Tác Động Cộng Đồng
                   </h3>
                   <p className="text-muted-foreground">
-                    Chúng tôi hợp tác với các doanh nghiệp địa phương và hướng dẫn viên
-                    để đảm bảo các tour của chúng tôi đóng góp tích cực cho cộng đồng mà chúng tôi ghé thăm.
+                    Chúng tôi hợp tác với các doanh nghiệp địa phương và hướng
+                    dẫn viên để đảm bảo các tour của chúng tôi đóng góp tích cực
+                    cho cộng đồng mà chúng tôi ghé thăm.
                   </p>
                 </CardContent>
               </Card>
@@ -144,7 +150,8 @@ const AboutPage = () => {
                 <CardContent className="p-6 text-center">
                   <div className="bg-primary/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <GlobeLock className="h-8 w-8 text-primary" />
-                  </div>                  <h3 className="font-semibold text-lg mb-2">
+                  </div>{" "}
+                  <h3 className="font-semibold text-lg mb-2">
                     Du Lịch Bền Vững
                   </h3>
                   <p className="text-muted-foreground">
@@ -158,7 +165,7 @@ const AboutPage = () => {
                 <CardContent className="p-6 text-center">
                   <div className="bg-primary/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
                     <Star className="h-8 w-8 text-primary" />
-                  </div>                  
+                  </div>
                   <h3 className="font-semibold text-lg mb-2">Xuất Sắc</h3>
                   <p className="text-muted-foreground">
                     Chúng tôi phấn đấu đạt được sự xuất sắc trong mọi khía cạnh
@@ -171,27 +178,31 @@ const AboutPage = () => {
         </div>
 
         {/* Why Choose Us */}
-        <div className="container mx-auto py-16 px-4">          <div className="text-center max-w-3xl mx-auto mb-12">
+        <div className="container mx-auto py-16 px-4">
+          {" "}
+          <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-4">
               Tại Sao Chọn WanderWise?
             </h2>
             <p className="text-muted-foreground">
               Với hàng nghìn công ty du lịch để lựa chọn, đây là lý do tại sao
-              du khách tiếp tục tin tưởng chúng tôi với những khoảnh khắc quý giá nhất của họ.
+              du khách tiếp tục tin tưởng chúng tôi với những khoảnh khắc quý
+              giá nhất của họ.
             </p>
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="flex items-start">
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Award className="h-6 w-6 text-primary" />
               </div>
-              <div>                <h3 className="font-semibold text-lg mb-2">
+              <div>
+                {" "}
+                <h3 className="font-semibold text-lg mb-2">
                   Dịch Vụ Đạt Giải Thưởng
                 </h3>
                 <p className="text-muted-foreground">
-                  Được công nhận với nhiều giải thưởng ngành về dịch vụ
-                  xuất sắc và thiết kế tour sáng tạo.
+                  Được công nhận với nhiều giải thưởng ngành về dịch vụ xuất sắc
+                  và thiết kế tour sáng tạo.
                 </p>
               </div>
             </div>
@@ -200,12 +211,14 @@ const AboutPage = () => {
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Users className="h-6 w-6 text-primary" />
               </div>
-              <div>                <h3 className="font-semibold text-lg mb-2">
+              <div>
+                {" "}
+                <h3 className="font-semibold text-lg mb-2">
                   Hướng Dẫn Viên Địa Phương Chuyên Nghiệp
                 </h3>
                 <p className="text-muted-foreground">
-                  Hướng dẫn viên của chúng tôi là những người địa phương đầy
-                  đam mê với kiến thức sâu sắc về khu vực của họ, mang đến những
+                  Hướng dẫn viên của chúng tôi là những người địa phương đầy đam
+                  mê với kiến thức sâu sắc về khu vực của họ, mang đến những
                   hiểu biết mà bạn không thể tìm thấy trong sách hướng dẫn.
                 </p>
               </div>
@@ -215,7 +228,9 @@ const AboutPage = () => {
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Smile className="h-6 w-6 text-primary" />
               </div>
-              <div>                <h3 className="font-semibold text-lg mb-2">
+              <div>
+                {" "}
+                <h3 className="font-semibold text-lg mb-2">
                   98% Khách Hàng Hài Lòng
                 </h3>
                 <p className="text-muted-foreground">
@@ -229,11 +244,12 @@ const AboutPage = () => {
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Headphones className="h-6 w-6 text-primary" />
               </div>
-              <div>                
+              <div>
                 <h3 className="font-semibold text-lg mb-2">Hỗ Trợ 24/7</h3>
                 <p className="text-muted-foreground">
-                  Đội ngũ hỗ trợ chuyên dụng của chúng tôi luôn sẵn sàng 24/7
-                  để hỗ trợ bất kỳ câu hỏi hoặc quan ngại nào trong suốt hành trình của bạn.
+                  Đội ngũ hỗ trợ chuyên dụng của chúng tôi luôn sẵn sàng 24/7 để
+                  hỗ trợ bất kỳ câu hỏi hoặc quan ngại nào trong suốt hành trình
+                  của bạn.
                 </p>
               </div>
             </div>
@@ -241,14 +257,14 @@ const AboutPage = () => {
             <div className="flex items-start">
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Clock className="h-6 w-6 text-primary" />
-              </div>              
+              </div>
               <div>
                 <h3 className="font-semibold text-lg mb-2">
                   Lịch Trình Linh Hoạt
                 </h3>
                 <p className="text-muted-foreground">
-                  Chúng tôi cung cấp nhiều ngày khởi hành và thường có thể
-                  điều chỉnh thời gian phù hợp với lịch trình của bạn.
+                  Chúng tôi cung cấp nhiều ngày khởi hành và thường có thể điều
+                  chỉnh thời gian phù hợp với lịch trình của bạn.
                 </p>
               </div>
             </div>
@@ -256,34 +272,34 @@ const AboutPage = () => {
             <div className="flex items-start">
               <div className="bg-primary/10 p-2 rounded-full mr-4 mt-1">
                 <Map className="h-6 w-6 text-primary" />
-              </div>              
+              </div>
               <div>
                 <h3 className="font-semibold text-lg mb-2">
                   Hành Trình Độc Đáo
                 </h3>
                 <p className="text-muted-foreground">
                   Hành trình được tạo ra cẩn thận của chúng tôi kết hợp những
-                  điểm nổi bật phổ biến với những viên ngọc ẩn để mang lại trải nghiệm du lịch thực sự độc đáo.
+                  điểm nổi bật phổ biến với những viên ngọc ẩn để mang lại trải
+                  nghiệm du lịch thực sự độc đáo.
                 </p>
               </div>
             </div>
-          </div>          
-          <
-            div className="flex justify-center mt-12">
+          </div>
+          <div className="flex justify-center mt-12">
             <Button size="lg">Khám Phá Các Tour</Button>
-          </>
+          </div>
         </div>
 
         {/* Team Section */}
         <div className="bg-muted py-16 px-4">
-          <div className="container mx-auto">            
+          <div className="container mx-auto">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-4">
                 Gặp Gỡ Đội Ngũ Lãnh Đạo
               </h2>
               <p className="text-muted-foreground">
-                Những cá nhân đầy đam mê đằng sau WanderWise, những người làm việc
-                không mệt mỏi để tạo ra những trải nghiệm du lịch đặc biệt.
+                Những cá nhân đầy đam mê đằng sau WanderWise, những người làm
+                việc không mệt mỏi để tạo ra những trải nghiệm du lịch đặc biệt.
               </p>
             </div>
 
@@ -297,11 +313,11 @@ const AboutPage = () => {
                 <CardContent className="p-6">
                   <h3 className="font-semibold text-lg">Alex Rodriguez</h3>
                   <p className="text-primary font-medium text-sm mb-2">
-                    Co-Founder & CEO
+                    Đồng Sáng Lập & CEO
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Một người du lịch suốt đời đã thăm hơn 70 quốc gia, 
-                    Alex dẫn dắt tầm nhìn và hướng đi chiến lược của công ty chúng tôi.
+                    Một người du lịch suốt đời đã thăm hơn 70 quốc gia, Alex dẫn
+                    dắt tầm nhìn và hướng đi chiến lược của công ty chúng tôi.
                   </p>
                 </CardContent>
               </Card>
@@ -313,13 +329,13 @@ const AboutPage = () => {
                   className="w-full h-64 object-cover"
                 />
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg">Maria Rodriguez</h3>                  
+                  <h3 className="font-semibold text-lg">Maria Rodriguez</h3>
                   <p className="text-primary font-medium text-sm mb-2">
                     Đồng Sáng Lập & COO
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Với nền tảng về nhân học văn hóa, Maria đảm bảo
-                    các tour của chúng tôi mang lại sự hòa nhập văn hóa chân thực.
+                    Với nền tảng về nhân học văn hóa, Maria đảm bảo các tour của
+                    chúng tôi mang lại sự hòa nhập văn hóa chân thực.
                   </p>
                 </CardContent>
               </Card>
@@ -331,13 +347,14 @@ const AboutPage = () => {
                   className="w-full h-64 object-cover"
                 />
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg">David Chen</h3>                  
+                  <h3 className="font-semibold text-lg">David Chen</h3>
                   <p className="text-primary font-medium text-sm mb-2">
                     Giám Đốc Tour
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Với 15 năm kinh nghiệm dẫn tour trên khắp châu Á và
-                    châu Đại Dương, David giám sát hoạt động tour và đào tạo hướng dẫn viên của chúng tôi.
+                    Với 15 năm kinh nghiệm dẫn tour trên khắp châu Á và châu Đại
+                    Dương, David giám sát hoạt động tour và đào tạo hướng dẫn
+                    viên của chúng tôi.
                   </p>
                 </CardContent>
               </Card>
@@ -349,13 +366,14 @@ const AboutPage = () => {
                   className="w-full h-64 object-cover"
                 />
                 <CardContent className="p-6">
-                  <h3 className="font-semibold text-lg">Sophia Martinez</h3>                  
+                  <h3 className="font-semibold text-lg">Sophia Martinez</h3>
                   <p className="text-primary font-medium text-sm mb-2">
                     Giám Đốc Phát Triển Bền Vững
                   </p>
                   <p className="text-muted-foreground text-sm">
-                    Một nhà môi trường đầy đam mê, Sophia dẫn dắt các sáng kiến của chúng tôi
-                    để giảm thiểu dấu chân sinh thái và thúc đẩy du lịch có trách nhiệm.
+                    Một nhà môi trường đầy đam mê, Sophia dẫn dắt các sáng kiến
+                    của chúng tôi để giảm thiểu dấu chân sinh thái và thúc đẩy
+                    du lịch có trách nhiệm.
                   </p>
                 </CardContent>
               </Card>

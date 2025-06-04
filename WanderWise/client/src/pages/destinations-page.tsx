@@ -129,10 +129,10 @@ const DestinationsPage = () => {
                     </div>
                     <div className="mt-4 flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        {destination.tourCount} tours available
+                        {destination.tourCount} tour có sẵn
                       </span>
                       <Button variant="outline" size="sm">
-                        Explore
+                        Khám Phá
                       </Button>
                     </div>
                   </CardContent>
@@ -143,14 +143,14 @@ const DestinationsPage = () => {
           {filteredDestinations.length === 0 && !isLoading && (
             <div className="text-center py-12">
               <p className="text-xl text-muted-foreground">
-                No destinations found matching "{searchTerm}"
+                Không tìm thấy điểm đến phù hợp "{searchTerm}"
               </p>
               <Button
                 variant="link"
                 onClick={() => setSearchTerm("")}
                 className="mt-2"
               >
-                Clear search
+                Xóa tìm kiếm
               </Button>
             </div>
           )}
@@ -190,7 +190,10 @@ const DestinationsPage = () => {
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span>Expert local guides with insider knowledge</span>
+                    <span>
+                      Hướng dẫn viên địa phương chuyên nghiệp với kiến thức nội
+                      bộ
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <div className="bg-primary/20 p-1 rounded-full mr-3 mt-1">
@@ -236,7 +239,7 @@ const DestinationsPage = () => {
                     </span>
                   </li>
                 </ul>
-                <Button className="mt-2">Browse All Tours</Button>
+                <Button className="mt-2">Duyệt Tất Cả Tours</Button>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">

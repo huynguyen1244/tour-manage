@@ -136,11 +136,11 @@ const ToursPage = () => {
                   {isLoading ? (
                     <Skeleton className="h-7 w-40" />
                   ) : error ? (
-                    "Error loading tours"
+                    "Lỗi khi tải tours"
                   ) : (
                     `${sortedTours.length} ${
                       sortedTours.length === 1 ? "Tour" : "Tours"
-                    } ${destination ? `in ${destination}` : "Available"}`
+                    } ${destination ? `tại ${destination}` : "Có Sẵn"}`
                   )}
                 </h2>
               </div>

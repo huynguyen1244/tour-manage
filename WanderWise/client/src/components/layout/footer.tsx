@@ -71,11 +71,12 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
+                {" "}
                 <Link
                   href="/tours"
                   className="text-gray-400 hover:text-white transition"
                 >
-                  Tours
+                  Du Lịch
                 </Link>
               </li>
               <li>
@@ -151,10 +152,10 @@ const Footer = () => {
                 <span className="text-gray-400">
                   123 Đường Du Lịch, Thành Phố Du Lịch, 10001
                 </span>
-              </li>
+              </li>{" "}
               <li className="flex items-center">
                 <Phone className="h-5 w-5 text-primary mr-3 flex-shrink-0" />
-                <span className="text-gray-400">+1 (555) 123-4567</span>
+                <span className="text-gray-400">+84 123 456 789</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-primary mr-3 flex-shrink-0" />

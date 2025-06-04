@@ -102,7 +102,7 @@ const ContactPage = () => {
             {/* Contact Information */}
             <div>
               <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-6">
-                Get in Touch
+                Liên Hệ Với Chúng Tôi
               </h2>
               <p className="text-muted-foreground mb-8">
                 Có thắc mắc về các chuyến tham quan của chúng tôi hoặc cần giúp
@@ -119,7 +119,9 @@ const ContactPage = () => {
                       <MapPin className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-lg mb-1">Our Address</h3>
+                      <h3 className="font-medium text-lg mb-1">
+                        Địa Chỉ Của Chúng Tôi
+                      </h3>
                       <p className="text-muted-foreground">
                         123 Lê Thanh Nghị, <br />
                         Hai Bà Trưng, <br />
@@ -154,11 +156,12 @@ const ContactPage = () => {
                       <Phone className="h-6 w-6 text-primary" />
                     </div>
                     <div>
+                      {" "}
                       <h3 className="font-medium text-lg mb-1">
                         Gọi chúng tôi
                       </h3>
-                      <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                      <p className="text-muted-foreground">+1 (800) TOUR-NOW</p>
+                      <p className="text-muted-foreground">+84 123 456 789</p>
+                      <p className="text-muted-foreground">+84 1900 TOUR</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -171,14 +174,16 @@ const ContactPage = () => {
                     <div>
                       <h3 className="font-medium text-lg mb-1">
                         Thời gian hoạt động
-                      </h3>
+                      </h3>{" "}
                       <p className="text-muted-foreground">
-                        Monday - Friday: 9:00 AM - 6:00 PM
+                        Thứ Hai - Thứ Sáu: 9:00 AM - 6:00 PM
                       </p>
                       <p className="text-muted-foreground">
-                        Saturday: 10:00 AM - 4:00 PM
+                        Thứ Bảy: 10:00 AM - 4:00 PM
                       </p>
-                      <p className="text-muted-foreground">Sunday: Closed</p>
+                      <p className="text-muted-foreground">
+                        Chủ Nhật: Đóng cửa
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
@@ -230,7 +235,10 @@ const ContactPage = () => {
                               <FormItem>
                                 <FormLabel>Tên đầy đủ</FormLabel>
                                 <FormControl>
-                                  <Input placeholder="John Doe" {...field} />
+                                  <Input
+                                    placeholder="Nguyễn Văn A"
+                                    {...field}
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
@@ -241,11 +249,11 @@ const ContactPage = () => {
                             name="email"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Email</FormLabel>
+                                <FormLabel>Email</FormLabel>{" "}
                                 <FormControl>
                                   <Input
                                     type="email"
-                                    placeholder="your.email@example.com"
+                                    placeholder="tenemail@example.com"
                                     {...field}
                                   />
                                 </FormControl>
@@ -261,10 +269,10 @@ const ContactPage = () => {
                             name="phone"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Số điện thoại</FormLabel>
+                                <FormLabel>Số điện thoại</FormLabel>{" "}
                                 <FormControl>
                                   <Input
-                                    placeholder="+1 (555) 123-4567"
+                                    placeholder="+84 123 456 789"
                                     {...field}
                                   />
                                 </FormControl>
@@ -277,10 +285,10 @@ const ContactPage = () => {
                             name="subject"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Subject</FormLabel>
+                                <FormLabel>Chủ Đề</FormLabel>
                                 <FormControl>
                                   <Input
-                                    placeholder="Tour inquiry"
+                                    placeholder="Yêu cầu tư vấn tour"
                                     {...field}
                                   />
                                 </FormControl>
@@ -307,10 +315,9 @@ const ContactPage = () => {
                             </FormItem>
                           )}
                         />
-
                         <Button type="submit" className="w-full">
                           <Send className="h-4 w-4 mr-2" />
-                          Send Message
+                          Gửi Tin Nhắn
                         </Button>
                       </form>
                     </Form>

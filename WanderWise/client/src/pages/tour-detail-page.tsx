@@ -56,17 +56,18 @@ const TourDetailPage = () => {
       </div>
     );
   }
-
   return (
     <>
       <Helmet>
         <title>
-          {isLoading ? "Đang Tải Tour..." : `${tour.title} | WanderWise`}
+          {isLoading || !tour
+            ? "Đang Tải Tour..."
+            : `${tour.title} | WanderWise`}
         </title>
         <meta
           name="description"
           content={
-            isLoading
+            isLoading || !tour
               ? "Đang tải thông tin chi tiết về tour..."
               : tour.description
           }
@@ -75,7 +76,7 @@ const TourDetailPage = () => {
 
       <div className="flex flex-col min-h-screen">
         <main className="flex-grow">
-          {isLoading ? (
+          {isLoading || !tour ? (
             <TourDetailSkeleton />
           ) : (
             <section className="py-12 bg-white">
@@ -85,43 +86,44 @@ const TourDetailPage = () => {
                     <Link href="/" className="hover:text-primary">
                       Trang chủ
                     </Link>
-                    <span className="mx-2">›</span>
+                    <span className="mx-2">›</span>{" "}
                     <Link href="/tours" className="hover:text-primary">
-                      Tours
+                      Du Lịch
                     </Link>
-                    <span className="mx-2">›</span>
+                    <span className="mx-2">›</span>{" "}
                     <Link
                       href={`/tours?destination=${encodeURIComponent(
-                        tour.destination
+                        tour.destination || ""
                       )}`}
                       className="hover:text-primary"
                     >
-                      {tour.destination}
+                      {tour.destination || ""}
                     </Link>
                     <span className="mx-2">›</span>
-                    <span className="text-foreground">{tour.title}</span>
+                    <span className="text-foreground">{tour.title || ""}</span>
                   </div>
 
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
                       <h1 className="text-3xl md:text-4xl font-bold font-poppins text-foreground">
-                        {tour.title}
+                        {tour.title || ""}
                       </h1>
                       <div className="flex flex-wrap items-center mt-2">
                         <div className="flex items-center text-accent">
                           <Star className="h-5 w-5 fill-current" />
                           <span className="ml-1 font-medium">
-                            {tour.rating?.toFixed(1)}
+                            {tour.rating?.toFixed(1) || "0.0"}
                           </span>
                         </div>{" "}
                         <span className="ml-1 text-muted-foreground">
-                          ({tour.reviewCount} đánh giá)
+                          ({tour.reviewCount || 0} đánh giá)
                         </span>
                         <span className="mx-3 text-gray-300">|</span>
                         <div className="flex items-center text-muted-foreground">
                           <MapPin className="h-4 w-4 mr-1" />
                           <span>
-                            {tour.destination}, {tour.destinationCountry}
+                            {tour.destination || ""},{" "}
+                            {tour.destinationCountry || ""}
                           </span>
                         </div>
                       </div>
@@ -138,10 +140,9 @@ const TourDetailPage = () => {
                     </div>
                   </div>
                 </div>
-
                 <TourGallery
-                  images={tour.galleryImages || [tour.image]}
-                  title={tour.title}
+                  images={tour.galleryImages || [tour.image || ""]}
+                  title={tour.title || ""}
                 />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -194,7 +195,7 @@ const TourDetailPage = () => {
                                 Tổng quan tour
                               </h2>
                               <p className="text-muted-foreground mb-4">
-                                {tour.description}
+                                {tour.description || ""}
                               </p>
                             </div>
 
@@ -205,7 +206,7 @@ const TourDetailPage = () => {
                                   Thời gian
                                 </h3>
                                 <p className="text-muted-foreground">
-                                  {tour.duration} ngày
+                                  {tour.duration || 0} ngày
                                 </p>
                               </div>
                               <div className="border border-gray-200 rounded-lg p-4 text-center">
@@ -214,7 +215,7 @@ const TourDetailPage = () => {
                                   Quy mô đoàn
                                 </h3>
                                 <p className="text-muted-foreground">
-                                  Tối đa {tour.capacity} người
+                                  Tối đa {tour.capacity || 0} người
                                 </p>
                               </div>
                               <div className="border border-gray-200 rounded-lg p-4 text-center">
@@ -242,7 +243,7 @@ const TourDetailPage = () => {
                                 Điểm nổi bật
                               </h2>
                               <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {tour.itinerary
+                                {(tour.itinerary || [])
                                   .slice(0, 6)
                                   .map((item, index) => (
                                     <li
@@ -264,7 +265,7 @@ const TourDetailPage = () => {
                               Lịch trình chi tiết
                             </h2>
                             <div className="border-l-2 border-primary pl-6 space-y-6">
-                              {tour.itinerary.map((item, index) => {
+                              {(tour.itinerary || []).map((item, index) => {
                                 const dayMatch = item.match(/Day (\d+):/);
                                 const day = dayMatch
                                   ? dayMatch[1]
@@ -303,21 +304,21 @@ const TourDetailPage = () => {
                                     </span>
                                   </li>
                                   <li className="flex items-start">
-                                    <CheckCircle className="h-5 w-5 text-secondary mt-0.5 mr-2 flex-shrink-0" />
+                                    <CheckCircle className="h-5 w-5 text-secondary mt-0.5 mr-2 flex-shrink-0" />{" "}
                                     <span className="text-muted-foreground">
-                                      {tour.duration - 1} đêm lưu trú theo quy
-                                      định
+                                      {(tour.duration || 1) - 1} đêm lưu trú
+                                      theo quy định
                                     </span>
                                   </li>
                                   <li className="flex items-start">
-                                    <CheckCircle className="h-5 w-5 text-secondary mt-0.5 mr-2 flex-shrink-0" />
+                                    <CheckCircle className="h-5 w-5 text-secondary mt-0.5 mr-2 flex-shrink-0" />{" "}
                                     <span className="text-muted-foreground">
                                       Phương tiện di chuyển:{" "}
-                                      {tour.transportation}
+                                      {tour.transportation || "Sẽ thông báo"}
                                     </span>
                                   </li>
                                   <li className="flex items-start">
-                                    <CheckCircle className="h-5 w-5 text-secondary mt-0.5 mr-2 flex-shrink-0" />
+                                    <CheckCircle className="h-5 w-5 text-secondary mt-0.5 mr-2 flex-shrink-0" />{" "}
                                     <span className="text-muted-foreground">
                                       Bữa ăn:{" "}
                                       {tour.includesFood
@@ -348,10 +349,10 @@ const TourDetailPage = () => {
                                 </h2>
                                 <ul className="space-y-3">
                                   <li className="flex items-start">
-                                    <X className="h-5 w-5 text-destructive mt-0.5 mr-2 flex-shrink-0" />
+                                    <X className="h-5 w-5 text-destructive mt-0.5 mr-2 flex-shrink-0" />{" "}
                                     <span className="text-muted-foreground">
                                       Vé máy bay quốc tế đến/đi{" "}
-                                      {tour.destination}
+                                      {tour.destination || "điểm đến"}
                                     </span>
                                   </li>
                                   <li className="flex items-start">
@@ -414,9 +415,9 @@ const TourDetailPage = () => {
                                     <div>
                                       <h3 className="font-medium text-foreground mb-1">
                                         Phương tiện di chuyển
-                                      </h3>
+                                      </h3>{" "}
                                       <p className="text-sm text-muted-foreground">
-                                        {tour.transportation}
+                                        {tour.transportation || "Sẽ thông báo"}
                                       </p>
                                     </div>
                                   </div>
@@ -427,7 +428,7 @@ const TourDetailPage = () => {
                                     <div>
                                       <h3 className="font-medium text-foreground mb-1">
                                         Bữa ăn
-                                      </h3>
+                                      </h3>{" "}
                                       <p className="text-sm text-muted-foreground">
                                         {tour.includesFood
                                           ? "Bữa sáng hàng ngày và các bữa ăn được chọn theo lịch trình"
@@ -445,11 +446,13 @@ const TourDetailPage = () => {
                               Địa điểm tour
                             </h2>
                             <div className="mb-4">
+                              {" "}
                               <p className="text-muted-foreground mb-4">
-                                Tour này diễn ra tại {tour.destination},{" "}
-                                {tour.destinationCountry}. Bạn sẽ tham quan
-                                nhiều địa điểm khác nhau như đã nêu trong lịch
-                                trình.
+                                Tour này diễn ra tại{" "}
+                                {tour.destination || "điểm đến"},{" "}
+                                {tour.destinationCountry || ""}. Bạn sẽ tham
+                                quan nhiều địa điểm khác nhau như đã nêu trong
+                                lịch trình.
                               </p>
                             </div>
                             <div className="bg-gray-200 rounded-xl h-64 md:h-96 flex items-center justify-center">
@@ -471,14 +474,14 @@ const TourDetailPage = () => {
                               {" "}
                               <h2 className="text-2xl font-bold font-poppins text-foreground">
                                 Đánh giá của khách hàng
-                              </h2>
+                              </h2>{" "}
                               <div className="flex items-center bg-blue-50 px-3 py-1 rounded-full">
                                 <Star className="h-5 w-5 text-accent fill-current mr-1" />
                                 <span className="font-semibold">
-                                  {tour.rating?.toFixed(1)}
+                                  {tour.rating?.toFixed(1) || "0.0"}
                                 </span>
                                 <span className="text-muted-foreground text-sm ml-1">
-                                  ({tour.reviewCount} đánh giá)
+                                  ({tour.reviewCount || 0} đánh giá)
                                 </span>
                               </div>
                             </div>
