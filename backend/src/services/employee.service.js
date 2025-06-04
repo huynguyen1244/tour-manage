@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const bcrypt = require("bcryptjs");
 
 const getAllEmployees = async (filter = {}) => {
   let query = {};
@@ -17,13 +18,22 @@ const getAllEmployees = async (filter = {}) => {
 
   if (filter.role) {
     query.role = { $regex: filter.role, $options: "i" };
+  } else {
+    query.role = { $ne: "customer" }; // loại trừ admin
   }
 
   return await User.find(query).select("-password_hash");
 };
 
-const creatEmployee = async (employeeData) => {
-  const newEmployee = new User(employeeData);
+const createEmployee = async (employeeData) => {
+  const passwordHash = await bcrypt.hash(employeeData.password, 10);
+
+  const newEmployee = new User({
+    ...employeeData,
+    password_hash: passwordHash,
+    is_active: true, // Mặc định là active
+  });
+
   return await newEmployee.save();
 };
 
@@ -34,6 +44,10 @@ const updateEmployee = async (id, updateData) => {
     throw new Error("User not found");
   }
 
+  // Nếu có thay đổi mật khẩu, mã hóa lại
+  if (updateData.password) {
+    updateData.password_hash = await bcrypt.hash(updateData.password, 10);
+  }
   // Nếu là admin và đang cố thay đổi role
   if (
     existingUser.role === "admin" &&
@@ -61,7 +75,7 @@ const deleteEmployee = async (id) => {
 
 module.exports = {
   getAllEmployees,
-  creatEmployee,
+  createEmployee,
   updateEmployee,
   deleteEmployee,
 };

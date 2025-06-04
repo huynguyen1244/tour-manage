@@ -1,11 +1,11 @@
-const Review = require('../models/review.model');
+const Review = require("../models/review.model");
 
 const getAllReviews = async () => {
-  return await Review.find().populate('user_id').populate('tour_id');
+  return await Review.find().populate("user_id").populate("tour_id");
 };
 
-const getReviewById = async (id) => {
-  return await Review.findById(id).populate('user_id').populate('tour_id');
+const getReviewById = async (tour_id) => {
+  return await Review.find({ tour_id }).populate("user_id").populate("tour_id");
 };
 
 const createReview = async (reviewData) => {
@@ -26,5 +26,5 @@ module.exports = {
   getReviewById,
   createReview,
   updateReview,
-  deleteReview
+  deleteReview,
 };

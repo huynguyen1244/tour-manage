@@ -53,17 +53,28 @@ const removeTourFromWishlist = async (req, res) => {
     session.startTransaction();
 
     const user_id = req.user.id;
-    const wishlist = await wishlistService.removeTourFromWishlist(
+    const tour_id = req.params.id; // id ở đây là tour_id
+
+    const deletedWishlist = await wishlistService.removeTourFromWishlist(
       user_id,
-      req.params.id
+      tour_id
     );
-    if (!wishlist) return res.status(404).json({ error: "Wishlist not found" });
+
+    if (!deletedWishlist) {
+      await session.abortTransaction(); // rollback nếu không tìm thấy
+      return res
+        .status(404)
+        .json({ error: "Wishlist not found or already removed" });
+    }
+
     await session.commitTransaction();
 
-    res.json(wishlist);
+    res.json({
+      message: "Tour removed from wishlist successfully",
+      removed: deletedWishlist,
+    });
   } catch (err) {
     await session.abortTransaction();
-
     res.status(400).json({ error: err.message });
   } finally {
     session.endSession();

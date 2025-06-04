@@ -28,8 +28,8 @@ const createCart = async (req, res) => {
     session.startTransaction();
 
     const user_id = req.user.id;
-
-    const newCart = await cartService.createCart(user_id, req.body);
+    const tour_id = req.params.id;
+    const newCart = await cartService.createCart(user_id, tour_id, req.body);
     await session.commitTransaction();
 
     res.status(201).json(newCart);

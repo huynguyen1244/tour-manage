@@ -13,7 +13,8 @@ const getAllCustomers = async (req, res, next) => {
 const blockCustomer = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const blockedCustomer = await customerService.blockCustomer(id);
+    const is_active = req.body.is_active;
+    const blockedCustomer = await customerService.blockCustomer(id, is_active);
     res.json(blockedCustomer);
   } catch (error) {
     next(error);
@@ -24,7 +25,9 @@ const deleteCustomer = async (req, res, next) => {
   try {
     const { id } = req.params;
     await customerService.deleteCustomer(id);
-    res.status(204).send();
+    res.status(204).send({
+      message: "Xóa tài khoản khách hàng thành công",
+    });
   } catch (error) {
     next(error);
   }
@@ -32,16 +35,17 @@ const deleteCustomer = async (req, res, next) => {
 
 const getCustomerById = async (req, res, next) => {
   try {
-    const { id } = req.user.id;
+    const id = req.user.id;
     const customer = await customerService.getCustomerById(id);
     res.json(customer);
   } catch (error) {
     next(error);
   }
 };
+
 const updateCustomer = async (req, res, next) => {
   try {
-    const { id } = req.user.id;
+    const id = req.user.id;
     const updateData = req.body;
     const updatedCustomer = await customerService.updateCustomer(
       id,

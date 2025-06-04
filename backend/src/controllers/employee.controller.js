@@ -3,7 +3,7 @@ const employeeService = require("../services/employee.service");
 // Lấy danh sách nhân viên
 const getAllEmployees = async (req, res, next) => {
   try {
-    const filter = req.query;
+    const filter = req.body;
     const employees = await employeeService.getAllEmployees(filter);
     res.json(employees);
   } catch (error) {

@@ -50,8 +50,8 @@ class VNPayService {
       vnp_TmnCode: this.config.tmnCode,
       vnp_Locale: params.locale || "vn",
       vnp_CurrCode: "VND",
-      vnp_TxnRef: params.orderId,
-      vnp_OrderInfo: params.orderInfo,
+      vnp_TxnRef: params.booking_id,
+      vnp_booking_info: params.booking_info,
       vnp_OrderType: "other",
       vnp_Amount: params.amount * 100,
       vnp_ReturnUrl: this.config.returnUrl,
@@ -103,7 +103,7 @@ class VNPayService {
     const requestId = moment(date).format("HHmmss");
 
     const transactionNo = "0";
-    const orderInfo = "Hoan tien GD ma:" + params.orderId;
+    const booking_info = "Hoan tien GD ma:" + params.booking_id;
 
     const data = [
       requestId,
@@ -111,14 +111,14 @@ class VNPayService {
       "refund",
       this.config.tmnCode,
       params.transType || "02",
-      params.orderId,
+      params.booking_id,
       params.amount * 100,
       transactionNo,
       params.transDate,
       params.user,
       createDate,
       params.ipAddr || "127.0.0.1",
-      orderInfo,
+      booking_info,
     ].join("|");
 
     const hmac = crypto.createHmac("sha512", this.config.secretKey);
@@ -130,14 +130,14 @@ class VNPayService {
       vnp_Command: "refund",
       vnp_TmnCode: this.config.tmnCode,
       vnp_TransactionType: params.transType || "02",
-      vnp_TxnRef: params.orderId,
+      vnp_TxnRef: params.booking_id,
       vnp_Amount: params.amount * 100,
       vnp_TransactionNo: transactionNo,
       vnp_TransactionDate: params.transDate,
       vnp_CreateBy: params.user,
       vnp_CreateDate: createDate,
       vnp_IpAddr: params.ipAddr || "127.0.0.1",
-      vnp_OrderInfo: orderInfo,
+      vnp_booking_info: booking_info,
       vnp_SecureHash: secureHash,
     };
 

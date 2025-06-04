@@ -1,4 +1,5 @@
 const reviewService = require("../services/review.service");
+const reviewModel = require("../models/review.model");
 const mongoose = require("mongoose");
 
 // Không cần đăng nhập
@@ -50,16 +51,24 @@ const createReview = async (req, res) => {
     session.startTransaction();
 
     const user = req.user;
-    // Giả sử user.role là string: "user", "admin", "manager", "staff"
-    if (user.role !== "user") {
+
+    // if (user.role !== "customer") {
+    //   await session.abortTransaction();
+    //   return res
+    //     .status(403)
+    //     .json({ error: "Admin/Manager/Staff cannot create review" });
+    // }
+
+    // Kiểm tra xem user đã đăng nhập chưa
+    if (!user || user.role !== "customer") {
       await session.abortTransaction();
       return res
         .status(403)
-        .json({ error: "Admin/Manager/Staff cannot create review" });
+        .json({ error: "Only customers can create reviews" });
     }
 
     // Gắn thêm user_id vào review để biết ai tạo
-    const reviewData = { ...req.body, user: user._id };
+    const reviewData = { ...req.body, user_id: user.id };
 
     const newReview = await reviewService.createReview(reviewData);
     await session.commitTransaction();
@@ -92,26 +101,16 @@ const updateReview = async (req, res) => {
       return res.status(404).json({ error: "Review not found" });
     }
 
-    if (
-      user.role !== "user" &&
-      user.role !== "admin" &&
-      user.role !== "manager" &&
-      user.role !== "staff"
-    ) {
-      await session.abortTransaction();
-      return res.status(403).json({ error: "Unauthorized" });
-    }
-
-    // Nếu user bình thường, chỉ được sửa review của mình
-    if (
-      user.role === "user" &&
-      existingReview.user.toString() !== user._id.toString()
-    ) {
-      await session.abortTransaction();
-      return res
-        .status(403)
-        .json({ error: "You can only update your own review" });
-    }
+    // // Nếu user bình thường, chỉ được sửa review của mình
+    // if (
+    //   user.role === "customer" &&
+    //   existingReview.user.toString() !== user.id.toString()
+    // ) {
+    //   await session.abortTransaction();
+    //   return res
+    //     .status(403)
+    //     .json({ error: "You can only update your own review" });
+    // }
 
     const updatedReview = await reviewService.updateReview(reviewId, req.body);
     await session.commitTransaction();
@@ -127,42 +126,43 @@ const updateReview = async (req, res) => {
 };
 
 // Tương tự updateReview, chỉ admin/manager/staff hoặc user tạo review mới được xóa
-// Nhưng yêu cầu quản trị viên mới xóa được, user thường không được xóa
+// Nhưng yêu cầu quản trị viên mới xóa được, customer được xóa review của bản thân
 const deleteReview = async (req, res) => {
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
-    const user = req.user;
     const reviewId = req.params.id;
+    const user = req.user;
 
-    const existingReview = await reviewService.getReviewById(reviewId);
+    const existingReview = await reviewModel.findById(reviewId);
     if (!existingReview) {
       await session.abortTransaction();
       return res.status(404).json({ error: "Review not found" });
     }
 
-    // Chỉ admin, manager, staff mới được xóa
-    if (!["admin", "manager", "staff"].includes(user.role)) {
-      await session.abortTransaction();
-      return res
-        .status(403)
-        .json({ error: "Only admin/manager/staff can delete reviews" });
-    }
+    const isOwner =
+      existingReview.user_id &&
+      existingReview.user_id.toString() === user.id.toString();
+    const isPrivileged =
+      user.role === "admin" || user.role === "manager" || user.role === "staff";
 
-    const deleted = await reviewService.deleteReview(reviewId);
-    if (!deleted) {
+    if (isOwner || isPrivileged) {
+      const deleted = await reviewService.deleteReview(reviewId);
+      if (!deleted) {
+        await session.abortTransaction();
+        return res.status(404).json({ error: "Review not found" });
+      }
+    } else {
       await session.abortTransaction();
-      return res.status(404).json({ error: "Review not found" });
+      return res.status(403).json({ error: "Bạn không có quyền xóa" });
     }
 
     await session.commitTransaction();
-
     res.json({ message: "Review deleted successfully" });
   } catch (err) {
     await session.abortTransaction();
-
     res.status(500).json({ error: err.message });
   } finally {
     session.endSession();

@@ -23,6 +23,7 @@ const BookingSchema = new mongoose.Schema({
   itineraryProgress: [
     {
       day: String, // Ví dụ: "Ngày 1"
+      description: String, // Mô tả hành trình trong ngày
       completed: { type: Boolean, default: false },
       completedAt: Date,
     },

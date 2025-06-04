@@ -1,5 +1,6 @@
 const VNPayService = require("../services/payment/vnpay.payment");
 const paymentService = require("../services/payment.service");
+const bookingService = require("../services/booking.service");
 
 class PaymentController {
   /**
@@ -7,20 +8,22 @@ class PaymentController {
    */
   static async createPayment(req, res) {
     try {
-      const { amount, orderId, orderInfo, ipAddr, bankCode, locale } = req.body;
+      const booking_id = req.params.id;
+      const booking = await bookingService.getBookingById(booking_id);
+      const { ipAddr, bankCode, locale } = req.body;
 
-      if (!amount || !orderId || !orderInfo) {
-        return res.status(400).json({
+      if (!booking) {
+        return res.status(404).json({
           success: false,
-          message: "Thiếu thông tin thanh toán cho VNPay",
+          message: "Không tìm thấy booking với ID đã cho",
         });
       }
 
       // Gọi service tạo URL thanh toán VNPay
       const paymentUrl = VNPayService.createPaymentUrl({
-        amount,
-        orderId,
-        orderInfo,
+        amount: booking.total_price,
+        booking_id,
+        booking_info: booking ? booking.tour_id.name : "Tour không xác định",
         ipAddr: ipAddr || req.ip || "127.0.0.1",
         bankCode,
         locale,

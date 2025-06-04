@@ -79,19 +79,9 @@ const updateTour = async (id, updatedData, files) => {
   const existingTour = await Tour.findById(id);
   if (!existingTour) return null;
 
-  // Nếu có ảnh mới thì xóa ảnh cũ trên Cloudinary
+  // Nếu có ảnh mới thì upload và nối thêm vào images
   if (files && files.length > 0) {
-    // // Xóa ảnh cũ
-    // if (existingTour.images && existingTour.images.length > 0) {
-    //   for (const img of existingTour.images) {
-    //     if (img.public_id) {
-    //       await cloudinary.uploader.destroy(img.public_id);
-    //     }
-    //   }
-    // }
-
-    // Upload ảnh mới
-    const images = await Promise.all(
+    const newImages = await Promise.all(
       files.map(async (file) => {
         const result = await cloudinary.uploader.upload(file.path, {
           folder: "tours/images",
@@ -103,7 +93,8 @@ const updateTour = async (id, updatedData, files) => {
       })
     );
 
-    updatedData.images = images;
+    // Nối ảnh cũ + ảnh mới
+    updatedData.images = [...existingTour.images, ...newImages];
   }
 
   return await Tour.findByIdAndUpdate(id, updatedData, { new: true });
@@ -128,16 +119,27 @@ const deleteTour = async (id) => {
 const deleteTourImage = async (tour_id, image_id) => {
   const tour = await Tour.findById(tour_id);
   if (!tour) return null;
+
+  // Tìm chỉ số của ảnh trong mảng images dựa vào _id
   const imageIndex = tour.images.findIndex(
     (img) => img._id.toString() === image_id
   );
   if (imageIndex === -1) return null;
+
   const image = tour.images[imageIndex];
+
+  // Xóa ảnh trên Cloudinary nếu có public_id
   if (image.public_id) {
     await cloudinary.uploader.destroy(image.public_id);
   }
+
+  // Xóa ảnh khỏi mảng images
   tour.images.splice(imageIndex, 1);
-  return await tour.save();
+
+  // Lưu lại Tour
+  await tour.save();
+
+  return true; // Trả về true để báo đã xóa thành công
 };
 
 module.exports = {

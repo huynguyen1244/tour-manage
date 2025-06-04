@@ -1,5 +1,6 @@
 const bookingService = require("../services/booking.service");
 const paymentService = require("../services/payment.service");
+const cartService = require("../services/cart.service");
 const mongoose = require("mongoose");
 
 // Lấy toàn bộ booking
@@ -67,28 +68,25 @@ const createBooking = async (req, res) => {
     session.startTransaction();
 
     const user_id = req.user._id;
-    const { cartId, payment_method } = req.body;
+    const { cart_id, payment_method } = req.body;
 
     // 1. Lấy dữ liệu giỏ hàng
-    const cart = await cartService.getCartById(cartId, user_id);
+    const cart = await cartService.getCartByIdAndUserId(cart_id, user_id);
     if (!cart) {
       await session.abortTransaction();
       return res.status(404).json({ error: "Cart not found or unauthorized" });
     }
-
     // 2. Tạo booking dựa trên dữ liệu giỏ hàng
     const bookingData = {
-      user: user_id,
-      tours: cart.tours, // hoặc tên trường chứa danh sách tour trong cart
-      total_price: cart.totalPrice, // hoặc tính tổng tiền từ cart
+      user_id: user_id, // ID của người dùng đang đăng nhập
+      tour_id: cart.tour_id, // hoặc tên trường chứa danh sách tour trong cart
+      total_price: cart.total_price, // hoặc tính tổng tiền từ cart
+      num_people: cart.num_people, // hoặc tên trường chứa số lượng người trong cart
+      itineraryProgress: [], // Khởi tạo mảng tiến độ hành trình
       // Thêm các thông tin khác nếu cần
     };
 
-    const newBooking = await bookingService.createBooking(
-      user_id,
-      bookingData,
-      session
-    );
+    const newBooking = await bookingService.createBooking(bookingData);
 
     // 3. Tạo payment cho booking
     const paymentData = {
@@ -100,7 +98,7 @@ const createBooking = async (req, res) => {
     const newPayment = await paymentService.createPayment(paymentData, session);
 
     // 4. Nếu muốn, có thể xóa giỏ hàng đã dùng
-    await cartService.deleteCart(cartId, user_id, session);
+    await cartService.deleteCart(cart_id, user_id, session);
 
     await session.commitTransaction();
 

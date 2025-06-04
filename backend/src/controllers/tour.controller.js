@@ -5,7 +5,7 @@ const getAllTours = async (req, res) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    const filter = req.query;
+    const filter = req.body;
     const tours = await tourService.getAllTours(filter);
     await session.commitTransaction();
     res.json(tours);
@@ -100,13 +100,13 @@ const deleteTourImage = async (req, res) => {
   try {
     session.startTransaction();
     const deleted = await tourService.deleteTourImage(
-      req.params.tour_id,
-      req.params.image_id
+      req.body.tour_id,
+      req.body.image_id
     );
     if (!deleted) return res.status(404).json({ message: "Tour not found" });
     await session.commitTransaction();
 
-    res.json({ message: "Tour deleted successfully" });
+    res.json({ message: "Tour image deleted successfully" });
   } catch (error) {
     await session.abortTransaction();
 

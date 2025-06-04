@@ -3,7 +3,7 @@ const paymentController = require("../controllers/payment.controller");
 
 const router = express.Router();
 
-router.post("/", paymentController.createPayment);
+router.post("/:id", paymentController.createPayment);
 router.get("/callback", paymentController.vnpayCallback);
 router.post("/refund", paymentController.refundPayment);
 
