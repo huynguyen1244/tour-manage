@@ -38,7 +38,7 @@ const Sidebar = ({ activeView, setActiveView }) => {
   return (
     <div className="w-64 bg-gray-800 text-white h-full flex flex-col">
       <div className="p-4 text-2xl font-bold border-b border-gray-700">
-        Admin
+        BK-TOUR
       </div>
       <nav className="flex-1 p-4 space-y-2">
         {menuItems.map((item) => (

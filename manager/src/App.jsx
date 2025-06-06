@@ -2,13 +2,11 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useLocation,
+  Navigate,
 } from "react-router-dom";
-import { useState } from "react";
 
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
-
+import LoginPage from "./pages/Login";
+import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import AddTourForm from "./components/AddTourForm";
 import TourDetail from "./components/TourDetail";
@@ -19,81 +17,60 @@ import ReviewsPage from "./pages/Reviews";
 import PaymentsPage from "./pages/Payments";
 import RefundPage from "./pages/Refund";
 
-function AppRoutes() {
-  return (
-    <Routes>
-      <Route path="/" element={<Dashboard />} />
-      <Route path="/tours" element={<ToursPage />} />
-      <Route path="/tours/add" element={<AddTourForm />} />
-      <Route path="/tours/:id" element={<TourDetail />} />
-      <Route path="/staff" element={<Staff />} />
-      <Route path="/customers" element={<CustomersPage />} />
-      <Route path="/reviews" element={<ReviewsPage />} />
-      <Route path="/payments" element={<PaymentsPage />} />
-      <Route path="/refunds" element={<RefundPage />} />
-      <Route
-        path="*"
-        element={
-          <div className="text-center text-2xl mt-10">404 - Page Not Found</div>
-        }
-      />
-    </Routes>
-  );
-}
+import { isAuthenticated, getUserFromLocalStorage } from "./utils/auth";
+import MainLayout from "./components/MainLayout";
 
-function AppLayout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const location = useLocation();
+function ProtectedRoute({ element, requiredRole }) {
+  const user = getUserFromLocalStorage();
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" replace />;
+  }
 
-  // Nếu sau này có LoginPage, RegisterPage riêng thì kiểm tra ở đây.
-  const isAuthPage =
-    location.pathname === "/login" || location.pathname === "/register";
-
-  if (isAuthPage) {
+  if (requiredRole && user?.role !== requiredRole) {
     return (
-      <main className="flex items-center justify-center h-screen bg-gray-50">
-        <div className="w-full max-w-md p-6 bg-white shadow rounded">
-          <AppRoutes />
-        </div>
-      </main>
+      <div className="text-red-500 text-center mt-10 text-xl">
+        403 - You do not have permission to access this page.
+      </div>
     );
   }
 
-  return (
-    <div className="flex h-screen bg-gray-50">
-      {/* Sidebar */}
-      <aside
-        className={`bg-white shadow-md transition-all duration-300 ${
-          isSidebarOpen ? "w-64" : "w-16"
-        } overflow-hidden`}
-      >
-        <Sidebar isOpen={isSidebarOpen} />
-      </aside>
-
-      {/* Main layout */}
-      <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Header */}
-        <header className="h-16 bg-white shadow flex items-center justify-between px-4">
-          <Header toggleSidebar={toggleSidebar} />
-        </header>
-
-        {/* Content */}
-        <main className="flex-1 overflow-y-auto p-6">
-          <AppRoutes />
-        </main>
-      </div>
-    </div>
-  );
+  return element;
 }
 
 function App() {
   return (
     <Router>
-      <AppLayout />
+      <Routes>
+        {/* Trang Login riêng biệt, không có layout */}
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Các route nằm trong layout */}
+        <Route path="/" element={<ProtectedRoute element={<MainLayout />} />}>
+          <Route index element={<Dashboard />} />
+          <Route path="tours" element={<ToursPage />} />
+          <Route
+            path="tours/add"
+            element={
+              <ProtectedRoute element={<AddTourForm />} requiredRole="admin" />
+            }
+          />
+          <Route path="tours/:id" element={<TourDetail />} />
+          <Route
+            path="staff"
+            element={
+              <ProtectedRoute element={<Staff />} requiredRole="admin" />
+            }
+          />
+          <Route path="customers" element={<CustomersPage />} />
+          <Route path="reviews" element={<ReviewsPage />} />
+          <Route path="payments" element={<PaymentsPage />} />
+          <Route path="refunds" element={<RefundPage />} />
+        </Route>
+
+        {/* Trang 404: không dùng layout */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </Router>
   );
 }

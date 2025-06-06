@@ -5,6 +5,7 @@ const {
   signAccessToken,
   signRefreshToken,
   verifyRefreshToken,
+  verifyAccessToken,
 } = require("../utility/jwt.util");
 
 const {
@@ -101,6 +102,20 @@ const login = async (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+};
+
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ message: "Không có token" });
+  }
+  try {
+    const payload = verifyAccessToken(token);
+    req.user = { id: payload.id, email: payload.email, role: payload.role };
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "Token không hợp lệ hoặc hết hạn" });
   }
 };
 
@@ -213,6 +228,7 @@ const resetPassword = async (req, res, next) => {
 module.exports = {
   register,
   login,
+  verifyToken,
   refreshToken,
   changePassword,
   forgotPassword,

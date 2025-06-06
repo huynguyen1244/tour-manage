@@ -1,6 +1,40 @@
-import { FaSignOutAlt, FaUserCircle } from "react-icons/fa"; // Import thêm icon
+import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt, FaUserCircle } from "react-icons/fa";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 function Header() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  // Load user từ localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  // Hàm logout
+  const handleLogout = async () => {
+    try {
+      await axios.post("http://localhost:5000/api/auth/logout", null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        withCredentials: true, // nếu backend sử dụng cookie
+      });
+
+      // Xoá localStorage và chuyển hướng
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("user");
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+      alert("Có lỗi xảy ra khi đăng xuất.");
+    }
+  };
+
   return (
     <header className="bg-transparent px-6 py-4 w-full">
       <div className="flex justify-between items-center">
@@ -33,15 +67,18 @@ function Header() {
             </svg>
           </div>
 
-          {/* Admin icon and Logout */}
+          {/* User info & logout */}
           <div className="flex items-center gap-4">
-            {/* Thay avatar bằng icon */}
             <FaUserCircle className="w-10 h-10 text-gray-600" />
 
-            <span className="text-gray-700 font-medium">Admin</span>
+            <span className="text-gray-700 font-medium capitalize">
+              {user?.name || user?.role}
+            </span>
 
-            {/* Nút Logout */}
-            <button className="flex items-center bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200 ease-in-out">
+            <button
+              onClick={handleLogout}
+              className="flex items-center bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200 ease-in-out"
+            >
               <FaSignOutAlt className="mr-2" />
               Logout
             </button>
