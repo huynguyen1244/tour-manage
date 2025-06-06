@@ -195,10 +195,47 @@ const deleteBooking = async (req, res) => {
   }
 };
 
+const updatePayment = async (req, res) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const bookingId = req.params.id;
+    const payment_status = req.body.payment_status;
+    const booking = await bookingService.getBookingById(bookingId);
+    if (!booking) {
+      await session.abortTransaction();
+      return res.status(404).json({ error: "Booking not found" });
+    }
+    const updatedPayment = await paymentService.updatePaymentByBookingId(
+      bookingId,
+      { payment_status },
+      session
+    );
+
+    if (payment_status === "completed" || payment_status === "deposited") {
+      // Cập nhật trạng thái booking khi payment hoàn thành
+      await bookingService.updateBooking(bookingId, { status: "confirmed" });
+    }
+    if (payment_status === "failed") {
+      // Cập nhật trạng thái booking khi payment thất bại
+      await bookingService.updateBooking(bookingId, { status: "cancelled" });
+    }
+
+    await session.commitTransaction();
+    res.json(updatedPayment);
+  } catch (err) {
+    await session.abortTransaction();
+    res.status(500).json({ error: err.message });
+  } finally {
+    session.endSession();
+  }
+};
+
 module.exports = {
   getBookings,
   getBooking,
   createBooking,
   updateBooking,
   deleteBooking,
+  updatePayment,
 };

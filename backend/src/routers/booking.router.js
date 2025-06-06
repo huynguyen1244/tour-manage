@@ -41,4 +41,11 @@ router.delete(
   bookingController.deleteBooking
 );
 
+router.put(
+  "/update-payment/:id",
+  isManager,
+  verifyToken,
+  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
+  bookingController.updatePayment
+);
 module.exports = router;
