@@ -35,22 +35,22 @@ const ColorThemePage = () => {
   const themeOptions = [
     {
       id: "light",
-      name: "Light Mode",
-      description: "Clean and bright appearance",
+      name: "Chế Độ Sáng",
+      description: "Giao diện sáng và rõ ràng",
       icon: Sun,
       preview: "bg-white border-gray-200 text-gray-900",
     },
     {
       id: "dark",
-      name: "Dark Mode",
-      description: "Easier on the eyes in low light",
+      name: "Chế Độ Tối",
+      description: "Dễ chịu hơn cho mắt trong điều kiện ánh sáng yếu",
       icon: Moon,
       preview: "bg-gray-900 border-gray-700 text-white",
     },
     {
       id: "system",
-      name: "System Default",
-      description: "Follows your device settings",
+      name: "Theo Hệ Thống",
+      description: "Theo cài đặt thiết bị của bạn",
       icon: Monitor,
       preview:
         "bg-gradient-to-r from-white to-gray-900 border-gray-400 text-gray-600",
@@ -59,40 +59,40 @@ const ColorThemePage = () => {
 
   const accentColors = [
     {
-      name: "Blue",
+      name: "Xanh Dương",
       value: "blue",
       class: "bg-blue-500",
-      description: "Professional and trustworthy",
+      description: "Chuyên nghiệp và đáng tin cậy",
     },
     {
-      name: "Green",
+      name: "Xanh Lá",
       value: "green",
       class: "bg-green-500",
-      description: "Natural and calming",
+      description: "Tự nhiên và thư thái",
     },
     {
-      name: "Purple",
+      name: "Tím",
       value: "purple",
       class: "bg-purple-500",
-      description: "Creative and modern",
+      description: "Sáng tạo và hiện đại",
     },
     {
-      name: "Orange",
+      name: "Cam",
       value: "orange",
       class: "bg-orange-500",
-      description: "Energetic and warm",
+      description: "Năng động và ấm áp",
     },
     {
-      name: "Red",
+      name: "Đỏ",
       value: "red",
       class: "bg-red-500",
-      description: "Bold and vibrant",
+      description: "Mạnh mẽ và sôi động",
     },
     {
-      name: "Pink",
+      name: "Hồng",
       value: "pink",
       class: "bg-pink-500",
-      description: "Playful and friendly",
+      description: "Vui tươi và thân thiện",
     },
   ];
 
@@ -105,10 +105,10 @@ const ColorThemePage = () => {
   return (
     <>
       <Helmet>
-        <title>Color Theme | TravelTour</title>
+        <title>Giao Diện Màu | TravelTour</title>
         <meta
           name="description"
-          content="Customize your visual experience with different color themes and accents."
+          content="Tùy chỉnh trải nghiệm hình ảnh của bạn với các chủ đề màu và điểm nhấn khác nhau."
         />
       </Helmet>
 
@@ -118,11 +118,11 @@ const ColorThemePage = () => {
             {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold font-poppins text-foreground mb-2">
-                Color Theme
+                Giao Diện Màu
               </h1>
               <p className="text-muted-foreground">
-                Customize your visual experience by choosing a theme that works
-                best for you.
+                Tùy chỉnh trải nghiệm hình ảnh của bạn bằng cách chọn chủ đề phù
+                hợp nhất cho bạn.
               </p>
             </div>
 
@@ -131,26 +131,26 @@ const ColorThemePage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Eye className="h-5 w-5 mr-2" />
-                  Current Theme Preview
+                  Xem Trước Giao Diện Hiện Tại
                 </CardTitle>
                 <CardDescription>
-                  See how your current theme looks with different elements.
+                  Xem giao diện hiện tại của bạn với các phần tử khác nhau.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="border rounded-lg p-6 space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">Sample Tour Card</h3>
-                    <Badge>Featured</Badge>
+                    <h3 className="text-lg font-semibold">Thẻ Tour Mẫu</h3>
+                    <Badge>Nổi Bật</Badge>
                   </div>
                   <p className="text-muted-foreground">
-                    This is how your content will appear with the selected
-                    theme.
+                    Đây là cách nội dung của bạn sẽ xuất hiện với giao diện đã
+                    chọn.
                   </p>
                   <div className="flex space-x-2">
-                    <Button size="sm">Book Now</Button>
+                    <Button size="sm">Đặt Ngay</Button>
                     <Button variant="outline" size="sm">
-                      Learn More
+                      Tìm Hiểu Thêm
                     </Button>
                   </div>
                 </div>
@@ -162,10 +162,10 @@ const ColorThemePage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Contrast className="h-5 w-5 mr-2" />
-                  Theme Mode
+                  Chế Độ Giao Diện
                 </CardTitle>
                 <CardDescription>
-                  Choose between light, dark, or system-based theme.
+                  Chọn giữa giao diện sáng, tối, hoặc theo hệ thống.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -209,10 +209,10 @@ const ColorThemePage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Paintbrush className="h-5 w-5 mr-2" />
-                  Accent Color
+                  Màu Nhấn
                 </CardTitle>
                 <CardDescription>
-                  Choose an accent color for buttons, links, and highlights.
+                  Chọn màu nhấn cho nút, liên kết và điểm nổi bật.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -251,22 +251,22 @@ const ColorThemePage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Sparkles className="h-5 w-5 mr-2" />
-                  Advanced Options
+                  Tùy Chọn Nâng Cao
                 </CardTitle>
                 <CardDescription>
-                  Additional customization options for your theme.
+                  Các tùy chọn tùy chỉnh bổ sung cho giao diện của bạn.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-medium">High Contrast Mode</h3>
+                    <h3 className="font-medium">Chế Độ Tương Phản Cao</h3>
                     <p className="text-sm text-muted-foreground">
-                      Increases contrast for better accessibility
+                      Tăng độ tương phản để trợ năng tốt hơn
                     </p>
                   </div>
                   <Button variant="outline" size="sm">
-                    Enable
+                    Bật
                   </Button>
                 </div>
 
@@ -274,13 +274,13 @@ const ColorThemePage = () => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-medium">Reduced Motion</h3>
+                    <h3 className="font-medium">Giảm Chuyển Động</h3>
                     <p className="text-sm text-muted-foreground">
-                      Minimizes animations and transitions
+                      Giảm thiểu hiệu ứng và chuyển động
                     </p>
                   </div>
                   <Button variant="outline" size="sm">
-                    Configure
+                    Cấu Hình
                   </Button>
                 </div>
 
@@ -288,13 +288,13 @@ const ColorThemePage = () => {
 
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="font-medium">Custom CSS</h3>
+                    <h3 className="font-medium">CSS Tùy Chỉnh</h3>
                     <p className="text-sm text-muted-foreground">
-                      Apply your own custom styling
+                      Áp dụng kiểu dáng tùy chỉnh của riêng bạn
                     </p>
                   </div>
                   <Button variant="outline" size="sm">
-                    Advanced
+                    Nâng Cao
                   </Button>
                 </div>
               </CardContent>
@@ -305,10 +305,10 @@ const ColorThemePage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <RefreshCw className="h-5 w-5 mr-2" />
-                  Reset & Restore
+                  Đặt Lại & Khôi Phục
                 </CardTitle>
                 <CardDescription>
-                  Reset your theme settings to default values.
+                  Đặt lại cài đặt giao diện của bạn về giá trị mặc định.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -320,10 +320,10 @@ const ColorThemePage = () => {
                       setSelectedAccent("blue");
                     }}
                   >
-                    Reset to Light Default
+                    Đặt Lại Về Giao Diện Sáng
                   </Button>
                   <Button variant="outline" onClick={() => setTheme("system")}>
-                    Use System Settings
+                    Sử Dụng Cài Đặt Hệ Thống
                   </Button>
                 </div>
               </CardContent>

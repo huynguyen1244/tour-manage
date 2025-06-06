@@ -18,7 +18,9 @@ type Destination = {
 
 const DestinationsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredDestinations, setFilteredDestinations] = useState<Destination[]>([]);
+  const [filteredDestinations, setFilteredDestinations] = useState<
+    Destination[]
+  >([]);
   const isMobile = useIsMobile();
   const { toast } = useToast();
 
@@ -44,14 +46,14 @@ const DestinationsPage = () => {
 
   return (
     <>
+      {" "}
       <Helmet>
-        <title>Explore Destinations | TravelTour</title>
+        <title>Khám Phá Điểm Đến | WanderWise</title>
         <meta
           name="description"
-          content="Discover amazing destinations around the world and plan your next adventure."
+          content="Khám phá những điểm đến tuyệt vời khắp thế giới và lên kế hoạch cho cuộc phiêu lưu tiếp theo của bạn."
         />
       </Helmet>
-
       <div className="min-h-screen bg-background">
         {/* Header Banner */}
         <div
@@ -63,10 +65,11 @@ const DestinationsPage = () => {
         >
           <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
             <h1 className="text-3xl md:text-5xl font-bold font-poppins mb-4 text-center">
-              Explore Amazing Destinations
+              Khám Phá Những Điểm Đến Tuyệt Vời
             </h1>
             <p className="text-lg md:text-xl max-w-2xl text-center mb-8">
-              Discover the world's most breathtaking locations and plan your next adventure
+              Khám phá những địa điểm ngoạn mục nhất thế giới và lên kế hoạch
+              cho cuộc phiêu lưu tiếp theo của bạn
             </p>
 
             {/* Search bar */}
@@ -76,13 +79,13 @@ const DestinationsPage = () => {
             >
               <Input
                 type="text"
-                placeholder="Search destinations..."
+                placeholder="Tìm kiếm điểm đến..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="flex-grow border-none focus:ring-0 text-foreground"
               />
               <Button type="submit" size="sm" className="px-4">
-                <Search className="h-4 w-4 mr-2" /> Search
+                <Search className="h-4 w-4 mr-2" /> Tìm kiếm
               </Button>
             </form>
           </div>
@@ -90,10 +93,10 @@ const DestinationsPage = () => {
 
         {/* Destinations Grid */}
         <div className="container mx-auto py-12 px-4">
+          {" "}
           <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-8">
-            Popular Destinations
+            Điểm Đến Phổ Biến
           </h2>
-
           {isLoading ? (
             <div className="flex justify-center items-center py-12">
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
@@ -112,7 +115,9 @@ const DestinationsPage = () => {
                   <CardContent className="p-5">
                     <div className="flex justify-between items-start mb-2">
                       <div>
-                        <h3 className="text-xl font-semibold">{destination.destination}</h3>
+                        <h3 className="text-xl font-semibold">
+                          {destination.destination}
+                        </h3>
                         <div className="flex items-center text-muted-foreground">
                           <MapPin className="h-4 w-4 mr-1" />
                           <span>{destination.country}</span>
@@ -124,10 +129,10 @@ const DestinationsPage = () => {
                     </div>
                     <div className="mt-4 flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        {destination.tourCount} tours available
+                        {destination.tourCount} tour có sẵn
                       </span>
                       <Button variant="outline" size="sm">
-                        Explore
+                        Khám Phá
                       </Button>
                     </div>
                   </CardContent>
@@ -135,18 +140,17 @@ const DestinationsPage = () => {
               ))}
             </div>
           )}
-
           {filteredDestinations.length === 0 && !isLoading && (
             <div className="text-center py-12">
               <p className="text-xl text-muted-foreground">
-                No destinations found matching "{searchTerm}"
+                Không tìm thấy điểm đến phù hợp "{searchTerm}"
               </p>
               <Button
                 variant="link"
                 onClick={() => setSearchTerm("")}
                 className="mt-2"
               >
-                Clear search
+                Xóa tìm kiếm
               </Button>
             </div>
           )}
@@ -158,12 +162,15 @@ const DestinationsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-4">
-                  Travel to the World's Most Exotic Locations
+                  Du lịch đến những địa điểm kỳ lạ nhất thế giới
                 </h2>
                 <p className="text-muted-foreground mb-6">
-                  Our expert guides will take you on unforgettable journeys to hidden gems
-                  and iconic landmarks. Experience authentic local cultures, cuisines, and
-                  traditions while enjoying premium accommodations and seamless travel arrangements.
+                  Du lịch đến thế giới, các hướng dẫn viên chuyên nghiệp của
+                  chúng tôi sẽ đưa bạn đến những hành trình không thể quên đến
+                  những viên ngọc ẩn giấu và các địa điểm biểu tượng. Trải
+                  nghiệm các nền văn hóa, ẩm thực và truyền thống địa phương độc
+                  đáo trong khi tận hưởng chỗ ở cao cấp và các sắp xếp du lịch
+                  liền mạch.
                 </p>
                 <ul className="space-y-3 mb-6">
                   <li className="flex items-start">
@@ -183,7 +190,10 @@ const DestinationsPage = () => {
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span>Expert local guides with insider knowledge</span>
+                    <span>
+                      Hướng dẫn viên địa phương chuyên nghiệp với kiến thức nội
+                      bộ
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <div className="bg-primary/20 p-1 rounded-full mr-3 mt-1">
@@ -202,7 +212,10 @@ const DestinationsPage = () => {
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span>Small-group tours for personalized experiences</span>
+                    <span>
+                      Chuyến tham quan theo nhóm nhỏ để có trải nghiệm cá nhân
+                      hóa
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <div className="bg-primary/20 p-1 rounded-full mr-3 mt-1">
@@ -221,10 +234,12 @@ const DestinationsPage = () => {
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span>Handpicked accommodations with character and comfort</span>
+                    <span>
+                      Chỗ ở được chọn lọc với phong cách và sự thoải mái
+                    </span>
                   </li>
                 </ul>
-                <Button className="mt-2">Browse All Tours</Button>
+                <Button className="mt-2">Duyệt Tất Cả Tours</Button>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">

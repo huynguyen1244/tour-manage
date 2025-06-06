@@ -36,6 +36,7 @@ const DestinationCard = ({
         <div className="p-4">
           <div className="flex justify-between items-center">
             <div>
+              {" "}
               <p className="text-sm text-muted-foreground">
                 <MapPin className="inline-block h-3 w-3 mr-1" />
                 {tourCount} Tours

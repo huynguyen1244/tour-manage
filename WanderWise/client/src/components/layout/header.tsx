@@ -100,7 +100,7 @@ const Header = () => {
             <Link href="/" className="flex items-center">
               <Globe className="h-8 w-8 text-primary mr-2" />
               <span className="text-2xl font-bold font-poppins text-primary">
-                TravelTour
+                WanderWise
               </span>
             </Link>
             <nav className="hidden md:flex space-x-6">
@@ -112,7 +112,7 @@ const Header = () => {
                     : "text-foreground hover:text-primary"
                 } transition`}
               >
-                Home
+                Trang chủ
               </Link>
               <Link
                 href="/tours"
@@ -132,7 +132,7 @@ const Header = () => {
                     : "text-foreground hover:text-primary"
                 } transition`}
               >
-                Destinations
+                Điểm đến
               </Link>
               <Link
                 href="/about"
@@ -142,7 +142,7 @@ const Header = () => {
                     : "text-foreground hover:text-primary"
                 } transition`}
               >
-                About
+                Giới thiệu
               </Link>
               <Link
                 href="/contact"
@@ -152,7 +152,7 @@ const Header = () => {
                     : "text-foreground hover:text-primary"
                 } transition`}
               >
-                Contact
+                Liên hệ
               </Link>
             </nav>
           </div>{" "}
@@ -170,16 +170,17 @@ const Header = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
+                {" "}
                 {/* Theme Section */}
                 <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
-                  Theme
+                  Giao diện
                 </div>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => handleThemeChange("light")}
                 >
                   <Sun className="h-4 w-4 mr-2" />
-                  Light Mode
+                  Chế độ sáng
                   {theme === "light" && (
                     <span className="ml-auto text-primary">✓</span>
                   )}
@@ -189,7 +190,7 @@ const Header = () => {
                   onClick={() => handleThemeChange("dark")}
                 >
                   <Moon className="h-4 w-4 mr-2" />
-                  Dark Mode
+                  Chế độ tối
                   {theme === "dark" && (
                     <span className="ml-auto text-primary">✓</span>
                   )}
@@ -199,7 +200,7 @@ const Header = () => {
                   onClick={() => handleThemeChange("system")}
                 >
                   <Monitor className="h-4 w-4 mr-2" />
-                  System
+                  Theo hệ thống
                   {theme === "system" && (
                     <span className="ml-auto text-primary">✓</span>
                   )}
@@ -207,12 +208,12 @@ const Header = () => {
                 <DropdownMenuSeparator />
                 {/* Appearance Section */}
                 <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
-                  Appearance
+                  Giao diện
                 </div>{" "}
                 <DropdownMenuItem asChild>
                   <Link href="/color-theme" className="cursor-pointer w-full">
                     <Palette className="h-4 w-4 mr-2" />
-                    Color Theme
+                    Màu chủ đề
                   </Link>
                 </DropdownMenuItem>{" "}
                 <DropdownMenuItem asChild>
@@ -221,15 +222,14 @@ const Header = () => {
                     className="cursor-pointer w-full"
                   >
                     <Languages className="h-4 w-4 mr-2" />
-                    Language
+                    Ngôn ngữ
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {/* Account Section */}
+                <DropdownMenuSeparator /> {/* Account Section */}
                 {user && (
                   <>
                     <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
-                      Account
+                      Tài khoản
                     </div>{" "}
                     <DropdownMenuItem asChild>
                       <Link
@@ -237,13 +237,13 @@ const Header = () => {
                         className="cursor-pointer w-full"
                       >
                         <UserCog className="h-4 w-4 mr-2" />
-                        Account Settings
+                        Cài đặt tài khoản
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/profile" className="cursor-pointer w-full">
                         <Edit className="h-4 w-4 mr-2" />
-                        Edit Profile
+                        Chỉnh sửa hồ sơ
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
@@ -252,7 +252,7 @@ const Header = () => {
                         className="cursor-pointer w-full"
                       >
                         <CreditCard className="h-4 w-4 mr-2" />
-                        Payment Methods
+                        Phương thức thanh toán
                       </Link>
                     </DropdownMenuItem>{" "}
                     <DropdownMenuItem asChild>
@@ -261,7 +261,7 @@ const Header = () => {
                         className="cursor-pointer w-full"
                       >
                         <Key className="h-4 w-4 mr-2" />
-                        Change Password
+                        Đổi mật khẩu
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
@@ -270,7 +270,7 @@ const Header = () => {
                         className="cursor-pointer w-full"
                       >
                         <Bell className="h-4 w-4 mr-2" />
-                        Notifications
+                        Thông báo
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
@@ -279,12 +279,12 @@ const Header = () => {
                         className="cursor-pointer w-full"
                       >
                         <Shield className="h-4 w-4 mr-2" />
-                        Privacy & Security
+                        Bảo mật & Riêng tư
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                   </>
-                )}
+                )}{" "}
                 {/* General Section */}{" "}
                 <DropdownMenuItem asChild>
                   <Link
@@ -292,7 +292,7 @@ const Header = () => {
                     className="cursor-pointer w-full"
                   >
                     <HelpCircle className="h-4 w-4 mr-2" />
-                    Help & Support
+                    Trợ giúp & Hỗ trợ
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
@@ -301,7 +301,7 @@ const Header = () => {
                     className="cursor-pointer w-full"
                   >
                     <Settings className="h-4 w-4 mr-2" />
-                    General Settings
+                    Cài đặt chung
                   </Link>
                 </DropdownMenuItem>
                 {user && (
@@ -312,7 +312,7 @@ const Header = () => {
                       onClick={handleLogout}
                     >
                       <LogOut className="h-4 w-4 mr-2" />
-                      Sign Out
+                      Đăng xuất
                     </DropdownMenuItem>
                   </>
                 )}
@@ -335,12 +335,12 @@ const Header = () => {
                   <DropdownMenuContent align="end" className="w-48">
                     <DropdownMenuItem asChild>
                       <Link href="/profile" className="cursor-pointer w-full">
-                        My Profile
+                        Hồ sơ của tôi
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/bookings" className="cursor-pointer w-full">
-                        My Bookings
+                        Đặt chỗ của tôi
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -348,7 +348,7 @@ const Header = () => {
                       onClick={handleLogout}
                       className="cursor-pointer"
                     >
-                      Logout
+                      Đăng xuất
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -359,10 +359,10 @@ const Header = () => {
                     className="text-primary hover:bg-blue-50"
                     asChild
                   >
-                    <Link href="/auth">Login</Link>
+                    <Link href="/auth">Đăng nhập</Link>
                   </Button>
                   <Button asChild>
-                    <Link href="/auth">Sign Up</Link>
+                    <Link href="/auth">Đăng ký</Link>
                   </Button>
                 </div>
               )}
@@ -383,6 +383,7 @@ const Header = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white">
           <div className="px-4 py-3 space-y-2">
+            {" "}
             <Link
               href="/"
               className={`block py-2 font-medium ${
@@ -390,7 +391,7 @@ const Header = () => {
               } hover:text-primary transition`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Home
+              Trang chủ
             </Link>
             <Link
               href="/tours"
@@ -412,7 +413,7 @@ const Header = () => {
               } hover:text-primary transition`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Destinations
+              Điểm đến
             </Link>
             <Link
               href="/about"
@@ -421,7 +422,7 @@ const Header = () => {
               } hover:text-primary transition`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              About
+              Giới thiệu
             </Link>{" "}
             <Link
               href="/contact"
@@ -430,15 +431,15 @@ const Header = () => {
               } hover:text-primary transition`}
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              Contact
+              Liên hệ
             </Link>{" "}
             {/* Page Settings for Mobile */}
             <div className="pt-2 border-t border-gray-200">
-              <div className="py-2 font-medium text-foreground">Settings</div>
+              <div className="py-2 font-medium text-foreground">Cài đặt</div>
               {/* Theme Settings */}
               <div className="pl-4 space-y-2">
                 <div className="text-sm font-medium text-muted-foreground mb-2">
-                  Theme
+                  Giao diện
                 </div>
                 <button
                   className={`flex items-center w-full text-left py-1 text-sm hover:text-primary ${
@@ -447,7 +448,7 @@ const Header = () => {
                   onClick={() => handleThemeChange("light")}
                 >
                   <Sun className="h-4 w-4 mr-2" />
-                  Light Mode
+                  Chế độ sáng
                   {theme === "light" && <span className="ml-auto">✓</span>}
                 </button>
                 <button
@@ -457,7 +458,7 @@ const Header = () => {
                   onClick={() => handleThemeChange("dark")}
                 >
                   <Moon className="h-4 w-4 mr-2" />
-                  Dark Mode
+                  Chế độ tối
                   {theme === "dark" && <span className="ml-auto">✓</span>}
                 </button>
                 <button
@@ -469,7 +470,7 @@ const Header = () => {
                   onClick={() => handleThemeChange("system")}
                 >
                   <Monitor className="h-4 w-4 mr-2" />
-                  System
+                  Theo hệ thống
                   {theme === "system" && <span className="ml-auto">✓</span>}
                 </button>
               </div>
@@ -484,7 +485,7 @@ const Header = () => {
                   className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                 >
                   <Palette className="h-4 w-4 mr-2" />
-                  Color Theme
+                  Màu chủ đề
                 </Link>{" "}
                 <Link
                   href="/language-settings"
@@ -492,14 +493,14 @@ const Header = () => {
                   className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                 >
                   <Languages className="h-4 w-4 mr-2" />
-                  Language
+                  Ngôn ngữ
                 </Link>
               </div>
               {/* Account Settings for Mobile */}
               {user && (
                 <div className="pl-4 space-y-2 mt-3">
                   <div className="text-sm font-medium text-muted-foreground mb-2">
-                    Account
+                    Tài khoản
                   </div>{" "}
                   <Link
                     href="/account-settings"
@@ -507,7 +508,7 @@ const Header = () => {
                     className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                   >
                     <UserCog className="h-4 w-4 mr-2" />
-                    Account Settings
+                    Cài đặt tài khoản
                   </Link>
                   <Link
                     href="/profile"
@@ -515,7 +516,7 @@ const Header = () => {
                     className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                   >
                     <Edit className="h-4 w-4 mr-2" />
-                    Edit Profile
+                    Chỉnh sửa hồ sơ
                   </Link>
                   <Link
                     href="/payment-methods"
@@ -523,7 +524,7 @@ const Header = () => {
                     className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                   >
                     <CreditCard className="h-4 w-4 mr-2" />
-                    Payment Methods
+                    Phương thức thanh toán
                   </Link>{" "}
                   <Link
                     href="/change-password"
@@ -531,7 +532,7 @@ const Header = () => {
                     className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                   >
                     <Key className="h-4 w-4 mr-2" />
-                    Change Password
+                    Đổi mật khẩu
                   </Link>
                   <Link
                     href="/notifications"
@@ -539,7 +540,7 @@ const Header = () => {
                     className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                   >
                     <Bell className="h-4 w-4 mr-2" />
-                    Notifications
+                    Thông báo
                   </Link>
                   <Link
                     href="/privacy-security"
@@ -547,7 +548,7 @@ const Header = () => {
                     className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                   >
                     <Shield className="h-4 w-4 mr-2" />
-                    Privacy & Security
+                    Bảo mật & Riêng tư
                   </Link>
                 </div>
               )}
@@ -559,7 +560,7 @@ const Header = () => {
                   className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                 >
                   <HelpCircle className="h-4 w-4 mr-2" />
-                  Help & Support
+                  Trợ giúp & Hỗ trợ
                 </Link>
                 <Link
                   href="/general-settings"
@@ -567,7 +568,7 @@ const Header = () => {
                   className="flex items-center w-full text-left py-1 text-sm text-muted-foreground hover:text-primary"
                 >
                   <Settings className="h-4 w-4 mr-2" />
-                  General Settings
+                  Cài đặt chung
                 </Link>
               </div>
             </div>
@@ -579,7 +580,7 @@ const Header = () => {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Button variant="outline" className="w-full mb-2">
-                      My Profile
+                      Thông tin cá nhân
                     </Button>
                   </Link>
                   <Link
@@ -587,7 +588,7 @@ const Header = () => {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Button variant="outline" className="w-full mb-2">
-                      My Bookings
+                      Đặt chỗ của tôi
                     </Button>
                   </Link>
                   <Button
@@ -597,7 +598,7 @@ const Header = () => {
                     }}
                     className="w-full"
                   >
-                    Logout
+                    Đăng xuất
                   </Button>
                 </>
               ) : (
@@ -611,7 +612,7 @@ const Header = () => {
                       variant="outline"
                       className="w-full mb-2 border-primary text-primary hover:bg-blue-50"
                     >
-                      Login
+                      Đăng nhập
                     </Button>
                   </Link>
                   <Link
@@ -619,7 +620,7 @@ const Header = () => {
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="block w-full"
                   >
-                    <Button className="w-full">Sign Up</Button>
+                    <Button className="w-full">Đăng ký</Button>
                   </Link>
                 </>
               )}

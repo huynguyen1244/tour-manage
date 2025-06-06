@@ -32,109 +32,113 @@ const HelpAndSupportPage = () => {
       <div className="space-y-6">
         <div className="flex items-center space-x-2">
           <HelpCircle className="h-6 w-6 text-primary" />
-          <h1 className="text-2xl font-bold">Help & Support</h1>
+          <h1 className="text-2xl font-bold">Hỗ Trợ & Trợ Giúp</h1>
         </div>
 
         <Tabs defaultValue="faq" className="w-full">
           <TabsList className="grid grid-cols-4 w-full mb-6">
-            <TabsTrigger value="faq">FAQ</TabsTrigger>
-            <TabsTrigger value="contact">Contact Us</TabsTrigger>
-            <TabsTrigger value="documentation">Documentation</TabsTrigger>
-            <TabsTrigger value="tutorials">Tutorials</TabsTrigger>
+            <TabsTrigger value="faq">Câu Hỏi Thường Gặp</TabsTrigger>
+            <TabsTrigger value="contact">Liên Hệ Với Chúng Tôi</TabsTrigger>
+            <TabsTrigger value="documentation">Tài Liệu Hướng Dẫn</TabsTrigger>
+            <TabsTrigger value="tutorials">Hướng Dẫn</TabsTrigger>
           </TabsList>
-
           <TabsContent value="faq" className="space-y-6">
+            {" "}
             <Card>
               <CardHeader>
-                <CardTitle>Frequently Asked Questions</CardTitle>
+                <CardTitle>Câu Hỏi Thường Gặp</CardTitle>
                 <CardDescription>
-                  Find answers to the most common questions about using
-                  WanderWise.
+                  Tìm câu trả lời cho những câu hỏi phổ biến nhất về việc sử
+                  dụng WanderWise.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Accordion type="single" collapsible className="w-full">
                   <AccordionItem value="item-1">
-                    <AccordionTrigger>How do I book a tour?</AccordionTrigger>
+                    <AccordionTrigger>
+                      Làm thế nào để đặt tour?
+                    </AccordionTrigger>
                     <AccordionContent>
-                      To book a tour, browse our available tours, select the one
-                      you're interested in, and click the "Book Now" button.
-                      Follow the prompts to select your preferred date, number
-                      of travelers, and any additional options. Complete the
-                      payment process to finalize your booking.
+                      Để đặt tour, duyệt qua các tour có sẵn của chúng tôi, chọn
+                      tour bạn quan tâm và nhấp vào nút "Đặt Ngay". Làm theo
+                      hướng dẫn để chọn ngày ưa thích, số người đi và bất kỳ tùy
+                      chọn bổ sung nào. Hoàn tất quy trình thanh toán để hoàn
+                      thành việc đặt tour.
                     </AccordionContent>
                   </AccordionItem>
 
                   <AccordionItem value="item-2">
                     <AccordionTrigger>
-                      How can I cancel or modify my booking?
+                      Làm thế nào để hủy hoặc sửa đổi đặt tour của tôi?
                     </AccordionTrigger>
                     <AccordionContent>
-                      You can cancel or modify your booking by navigating to "My
-                      Bookings" in your account dashboard. Select the booking
-                      you wish to change, and click either "Cancel Booking" or
-                      "Modify Booking". Please note that cancellation policies
-                      vary by tour and timeframe.
+                      Bạn có thể hủy hoặc sửa đổi đặt tour bằng cách điều hướng
+                      đến "Đặt Tour Của Tôi" trong bảng điều khiển tài khoản của
+                      bạn. Chọn đặt tour bạn muốn thay đổi và nhấp vào "Hủy Đặt
+                      Tour" hoặc "Sửa Đổi Đặt Tour". Xin lưu ý rằng các chính
+                      sách hủy khác nhau tùy theo tour và khung thời gian.
                     </AccordionContent>
                   </AccordionItem>
 
                   <AccordionItem value="item-3">
                     <AccordionTrigger>
-                      What payment methods do you accept?
+                      Bạn chấp nhận những phương thức thanh toán nào?
                     </AccordionTrigger>
                     <AccordionContent>
-                      We accept major credit cards (Visa, Mastercard, American
-                      Express), PayPal, and in select regions, we offer Apple
-                      Pay and Google Pay. You can manage your payment methods in
-                      the "Payment Methods" section of your account.
+                      Chúng tôi chấp nhận các thẻ tín dụng chính (Visa,
+                      Mastercard, American Express), PayPal, và ở một số khu
+                      vực, chúng tôi cung cấp Apple Pay và Google Pay. Bạn có
+                      thể quản lý phương thức thanh toán của mình trong phần
+                      "Phương Thức Thanh Toán" của tài khoản.
                     </AccordionContent>
                   </AccordionItem>
 
                   <AccordionItem value="item-4">
                     <AccordionTrigger>
-                      Is travel insurance included in my booking?
+                      Bảo hiểm du lịch có được bao gồm trong đặt tour của tôi
+                      không?
                     </AccordionTrigger>
                     <AccordionContent>
-                      Travel insurance is not automatically included in your
-                      booking. However, we highly recommend purchasing travel
-                      insurance for your trip. You can add insurance during the
-                      checkout process or arrange it separately through your
-                      preferred provider.
+                      Bảo hiểm du lịch không được tự động bao gồm trong đặt tour
+                      của bạn. Tuy nhiên, chúng tôi rất khuyên bạn mua bảo hiểm
+                      du lịch cho chuyến đi của bạn. Bạn có thể thêm bảo hiểm
+                      trong quá trình thanh toán hoặc sắp xếp riêng thông qua
+                      nhà cung cấp ưa thích của bạn.
                     </AccordionContent>
                   </AccordionItem>
 
                   <AccordionItem value="item-5">
                     <AccordionTrigger>
-                      How do I leave a review for a tour?
+                      Làm thế nào để tôi để lại đánh giá cho một tour?
                     </AccordionTrigger>
                     <AccordionContent>
-                      After completing a tour, you'll receive an email
-                      invitation to leave a review. Alternatively, you can go to
-                      "My Bookings" in your account dashboard, find the
-                      completed tour, and click "Leave a Review". Your feedback
-                      helps other travelers and our tour operators improve their
-                      services.
+                      Sau khi hoàn thành một tour, bạn sẽ nhận được email mời để
+                      lại đánh giá. Ngoài ra, bạn có thể đi đến "Đặt Tour Của
+                      Tôi" trong bảng điều khiển tài khoản của bạn, tìm tour đã
+                      hoàn thành và nhấp vào "Để Lại Đánh Giá". Phản hồi của bạn
+                      giúp những du khách khác và các nhà điều hành tour của
+                      chúng tôi cải thiện dịch vụ của họ.
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
               </CardContent>
             </Card>
           </TabsContent>
-
           <TabsContent value="contact" className="space-y-6">
+            {" "}
             <Card>
               <CardHeader>
-                <CardTitle>Contact Support</CardTitle>
+                <CardTitle>Liên Hệ Hỗ Trợ</CardTitle>
                 <CardDescription>
-                  Get in touch with our customer support team for personalized
-                  assistance.
+                  Liên hệ với đội ngũ hỗ trợ khách hàng của chúng tôi để nhận
+                  trợ giúp cá nhân.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="text-lg font-medium mb-4">
-                      Send us a message
+                      Gửi tin nhắn cho chúng tôi
                     </h3>
                     <form className="space-y-4">
                       <div>
@@ -142,9 +146,9 @@ const HelpAndSupportPage = () => {
                           htmlFor="name"
                           className="block text-sm font-medium mb-1"
                         >
-                          Name
+                          Họ tên
                         </label>
-                        <Input id="name" placeholder="Your name" />
+                        <Input id="name" placeholder="Họ tên của bạn" />
                       </div>
                       <div>
                         <label
@@ -156,7 +160,7 @@ const HelpAndSupportPage = () => {
                         <Input
                           id="email"
                           type="email"
-                          placeholder="Your email address"
+                          placeholder="Địa chỉ email của bạn"
                         />
                       </div>
                       <div>
@@ -164,41 +168,43 @@ const HelpAndSupportPage = () => {
                           htmlFor="subject"
                           className="block text-sm font-medium mb-1"
                         >
-                          Subject
+                          Chủ đề
                         </label>
-                        <Input id="subject" placeholder="What's this about?" />
+                        <Input
+                          id="subject"
+                          placeholder="Nội dung về vấn đề gì?"
+                        />
                       </div>
                       <div>
                         <label
                           htmlFor="message"
                           className="block text-sm font-medium mb-1"
                         >
-                          Message
+                          Tin nhắn
                         </label>
                         <Textarea
                           id="message"
-                          placeholder="How can we help you?"
+                          placeholder="Chúng tôi có thể giúp gì cho bạn?"
                           rows={5}
                         />
                       </div>
-                      <Button className="w-full">Send Message</Button>
+                      <Button className="w-full">Gửi Tin Nhắn</Button>
                     </form>
-                  </div>
-
+                  </div>{" "}
                   <div>
                     <h3 className="text-lg font-medium mb-4">
-                      Other ways to connect
+                      Các cách khác để kết nối
                     </h3>
                     <div className="space-y-4">
                       <div className="flex items-start space-x-3">
                         <Phone className="h-5 w-5 text-primary mt-1" />
                         <div>
-                          <p className="font-medium">Phone Support</p>
+                          <p className="font-medium">Hỗ Trợ Qua Điện Thoại</p>
                           <p className="text-sm text-muted-foreground">
                             +1 (800) 123-4567
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            Monday-Friday, 9am-6pm EST
+                            Thứ Hai-Thứ Sáu, 9am-6pm EST
                           </p>
                         </div>
                       </div>
@@ -206,12 +212,12 @@ const HelpAndSupportPage = () => {
                       <div className="flex items-start space-x-3">
                         <Mail className="h-5 w-5 text-primary mt-1" />
                         <div>
-                          <p className="font-medium">Email Support</p>
+                          <p className="font-medium">Hỗ Trợ Qua Email</p>
                           <p className="text-sm text-muted-foreground">
                             support@wanderwise.com
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            Response time: 24-48 hours
+                            Thời gian phản hồi: 24-48 giờ
                           </p>
                         </div>
                       </div>
@@ -219,12 +225,12 @@ const HelpAndSupportPage = () => {
                       <div className="flex items-start space-x-3">
                         <MessageCircle className="h-5 w-5 text-primary mt-1" />
                         <div>
-                          <p className="font-medium">Live Chat</p>
+                          <p className="font-medium">Trò Chuyện Trực Tuyến</p>
                           <p className="text-sm text-muted-foreground">
-                            Available 24/7
+                            Hoạt động 24/7
                           </p>
                           <Button variant="outline" className="mt-2">
-                            Start Chat
+                            Bắt Đầu Trò Chuyện
                           </Button>
                         </div>
                       </div>
@@ -232,12 +238,12 @@ const HelpAndSupportPage = () => {
                       <div className="flex items-start space-x-3">
                         <Video className="h-5 w-5 text-primary mt-1" />
                         <div>
-                          <p className="font-medium">Video Support</p>
+                          <p className="font-medium">Hỗ Trợ Qua Video</p>
                           <p className="text-sm text-muted-foreground">
-                            Book a video call with our support team
+                            Đặt cuộc gọi video với đội ngũ hỗ trợ của chúng tôi
                           </p>
                           <Button variant="outline" className="mt-2">
-                            Schedule Call
+                            Lên Lịch Cuộc Gọi
                           </Button>
                         </div>
                       </div>
@@ -246,51 +252,50 @@ const HelpAndSupportPage = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-
+          </TabsContent>{" "}
           <TabsContent value="documentation" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Documentation</CardTitle>
+                <CardTitle>Tài Liệu Hướng Dẫn</CardTitle>
                 <CardDescription>
-                  Comprehensive guides and resources for using WanderWise.
+                  Hướng dẫn và tài nguyên toàn diện để sử dụng WanderWise.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {[
                     {
-                      title: "User Guide",
+                      title: "Hướng Dẫn Người Dùng",
                       description:
-                        "Complete guide to using the WanderWise platform",
+                        "Hướng dẫn đầy đủ để sử dụng nền tảng WanderWise",
                       icon: Book,
                     },
                     {
-                      title: "Booking Process",
-                      description: "Step-by-step guide to booking tours",
+                      title: "Quy Trình Đặt Tour",
+                      description: "Hướng dẫn từng bước để đặt tour",
                       icon: FileText,
                     },
                     {
-                      title: "Payment & Refunds",
+                      title: "Thanh Toán & Hoàn Tiền",
                       description:
-                        "Understanding payment methods and refund policies",
+                        "Hiểu về phương thức thanh toán và chính sách hoàn tiền",
                       icon: FileText,
                     },
                     {
-                      title: "Account Management",
-                      description: "Managing your profile and preferences",
+                      title: "Quản Lý Tài Khoản",
+                      description: "Quản lý hồ sơ và tùy chọn của bạn",
                       icon: FileText,
                     },
                     {
-                      title: "Traveler Resources",
+                      title: "Tài Nguyên Du Lịch",
                       description:
-                        "Useful resources for before and during your trip",
+                        "Tài nguyên hữu ích cho trước và trong chuyến đi của bạn",
                       icon: FileText,
                     },
                     {
-                      title: "API Documentation",
+                      title: "Tài Liệu API",
                       description:
-                        "For developers integrating with our platform",
+                        "Dành cho nhà phát triển tích hợp với nền tảng của chúng tôi",
                       icon: FileText,
                     },
                   ].map((doc, index) => (
@@ -306,7 +311,7 @@ const HelpAndSupportPage = () => {
                           {doc.description}
                         </p>
                         <Button variant="outline" size="sm">
-                          View Documentation
+                          Xem Tài Liệu
                         </Button>
                       </CardContent>
                     </Card>
@@ -314,37 +319,36 @@ const HelpAndSupportPage = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-
+          </TabsContent>{" "}
           <TabsContent value="tutorials" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Video Tutorials</CardTitle>
+                <CardTitle>Video Hướng Dẫn</CardTitle>
                 <CardDescription>
-                  Learn how to use WanderWise with our step-by-step video
-                  guides.
+                  Học cách sử dụng WanderWise với các hướng dẫn video từng bước
+                  của chúng tôi.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
                     {
-                      title: "Getting Started with WanderWise",
+                      title: "Bắt Đầu Với WanderWise",
                       duration: "5:24",
                       thumbnail: "https://placehold.co/400x225",
                     },
                     {
-                      title: "How to Book the Perfect Tour",
+                      title: "Cách Đặt Tour Hoàn Hảo",
                       duration: "8:12",
                       thumbnail: "https://placehold.co/400x225",
                     },
                     {
-                      title: "Managing Your Bookings",
+                      title: "Quản Lý Các Đặt Tour Của Bạn",
                       duration: "3:45",
                       thumbnail: "https://placehold.co/400x225",
                     },
                     {
-                      title: "Customizing Your User Profile",
+                      title: "Tùy Chỉnh Hồ Sơ Người Dùng",
                       duration: "4:18",
                       thumbnail: "https://placehold.co/400x225",
                     },

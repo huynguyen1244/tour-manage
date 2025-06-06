@@ -82,105 +82,109 @@ const NotificationsPage = () => {
 
   const notificationGroups = [
     {
-      title: "Email Notifications",
+      title: "Thông Báo Qua Email",
       icon: Mail,
-      description: "Receive updates via email",
+      description: "Nhận cập nhật qua email",
       items: [
         {
           key: "emailBookingConfirmation",
-          label: "Booking Confirmations",
-          description: "Get confirmation emails when you book a tour",
+          label: "Xác Nhận Đặt Tour",
+          description: "Nhận email xác nhận khi bạn đặt tour",
           important: true,
         },
         {
           key: "emailBookingReminders",
-          label: "Booking Reminders",
-          description: "Reminders about upcoming tours",
+          label: "Nhắc Nhở Đặt Tour",
+          description: "Nhắc nhở về các tour sắp tới",
         },
         {
           key: "emailPromotions",
-          label: "Promotional Offers",
-          description: "Special deals and discounts",
+          label: "Email Khuyến Mãi",
+          description: "Nhận thông tin về ưu đãi và giảm giá đặc biệt",
         },
         {
           key: "emailNewsletters",
-          label: "Travel Newsletter",
-          description: "Monthly travel tips and destination highlights",
+          label: "Bản Tin Du Lịch",
+          description: "Nhận thông tin du lịch hàng tháng và điểm đến nổi bật",
         },
         {
           key: "emailSecurityAlerts",
-          label: "Security Alerts",
-          description: "Important account security notifications",
+          label: "Cảnh Báo Bảo Mật",
+          description: "Thông báo quan trọng về bảo mật tài khoản",
           important: true,
         },
       ],
     },
     {
-      title: "Push Notifications",
+      title: "Thông Báo Đẩy",
       icon: Smartphone,
-      description: "Instant notifications on your device",
+      description: "Nhận thông báo ngay lập tức trên thiết bị của bạn",
       items: [
         {
           key: "pushBookingUpdates",
-          label: "Booking Updates",
-          description: "Real-time updates about your bookings",
+          label: "Cập Nhật Đặt Tour",
+          description: "Nhận cập nhật thời gian thực về đặt tour của bạn",
           important: true,
         },
         {
           key: "pushPromotions",
-          label: "Promotions",
-          description: "Limited-time offers and flash sales",
+          label: "Khuyến Mãi",
+          description:
+            "Nhận thông báo về ưu đãi và giảm giá trong thời gian giới hạn",
         },
         {
           key: "pushReminders",
-          label: "Travel Reminders",
-          description: "Reminders about check-in, departure times",
+          label: "Nhắc Nhở Du Lịch",
+          description: "Nhắc nhở về thời gian làm thủ tục, giờ khởi hành",
         },
         {
           key: "pushSecurityAlerts",
-          label: "Security Alerts",
-          description: "Login attempts and security events",
+          label: "Cảnh Báo Bảo Mật",
+          description: "Thông báo về các sự kiện và cố gắng đăng nhập bảo mật",
           important: true,
         },
       ],
     },
     {
-      title: "SMS Notifications",
+      title: "Thông Báo Qua SMS",
       icon: MessageSquare,
-      description: "Text messages to your phone",
+      description: "Nhận tin nhắn văn bản trên điện thoại của bạn",
       items: [
         {
           key: "smsBookingConfirmation",
-          label: "Booking Confirmations",
-          description: "SMS confirmation for successful bookings",
+          label: "Xác Nhận Đặt Tour",
+          description: "Nhận tin nhắn SMS xác nhận cho các đặt tour thành công",
         },
         {
           key: "smsEmergencyAlerts",
-          label: "Emergency Alerts",
-          description: "Critical travel advisories and emergencies",
+          label: "Cảnh Báo Khẩn Cấp",
+          description:
+            "Thông báo về các tình huống khẩn cấp và cảnh báo du lịch",
           important: true,
         },
       ],
     },
     {
-      title: "In-App Notifications",
+      title: "Thông Báo Trong Ứng Dụng",
       icon: Bell,
-      description: "Notifications within the app",
+      description: "Nhận thông báo trong ứng dụng",
       items: [
         {
           key: "inAppMessages",
-          label: "Messages",
-          description: "Customer support and tour guide messages",
+          label: "Tin Nhắn",
+          description:
+            "Tin nhắn từ bộ phận hỗ trợ khách hàng và hướng dẫn viên",
         },
         {
           key: "inAppUpdates",
-          label: "System Updates",
-          description: "App updates and new features",
+          label: "Cập Nhật Hệ Thống",
+          description:
+            "Thông tin về các bản cập nhật và tính năng mới của ứng dụng",
         },
         {
           key: "inAppPromotions",
-          label: "Promotional Banners",
-          description: "In-app promotional content",
+          label: "Biểu Ngữ Khuyến Mãi",
+          description: "Nội dung khuyến mãi trong ứng dụng",
         },
       ],
     },
@@ -189,10 +193,10 @@ const NotificationsPage = () => {
   return (
     <>
       <Helmet>
-        <title>Notification Settings | TravelTour</title>
+        <title>Cài Đặt Thông Báo | TravelTour</title>
         <meta
           name="description"
-          content="Manage your notification preferences for bookings, promotions, and updates."
+          content="Quản lý sở thích nhận thông báo về đặt tour, khuyến mãi và cập nhật."
         />
       </Helmet>
 
@@ -202,11 +206,11 @@ const NotificationsPage = () => {
             {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold font-poppins text-foreground mb-2">
-                Notification Settings
+                Cài Đặt Thông Báo
               </h1>
               <p className="text-muted-foreground">
-                Choose how and when you want to receive notifications about your
-                bookings and account.
+                Chọn cách và thời gian bạn muốn nhận thông báo về đặt tour và
+                tài khoản của mình.
               </p>
             </div>
 
@@ -229,7 +233,7 @@ const NotificationsPage = () => {
                     }}
                   >
                     <VolumeX className="h-4 w-4 mr-2" />
-                    Turn Off All (Keep Security)
+                    Tắt Tất Cả (Giữ Bảo Mật)
                   </Button>
                   <Button
                     variant="outline"
@@ -242,7 +246,7 @@ const NotificationsPage = () => {
                     }}
                   >
                     <Volume2 className="h-4 w-4 mr-2" />
-                    Enable All Notifications
+                    Bật Tất Cả Thông Báo
                   </Button>
                 </div>
               </CardContent>
@@ -275,7 +279,7 @@ const NotificationsPage = () => {
                                   variant="secondary"
                                   className="ml-2 text-xs"
                                 >
-                                  Important
+                                  Quan Trọng
                                 </Badge>
                               )}
                             </div>
@@ -306,17 +310,17 @@ const NotificationsPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Settings2 className="h-5 w-5 mr-2" />
-                  Notification Preferences
+                  Tùy Chỉnh Thông Báo
                 </CardTitle>
                 <CardDescription>
-                  Customize how and when you receive notifications.
+                  Tùy chỉnh cách và thời gian bạn nhận thông báo.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
                   <div>
                     <label className="text-sm font-medium mb-2 block">
-                      Notification Frequency
+                      Tần Suất Thông Báo
                     </label>
                     <Select
                       value={preferences.frequency}
@@ -328,10 +332,10 @@ const NotificationsPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="immediate">Immediate</SelectItem>
-                        <SelectItem value="hourly">Hourly Digest</SelectItem>
-                        <SelectItem value="daily">Daily Summary</SelectItem>
-                        <SelectItem value="weekly">Weekly Summary</SelectItem>
+                        <SelectItem value="immediate">Ngay Lập Tức</SelectItem>
+                        <SelectItem value="hourly">Theo Giờ</SelectItem>
+                        <SelectItem value="daily">Hàng Ngày</SelectItem>
+                        <SelectItem value="weekly">Hàng Tuần</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -342,10 +346,10 @@ const NotificationsPage = () => {
                     <div>
                       <h3 className="font-medium flex items-center">
                         <Clock className="h-4 w-4 mr-2" />
-                        Quiet Hours
+                        Giờ Im Lặng
                       </h3>
                       <p className="text-sm text-muted-foreground">
-                        Pause non-urgent notifications during specified hours
+                        Tạm dừng thông báo không khẩn cấp trong giờ quy định
                       </p>
                     </div>
                     <Switch
@@ -360,7 +364,7 @@ const NotificationsPage = () => {
                     <div className="grid grid-cols-2 gap-4 pl-6">
                       <div>
                         <label className="text-sm font-medium mb-2 block">
-                          Start Time
+                          Giờ Bắt Đầu
                         </label>
                         <Select
                           value={preferences.quietStart}
@@ -385,7 +389,7 @@ const NotificationsPage = () => {
                       </div>
                       <div>
                         <label className="text-sm font-medium mb-2 block">
-                          End Time
+                          Giờ Kết Thúc
                         </label>
                         <Select
                           value={preferences.quietEnd}
@@ -415,7 +419,7 @@ const NotificationsPage = () => {
 
                   <div>
                     <label className="text-sm font-medium mb-2 block">
-                      Notification Language
+                      Ngôn Ngữ Thông Báo
                     </label>
                     <Select
                       value={preferences.language}
@@ -427,19 +431,19 @@ const NotificationsPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="es">Español</SelectItem>
-                        <SelectItem value="fr">Français</SelectItem>
-                        <SelectItem value="de">Deutsch</SelectItem>
-                        <SelectItem value="it">Italiano</SelectItem>
-                        <SelectItem value="pt">Português</SelectItem>
+                        <SelectItem value="en">Tiếng Anh</SelectItem>
+                        <SelectItem value="es">Tiếng Tây Ban Nha</SelectItem>
+                        <SelectItem value="fr">Tiếng Pháp</SelectItem>
+                        <SelectItem value="de">Tiếng Đức</SelectItem>
+                        <SelectItem value="it">Tiếng Ý</SelectItem>
+                        <SelectItem value="pt">Tiếng Bồ Đào Nha</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div>
                     <label className="text-sm font-medium mb-2 block">
-                      Timezone
+                      Múi Giờ
                     </label>
                     <Select
                       value={preferences.timezone}
@@ -451,14 +455,14 @@ const NotificationsPage = () => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="auto">Auto-detect</SelectItem>
+                        <SelectItem value="auto">Tự động phát hiện</SelectItem>
                         <SelectItem value="UTC">UTC</SelectItem>
-                        <SelectItem value="EST">Eastern Time</SelectItem>
-                        <SelectItem value="PST">Pacific Time</SelectItem>
+                        <SelectItem value="EST">Giờ Đông</SelectItem>
+                        <SelectItem value="PST">Giờ Tây</SelectItem>
                         <SelectItem value="CET">
-                          Central European Time
+                          Giờ Trung Bình Châu Âu
                         </SelectItem>
-                        <SelectItem value="JST">Japan Standard Time</SelectItem>
+                        <SelectItem value="JST">Giờ Chuẩn Nhật Bản</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -468,7 +472,7 @@ const NotificationsPage = () => {
 
             {/* Save Settings */}
             <div className="flex justify-end">
-              <Button>Save Notification Settings</Button>
+              <Button>Lưu Cài Đặt Thông Báo</Button>
             </div>
           </div>
         </div>

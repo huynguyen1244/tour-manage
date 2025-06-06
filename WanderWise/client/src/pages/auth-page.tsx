@@ -65,8 +65,11 @@ const AuthPage = () => {
   return (
     <>
       <Helmet>
-        <title>Login or Register | TravelTour</title>
-        <meta name="description" content="Login or create an account to book tours and manage your travel experiences." />
+        <title>Đăng nhập hoặc Đăng ký | WanderWise</title>
+        <meta
+          name="description"
+          content="Đăng nhập hoặc tạo tài khoản để đặt tour và quản lý trải nghiệm du lịch của bạn."
+        />
       </Helmet>
 
       <div className="min-h-screen flex flex-col">
@@ -75,19 +78,24 @@ const AuthPage = () => {
           <div className="flex items-center justify-center p-6 md:p-10">
             <div className="w-full max-w-md">
               <div className="mb-8 text-center md:text-left">
-                <Link href="/" className="flex items-center justify-center md:justify-start">
+                <Link
+                  href="/"
+                  className="flex items-center justify-center md:justify-start"
+                >
                   <Globe className="h-8 w-8 text-primary mr-2" />
                   <span className="text-2xl font-bold font-poppins text-primary">
-                    TravelTour
+                    WanderWise
                   </span>
                 </Link>
                 <h1 className="mt-6 text-3xl font-bold font-poppins text-foreground">
-                  {activeTab === "login" ? "Welcome Back" : "Create an Account"}
+                  {activeTab === "login"
+                    ? "Chào mừng trở lại"
+                    : "Tạo tài khoản"}
                 </h1>
                 <p className="mt-2 text-muted-foreground">
                   {activeTab === "login"
-                    ? "Sign in to access your account and bookings"
-                    : "Join us to explore amazing destinations"}
+                    ? "Đăng nhập để truy cập tài khoản và lịch đặt chỗ của bạn"
+                    : "Tham gia với chúng tôi để khám phá những điểm đến tuyệt vời"}
                 </p>
               </div>
 
@@ -97,11 +105,11 @@ const AuthPage = () => {
                 onValueChange={setActiveTab}
                 className="w-full"
               >
+                {" "}
                 <TabsList className="grid grid-cols-2 mb-6">
-                  <TabsTrigger value="login">Login</TabsTrigger>
-                  <TabsTrigger value="register">Register</TabsTrigger>
+                  <TabsTrigger value="login">Đăng nhập</TabsTrigger>
+                  <TabsTrigger value="register">Đăng ký</TabsTrigger>
                 </TabsList>
-                
                 <TabsContent value="login">
                   <Form {...loginForm}>
                     <form
@@ -113,12 +121,12 @@ const AuthPage = () => {
                         name="username"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Username or Email</FormLabel>
+                            <FormLabel>Tên người dùng hoặc Email</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                 <Input
-                                  placeholder="Enter your username or email"
+                                  placeholder="Nhập tên người dùng hoặc email"
                                   className="pl-10"
                                   {...field}
                                 />
@@ -135,17 +143,20 @@ const AuthPage = () => {
                         render={({ field }) => (
                           <FormItem>
                             <div className="flex justify-between items-center">
-                              <FormLabel>Password</FormLabel>
-                              <Link href="#" className="text-sm text-primary hover:underline">
-                                Forgot password?
+                              <FormLabel>Mật khẩu</FormLabel>
+                              <Link
+                                href="#"
+                                className="text-sm text-primary hover:underline"
+                              >
+                                Quên mật khẩu?
                               </Link>
                             </div>
                             <FormControl>
                               <div className="relative">
-                                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />{" "}
                                 <Input
                                   type="password"
-                                  placeholder="••••••••"
+                                  placeholder="Nhập mật khẩu"
                                   className="pl-10"
                                   {...field}
                                 />
@@ -162,7 +173,7 @@ const AuthPage = () => {
                           htmlFor="remember"
                           className="ml-2 text-sm text-muted-foreground"
                         >
-                          Remember me
+                          Ghi nhớ đăng nhập
                         </label>
                       </div>
 
@@ -171,24 +182,25 @@ const AuthPage = () => {
                         className="w-full"
                         disabled={loginMutation.isPending}
                       >
-                        {loginMutation.isPending ? "Logging in..." : "Login"}
+                        {loginMutation.isPending
+                          ? "Đang đăng nhập..."
+                          : "Đăng nhập"}
                       </Button>
                     </form>
                   </Form>
 
                   <div className="mt-6 text-center">
                     <p className="text-sm text-muted-foreground">
-                      Don't have an account?{" "}
+                      Chưa có tài khoản?{" "}
                       <button
                         onClick={() => setActiveTab("register")}
                         className="text-primary hover:underline font-medium"
                       >
-                        Sign up
+                        Đăng ký
                       </button>
                     </p>
                   </div>
                 </TabsContent>
-
                 <TabsContent value="register">
                   <Form {...registerForm}>
                     <form
@@ -201,9 +213,9 @@ const AuthPage = () => {
                           name="firstName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>First Name</FormLabel>
+                              <FormLabel>Tên</FormLabel>
                               <FormControl>
-                                <Input placeholder="John" {...field} />
+                                <Input placeholder="Văn A" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -215,9 +227,9 @@ const AuthPage = () => {
                           name="lastName"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Last Name</FormLabel>
+                              <FormLabel>Họ</FormLabel>
                               <FormControl>
-                                <Input placeholder="Doe" {...field} />
+                                <Input placeholder="Nguyễn" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -230,12 +242,13 @@ const AuthPage = () => {
                         name="username"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Username</FormLabel>
+                            {" "}
+                            <FormLabel>Tên người dùng</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                 <Input
-                                  placeholder="Choose a username"
+                                  placeholder="Chọn tên người dùng"
                                   className="pl-10"
                                   {...field}
                                 />
@@ -254,10 +267,10 @@ const AuthPage = () => {
                             <FormLabel>Email</FormLabel>
                             <FormControl>
                               <div className="relative">
-                                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />{" "}
                                 <Input
                                   type="email"
-                                  placeholder="your.email@example.com"
+                                  placeholder="email.cua.ban@example.com"
                                   className="pl-10"
                                   {...field}
                                 />
@@ -273,12 +286,14 @@ const AuthPage = () => {
                         name="phoneNumber"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Phone Number (Optional)</FormLabel>
+                            <FormLabel>
+                              Số điện thoại (Không bắt buộc)
+                            </FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                 <Input
-                                  placeholder="+1 (555) 123-4567"
+                                  placeholder="0912 345 678"
                                   className="pl-10"
                                   {...field}
                                 />
@@ -294,13 +309,13 @@ const AuthPage = () => {
                         name="password"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>Mật khẩu</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                 <Input
                                   type="password"
-                                  placeholder="Create a strong password"
+                                  placeholder="Tạo mật khẩu mạnh"
                                   className="pl-10"
                                   {...field}
                                 />
@@ -316,13 +331,13 @@ const AuthPage = () => {
                         name="confirmPassword"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Confirm Password</FormLabel>
+                            <FormLabel>Xác nhận mật khẩu</FormLabel>
                             <FormControl>
                               <div className="relative">
                                 <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                                 <Input
                                   type="password"
-                                  placeholder="Confirm your password"
+                                  placeholder="Xác nhận mật khẩu của bạn"
                                   className="pl-10"
                                   {...field}
                                 />
@@ -339,13 +354,19 @@ const AuthPage = () => {
                           htmlFor="terms"
                           className="ml-2 text-sm text-muted-foreground"
                         >
-                          I agree to the{" "}
-                          <Link href="#" className="text-primary hover:underline">
-                            Terms and Conditions
+                          Tôi đồng ý với{" "}
+                          <Link
+                            href="#"
+                            className="text-primary hover:underline"
+                          >
+                            Điều khoản và Điều kiện
                           </Link>{" "}
                           and{" "}
-                          <Link href="#" className="text-primary hover:underline">
-                            Privacy Policy
+                          <Link
+                            href="#"
+                            className="text-primary hover:underline"
+                          >
+                            Chính sách bảo mật
                           </Link>
                         </label>
                       </div>
@@ -356,20 +377,20 @@ const AuthPage = () => {
                         disabled={registerMutation.isPending}
                       >
                         {registerMutation.isPending
-                          ? "Creating account..."
-                          : "Sign Up"}
+                          ? "Đang tạo tài khoản..."
+                          : "Đăng ký"}
                       </Button>
                     </form>
                   </Form>
 
                   <div className="mt-6 text-center">
                     <p className="text-sm text-muted-foreground">
-                      Already have an account?{" "}
+                      Đã có tài khoản?{" "}
                       <button
                         onClick={() => setActiveTab("login")}
                         className="text-primary hover:underline font-medium"
                       >
-                        Login
+                        Đăng nhập
                       </button>
                     </p>
                   </div>
@@ -392,7 +413,7 @@ const AuthPage = () => {
                 Your Journey Begins Here
               </h2>
               <p className="text-xl opacity-90 mb-6">
-                Discover extraordinary destinations and unforgettable experiences with TravelTour.
+                Khám phá những điểm đến tuyệt vời với WanderWise
               </p>
               <ul className="space-y-4">
                 <li className="flex items-center">
@@ -412,7 +433,7 @@ const AuthPage = () => {
                       />
                     </svg>
                   </div>
-                  <span>Handpicked premium tours and experiences</span>
+                  <span>Các tour và trải nghiệm cao cấp được chọn lọc</span>
                 </li>
                 <li className="flex items-center">
                   <div className="bg-white/20 rounded-full p-1 mr-3">
@@ -431,7 +452,7 @@ const AuthPage = () => {
                       />
                     </svg>
                   </div>
-                  <span>Secure booking with flexible cancellation</span>
+                  <span>Đặt chỗ an toàn với chính sách hủy linh hoạt</span>
                 </li>
                 <li className="flex items-center">
                   <div className="bg-white/20 rounded-full p-1 mr-3">
@@ -450,7 +471,7 @@ const AuthPage = () => {
                       />
                     </svg>
                   </div>
-                  <span>Expert guides and personalized service</span>
+                  <span>Hướng dẫn chuyên gia và dịch vụ cá nhân hóa</span>
                 </li>
                 <li className="flex items-center">
                   <div className="bg-white/20 rounded-full p-1 mr-3">
@@ -469,7 +490,9 @@ const AuthPage = () => {
                       />
                     </svg>
                   </div>
-                  <span>24/7 customer support during your journey</span>
+                  <span>
+                    Hỗ trợ khách hàng 24/7 trong suốt hành trình của bạn
+                  </span>
                 </li>
               </ul>
             </div>

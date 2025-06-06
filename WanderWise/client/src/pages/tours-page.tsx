@@ -24,46 +24,62 @@ import {
 const ToursPage = () => {
   const [location] = useLocation();
   const searchParams = new URLSearchParams(location.split("?")[1] || "");
-  
-  const [destination, setDestination] = useState(searchParams.get("destination") || "");
+
+  const [destination, setDestination] = useState(
+    searchParams.get("destination") || ""
+  );
   const [sortBy, setSortBy] = useState("featured");
   const [filterOpen, setFilterOpen] = useState(false);
-  
+
   // Get search parameters
   const dates = searchParams.get("dates") || "";
   const travelers = searchParams.get("travelers") || "2";
-  
+
   // Fetch tours with search parameters
-  const { data: tours, isLoading, error } = useQuery({
+  const {
+    data: tours,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["/api/tours/search", destination],
     queryFn: async ({ queryKey }) => {
       const [_, destinationSearch] = queryKey;
-      const response = await fetch(`/api/tours/search?destination=${encodeURIComponent(destinationSearch || "")}`);
+      const response = await fetch(
+        `/api/tours/search?destination=${encodeURIComponent(
+          destinationSearch || ""
+        )}`
+      );
       if (!response.ok) {
-        throw new Error("Failed to fetch tours");
+        throw new Error("Không thể tải các tour");
       }
       return response.json();
     },
   });
-  
+
   // Sort tours based on selection
-  const sortedTours = tours ? [...tours].sort((a, b) => {
-    switch (sortBy) {
-      case "price-low":
-        return (a.discountedPrice || a.price) - (b.discountedPrice || b.price);
-      case "price-high":
-        return (b.discountedPrice || b.price) - (a.discountedPrice || a.price);
-      case "duration-short":
-        return a.duration - b.duration;
-      case "duration-long":
-        return b.duration - a.duration;
-      case "rating":
-        return (b.rating || 0) - (a.rating || 0);
-      default: // featured
-        return b.featured ? 1 : -1;
-    }
-  }) : [];
-  
+  const sortedTours = tours
+    ? [...tours].sort((a, b) => {
+        switch (sortBy) {
+          case "price-low":
+            return (
+              (a.discountedPrice || a.price) - (b.discountedPrice || b.price)
+            );
+          case "price-high":
+            return (
+              (b.discountedPrice || b.price) - (a.discountedPrice || a.price)
+            );
+          case "duration-short":
+            return a.duration - b.duration;
+          case "duration-long":
+            return b.duration - a.duration;
+          case "rating":
+            return (b.rating || 0) - (a.rating || 0);
+          default: // featured
+            return b.featured ? 1 : -1;
+        }
+      })
+    : [];
+
   // Update URL when destination changes
   useEffect(() => {
     if (destination) {
@@ -72,28 +88,36 @@ const ToursPage = () => {
       searchParams.delete("destination");
     }
     // Update URL without page reload
-    const newUrl = location.split("?")[0] + (searchParams.toString() ? `?${searchParams.toString()}` : "");
+    const newUrl =
+      location.split("?")[0] +
+      (searchParams.toString() ? `?${searchParams.toString()}` : "");
     window.history.replaceState(null, "", newUrl);
   }, [destination]);
-  
+
   return (
     <>
+      {" "}
       <Helmet>
-        <title>Tours | TravelTour</title>
-        <meta name="description" content="Explore our wide range of travel tours and find your perfect adventure." />
+        <title>Tours | WanderWise</title>
+        <meta
+          name="description"
+          content="Khám phá đa dạng các tour du lịch của chúng tôi và tìm cuộc phiêu lưu hoàn hảo cho bạn."
+        />
       </Helmet>
-      
       <div className="flex flex-col min-h-screen">
         <main className="flex-grow">
           <div className="bg-primary text-white py-12">
             <div className="container mx-auto px-4">
+              {" "}
               <h1 className="text-3xl md:text-4xl font-bold font-poppins mb-4">
-                {destination ? `Tours in ${destination}` : "Explore Our Tours"}
+                {destination
+                  ? `Tours tại ${destination}`
+                  : "Khám Phá Các Tour Của Chúng Tôi"}
               </h1>
               <p className="text-lg opacity-90 mb-6">
-                Discover amazing travel experiences crafted by our experts
+                Khám phá những trải nghiệm du lịch tuyệt vời được tạo ra bởi các
+                chuyên gia của chúng tôi
               </p>
-              
               <div className="bg-white p-4 md:p-6 rounded-xl shadow-md">
                 <SearchForm
                   defaultDestination={destination}
@@ -104,7 +128,7 @@ const ToursPage = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="container mx-auto px-4 py-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
               <div>
@@ -112,14 +136,17 @@ const ToursPage = () => {
                   {isLoading ? (
                     <Skeleton className="h-7 w-40" />
                   ) : error ? (
-                    "Error loading tours"
+                    "Lỗi khi tải tours"
                   ) : (
-                    `${sortedTours.length} ${sortedTours.length === 1 ? "Tour" : "Tours"} ${destination ? `in ${destination}` : "Available"}`
+                    `${sortedTours.length} ${
+                      sortedTours.length === 1 ? "Tour" : "Tours"
+                    } ${destination ? `tại ${destination}` : "Có Sẵn"}`
                   )}
                 </h2>
               </div>
-              
+
               <div className="flex flex-col sm:flex-row gap-3">
+                {" "}
                 <Button
                   variant="outline"
                   size="sm"
@@ -127,15 +154,19 @@ const ToursPage = () => {
                   onClick={() => setFilterOpen(!filterOpen)}
                 >
                   <SlidersHorizontal className="h-4 w-4 mr-2" />
-                  Filters & Sort
+                  Bộ Lọc & Sắp Xếp
                 </Button>
-                
-                <div className={`sm:flex items-center gap-3 ${filterOpen ? "block" : "hidden"}`}>
+                <div
+                  className={`sm:flex items-center gap-3 ${
+                    filterOpen ? "block" : "hidden"
+                  }`}
+                >
+                  {" "}
                   <div className="bg-background p-2 rounded-lg border border-border flex items-center mb-3 sm:mb-0">
                     <MapPin className="h-4 w-4 text-muted-foreground mr-2" />
-                    <span className="text-sm mr-2">Destination:</span>
+                    <span className="text-sm mr-2">Điểm đến:</span>
                     <span className="font-medium truncate max-w-[100px]">
-                      {destination || "All"}
+                      {destination || "Tất cả"}
                     </span>
                     {destination && (
                       <Button
@@ -148,34 +179,46 @@ const ToursPage = () => {
                       </Button>
                     )}
                   </div>
-                  
                   <div className="flex items-center">
                     <ArrowUpDown className="h-4 w-4 text-muted-foreground mr-2" />
-                    <span className="text-sm mr-2">Sort by:</span>
+                    <span className="text-sm mr-2">Sắp xếp theo:</span>
                     <Select value={sortBy} onValueChange={setSortBy}>
                       <SelectTrigger className="w-[180px] h-9 text-sm">
-                        <SelectValue placeholder="Sort by" />
+                        <SelectValue placeholder="Sắp xếp theo" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="featured">Featured</SelectItem>
-                        <SelectItem value="price-low">Price: Low to High</SelectItem>
-                        <SelectItem value="price-high">Price: High to Low</SelectItem>
-                        <SelectItem value="duration-short">Duration: Shortest</SelectItem>
-                        <SelectItem value="duration-long">Duration: Longest</SelectItem>
-                        <SelectItem value="rating">Highest Rated</SelectItem>
+                        <SelectItem value="featured">Nổi bật</SelectItem>
+                        <SelectItem value="price-low">
+                          Giá: Thấp đến cao
+                        </SelectItem>
+                        <SelectItem value="price-high">
+                          Giá: Cao đến thấp
+                        </SelectItem>
+                        <SelectItem value="duration-short">
+                          Thời gian: Ngắn nhất
+                        </SelectItem>
+                        <SelectItem value="duration-long">
+                          Thời gian: Dài nhất
+                        </SelectItem>
+                        <SelectItem value="rating">
+                          Đánh giá cao nhất
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {Array(6)
                   .fill(0)
                   .map((_, index) => (
-                    <div key={index} className="bg-white rounded-xl overflow-hidden shadow-md">
+                    <div
+                      key={index}
+                      className="bg-white rounded-xl overflow-hidden shadow-md"
+                    >
                       <Skeleton className="h-52 w-full" />
                       <div className="p-5">
                         <div className="flex items-center mb-2">
@@ -198,17 +241,26 @@ const ToursPage = () => {
               </div>
             ) : error ? (
               <div className="text-center py-10">
-                <div className="text-red-500 mb-4">Failed to load tours. Please try again later.</div>
-                <Button onClick={() => window.location.reload()}>Refresh</Button>
+                <div className="text-red-500 mb-4">
+                  Không thể tải các tour. Vui lòng thử lại sau.
+                </div>
+                <Button onClick={() => window.location.reload()}>
+                  Làm Mới
+                </Button>
               </div>
             ) : sortedTours.length === 0 ? (
               <div className="text-center py-16">
                 <div className="text-4xl mb-4">🔍</div>
-                <h3 className="text-xl font-bold mb-2">No tours found</h3>
+                <h3 className="text-xl font-bold mb-2">
+                  Không tìm thấy tour nào
+                </h3>
                 <p className="text-muted-foreground mb-6">
-                  We couldn't find any tours matching your search criteria.
+                  Chúng tôi không thể tìm thấy tour nào khớp với tiêu chí tìm
+                  kiếm của bạn.
                 </p>
-                <Button onClick={() => setDestination("")}>View All Tours</Button>
+                <Button onClick={() => setDestination("")}>
+                  Xem Tất Cả Tour
+                </Button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
