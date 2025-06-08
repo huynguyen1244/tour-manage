@@ -1,5 +1,149 @@
-function TourDetail({ tour }) {
-  if (!tour) return <div>Không có thông tin tour</div>;
+import { useEffect, useState } from "react";
+import apiClient from "../services/apiClient";
+
+function TourDetail({ id }) {
+  const [tour, setTour] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState({});
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
+
+    const fetchTour = async () => {
+      try {
+        console.log("Fetching tour with ID:", id);
+
+        const response = await apiClient.get(`/tours/${id}`);
+        console.log("API Response:", response);
+
+        // Kiểm tra cấu trúc response
+        const tourData = response.data?.data || response.data;
+        console.log("Tour data:", tourData);
+
+        if (tourData) {
+          setTour(tourData);
+          setEditForm(tourData);
+        }
+      } catch (error) {
+        console.error("Error fetching tour data:", error);
+        setError(
+          error.response?.data?.message ||
+            error.message ||
+            "Failed to fetch tour data"
+        );
+      }
+    };
+
+    fetchTour();
+  }, [id]);
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditForm(tour); // Reset form data
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleArrayChange = (field, index, value) => {
+    setEditForm((prev) => ({
+      ...prev,
+      [field]: prev[field].map((item, i) => (i === index ? value : item)),
+    }));
+  };
+
+  const handleAddArrayItem = (field) => {
+    setEditForm((prev) => ({
+      ...prev,
+      [field]: [...(prev[field] || []), ""],
+    }));
+  };
+
+  const handleRemoveArrayItem = (field, index) => {
+    setEditForm((prev) => ({
+      ...prev,
+      [field]: prev[field].filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleItineraryChange = (index, field, value) => {
+    setEditForm((prev) => ({
+      ...prev,
+      itinerary: prev.itinerary.map((item, i) =>
+        i === index ? { ...item, [field]: value } : item
+      ),
+    }));
+  };
+
+  const handleAddItinerary = () => {
+    setEditForm((prev) => ({
+      ...prev,
+      itinerary: [...(prev.itinerary || []), { day: "", description: "" }],
+    }));
+  };
+
+  const handleRemoveItinerary = (index) => {
+    setEditForm((prev) => ({
+      ...prev,
+      itinerary: prev.itinerary.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+
+      // Chuẩn bị dữ liệu để gửi (loại bỏ các field không cần thiết)
+      const updateData = {
+        name: editForm.name,
+        description: editForm.description,
+        location: editForm.location,
+        start_location: editForm.start_location,
+        destinations: editForm.destinations,
+        price: Number(editForm.price),
+        available_slots: Number(editForm.available_slots),
+        schedule: editForm.schedule,
+        start_date: editForm.start_date,
+        end_date: editForm.end_date,
+        transport: editForm.transport,
+        includes: editForm.includes,
+        excludes: editForm.excludes,
+        policies: editForm.policies,
+        itinerary: editForm.itinerary,
+        status: editForm.status,
+      };
+
+      console.log("Updating tour with data:", updateData);
+
+      const response = await apiClient.put(`/tours/${id}`, updateData);
+      console.log("Update response:", response);
+
+      // Cập nhật tour data
+      const updatedTour = response.data?.data || response.data;
+      setTour(updatedTour);
+      setEditForm(updatedTour);
+      setIsEditing(false);
+
+      alert("Cập nhật tour thành công!");
+    } catch (error) {
+      console.error("Error updating tour:", error);
+      alert(error.response?.data?.message || "Có lỗi xảy ra khi cập nhật tour");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("vi-VN", {
@@ -8,317 +152,525 @@ function TourDetail({ tour }) {
     }).format(price);
   };
 
-  // Giả lập dữ liệu chi tiết tour
-  const tourDetails = {
-    description:
-      "Tour du lịch Đà Lạt 3 ngày 2 đêm sẽ đưa bạn đến với thành phố ngàn hoa lãng mạn. Khám phá những địa điểm nổi tiếng như Hồ Xuân Hương, Đồi Robin, Thung lũng Tình yêu và Thiền viện Trúc Lâm. Thưởng thức không khí trong lành và khám phá văn hóa đặc sắc của cao nguyên.",
-    includes: [
-      "Xe đưa đón",
-      "Khách sạn 3 sao",
-      "Bữa ăn theo chương trình",
-      "Hướng dẫn viên",
-      "Vé tham quan",
-    ],
-    excludes: ["Chi phí cá nhân", "Đồ uống", "Các dịch vụ không đề cập"],
-    schedule: [
-      {
-        day: "Ngày 1: TP.HCM - Đà Lạt",
-        activities:
-          "Sáng: Khởi hành từ TP.HCM đi Đà Lạt.\nTrưa: Dùng bữa trưa tại nhà hàng.\nChiều: Tham quan Hồ Xuân Hương, Quảng trường Lâm Viên.\nTối: Khám phá chợ đêm Đà Lạt, thưởng thức ẩm thực địa phương.",
-      },
-      {
-        day: "Ngày 2: Khám phá Đà Lạt",
-        activities:
-          "Sáng: Tham quan Đồi Robin, Thiền viện Trúc Lâm.\nTrưa: Dùng bữa tại nhà hàng.\nChiều: Tham quan Thung lũng Tình yêu, Vườn hoa thành phố.\nTối: Tự do khám phá.",
-      },
-      {
-        day: "Ngày 3: Đà Lạt - TP.HCM",
-        activities:
-          "Sáng: Tham quan Làng Cù Lần, Thác Datanla.\nTrưa: Dùng bữa trưa.\nChiều: Trở về TP.HCM, kết thúc tour.",
-      },
-    ],
-    reviews: [
-      {
-        id: 1,
-        user: "Nguyễn Văn A",
-        rating: 5,
-        comment: "Tour rất tuyệt vời, hướng dẫn viên nhiệt tình",
-        date: "15/03/2025",
-      },
-      {
-        id: 2,
-        user: "Trần Thị B",
-        rating: 4,
-        comment: "Dịch vụ tốt, lịch trình hợp lý nhưng hơi mệt",
-        date: "10/03/2025",
-      },
-      {
-        id: 3,
-        user: "Lê Văn C",
-        rating: 5,
-        comment: "Đồ ăn ngon, khách sạn sạch sẽ",
-        date: "05/03/2025",
-      },
-    ],
-    bookings: [
-      {
-        id: 1,
-        customer: "Nguyễn Văn Nam",
-        phone: "0912345678",
-        participants: 2,
-        startDate: "15/05/2025",
-        status: "confirmed",
-      },
-      {
-        id: 2,
-        customer: "Trần Thị Hương",
-        phone: "0987654321",
-        participants: 4,
-        startDate: "20/05/2025",
-        status: "confirmed",
-      },
-      {
-        id: 3,
-        customer: "Lê Minh Dương",
-        phone: "0977123456",
-        participants: 1,
-        startDate: "25/05/2025",
-        status: "pending",
-      },
-    ],
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    return new Date(dateString).toISOString().split("T")[0];
   };
+
+  const formatDisplayDate = (dateString) => {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString("vi-VN");
+  };
+
+  if (!tour)
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-gray-600 text-center">
+          <p className="text-lg font-medium">Không tìm thấy thông tin tour</p>
+          <p className="mt-2">Tour ID: {id}</p>
+        </div>
+      </div>
+    );
 
   return (
     <div className="space-y-6 pt-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold text-gray-800">{tour.name}</h2>
+        <h2 className="text-2xl font-semibold text-gray-800">
+          {isEditing ? "Chỉnh sửa tour" : tour.name}
+        </h2>
         <div className="flex space-x-2">
-          <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-            Chỉnh sửa
-          </button>
-          <button className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
-            Xóa
-          </button>
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+              >
+                {saving ? "Đang lưu..." : "Lưu"}
+              </button>
+              <button
+                onClick={handleCancelEdit}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+              >
+                Hủy
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={handleEdit}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+              >
+                Chỉnh sửa
+              </button>
+            </>
+          )}
         </div>
       </div>
 
       <div className="bg-white shadow-md rounded-lg overflow-hidden p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <img
-              src="https://media.istockphoto.com/id/624183176/vi/anh/ru%E1%BB%99ng-b%E1%BA%ADc-thang-%E1%BB%9F-mu-cang-ch%E1%BA%A3i-vi%E1%BB%87t-nam.jpg?s=612x612&w=0&k=20&c=UbNrn36xFBIff9yV3RDl5lPs3-kW-WQ_sSNMB1M3Trs="
-              alt={tour.name}
-              className="w-full h-64 object-cover rounded-lg"
-            />
-            <div className="mt-4">
-              <h3 className="text-lg font-medium mb-2">Mô tả tour</h3>
-              <p className="text-gray-600">{tourDetails.description}</p>
-            </div>
-          </div>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="text-lg font-medium mb-4">Thông tin chi tiết</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Điểm đến:</span>
-                <span className="font-medium">{tour.location}</span>
+        {isEditing ? (
+          <div className="space-y-6">
+            {/* Form chỉnh sửa */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Tên tour
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={editForm.name || ""}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Thời gian:</span>
-                <span className="font-medium">{tour.duration}</span>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Địa điểm
+                </label>
+                <input
+                  type="text"
+                  name="location"
+                  value={editForm.location || ""}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Giá tour:</span>
-                <span className="font-medium text-green-600">
-                  {formatPrice(tour.price)}
-                </span>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Điểm khởi hành
+                </label>
+                <input
+                  type="text"
+                  name="start_location"
+                  value={editForm.start_location || ""}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Đánh giá:</span>
-                <span className="font-medium flex items-center">
-                  {tour.rating}
-                  <svg
-                    className="w-4 h-4 text-yellow-400 ml-1"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                </span>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Lịch trình
+                </label>
+                <input
+                  type="text"
+                  name="schedule"
+                  value={editForm.schedule || ""}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Lượt đặt:</span>
-                <span className="font-medium">{tour.bookings}</span>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Giá tour (VND)
+                </label>
+                <input
+                  type="number"
+                  name="price"
+                  value={editForm.price || ""}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Trạng thái:</span>
-                <span
-                  className={`font-medium ${
-                    tour.status === "active" ? "text-green-600" : "text-red-600"
-                  }`}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Số chỗ còn lại
+                </label>
+                <input
+                  type="number"
+                  name="available_slots"
+                  value={editForm.available_slots || ""}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Ngày bắt đầu
+                </label>
+                <input
+                  type="date"
+                  name="start_date"
+                  value={formatDate(editForm.start_date)}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Ngày kết thúc
+                </label>
+                <input
+                  type="date"
+                  name="end_date"
+                  value={formatDate(editForm.end_date)}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Phương tiện
+                </label>
+                <input
+                  type="text"
+                  name="transport"
+                  value={editForm.transport || ""}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Trạng thái
+                </label>
+                <select
+                  name="status"
+                  value={editForm.status || ""}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  {tour.status === "active"
-                    ? "Đang hoạt động"
-                    : "Ngưng hoạt động"}
-                </span>
+                  <option value="available">Có sẵn</option>
+                  <option value="unavailable">Ngưng hoạt động</option>
+                </select>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="mt-8 border-t pt-6">
-          <h3 className="text-lg font-medium mb-4">Bao gồm & Không bao gồm</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-medium text-green-600 mb-2">Bao gồm:</h4>
-              <ul className="list-disc pl-5 space-y-1">
-                {tourDetails.includes.map((item, index) => (
-                  <li key={index} className="text-gray-600">
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Mô tả
+              </label>
+              <textarea
+                name="description"
+                value={editForm.description || ""}
+                onChange={handleInputChange}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
+
             <div>
-              <h4 className="font-medium text-red-600 mb-2">Không bao gồm:</h4>
-              <ul className="list-disc pl-5 space-y-1">
-                {tourDetails.excludes.map((item, index) => (
-                  <li key={index} className="text-gray-600">
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Chính sách
+              </label>
+              <textarea
+                name="policies"
+                value={editForm.policies || ""}
+                onChange={handleInputChange}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
-          </div>
-        </div>
 
-        <div className="mt-8 border-t pt-6">
-          <h3 className="text-lg font-medium mb-4">Lịch trình tour</h3>
-          <div className="space-y-4">
-            {tourDetails.schedule.map((day, index) => (
-              <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-2">{day.day}</h4>
-                <p className="text-gray-600 whitespace-pre-line">
-                  {day.activities}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-8 border-t pt-6">
-          <h3 className="text-lg font-medium mb-4">Danh sách đặt tour</h3>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Khách hàng
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Liên hệ
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Số người
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Ngày khởi hành
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Trạng thái
-                  </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Thao tác
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {tourDetails.bookings.map((booking) => (
-                  <tr key={booking.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {booking.customer}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">
-                        {booking.phone}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {booking.participants}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {booking.startDate}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          booking.status === "confirmed"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
-                      >
-                        {booking.status === "confirmed"
-                          ? "Xác nhận"
-                          : "Chờ duyệt"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <button className="text-blue-600 hover:text-blue-900 mr-2">
-                        Xem
-                      </button>
-                      <button
-                        className={`${
-                          booking.status === "pending"
-                            ? "text-green-600 hover:text-green-900"
-                            : "text-gray-400 cursor-not-allowed"
-                        } mr-2`}
-                      >
-                        {booking.status === "pending"
-                          ? "Xác nhận"
-                          : "Đã xác nhận"}
-                      </button>
-                      <button className="text-red-600 hover:text-red-900">
-                        Hủy
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="mt-8 border-t pt-6">
-          <h3 className="text-lg font-medium mb-4">Đánh giá từ khách hàng</h3>
-          <div className="space-y-4">
-            {tourDetails.reviews.map((review) => (
-              <div key={review.id} className="bg-gray-50 p-4 rounded-lg">
-                <div className="flex justify-between">
-                  <div className="flex items-center">
-                    <div className="font-medium">{review.user}</div>
-                    <div className="ml-2 flex items-center">
-                      <span className="text-yellow-400">{review.rating}</span>
-                      <svg
-                        className="w-4 h-4 text-yellow-400 ml-1"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="text-sm text-gray-500">{review.date}</div>
+            {/* Destinations */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Điểm tham quan
+              </label>
+              {editForm.destinations?.map((destination, index) => (
+                <div key={index} className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={destination}
+                    onChange={(e) =>
+                      handleArrayChange("destinations", index, e.target.value)
+                    }
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveArrayItem("destinations", index)}
+                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  >
+                    Xóa
+                  </button>
                 </div>
-                <p className="mt-2 text-gray-600">{review.comment}</p>
-              </div>
-            ))}
+              ))}
+              <button
+                type="button"
+                onClick={() => handleAddArrayItem("destinations")}
+                className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+              >
+                Thêm điểm tham quan
+              </button>
+            </div>
+
+            {/* Includes */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Bao gồm
+              </label>
+              {editForm.includes?.map((item, index) => (
+                <div key={index} className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={item}
+                    onChange={(e) =>
+                      handleArrayChange("includes", index, e.target.value)
+                    }
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveArrayItem("includes", index)}
+                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  >
+                    Xóa
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => handleAddArrayItem("includes")}
+                className="px-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+              >
+                Thêm mục bao gồm
+              </button>
+            </div>
+
+            {/* Excludes */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Không bao gồm
+              </label>
+              {editForm.excludes?.map((item, index) => (
+                <div key={index} className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={item}
+                    onChange={(e) =>
+                      handleArrayChange("excludes", index, e.target.value)
+                    }
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveArrayItem("excludes", index)}
+                    className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  >
+                    Xóa
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => handleAddArrayItem("excludes")}
+                className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+              >
+                Thêm mục không bao gồm
+              </button>
+            </div>
+
+            {/* Itinerary */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Lịch trình chi tiết
+              </label>
+              {editForm.itinerary?.map((day, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-300 rounded-md p-4 mb-4"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={day.day}
+                      onChange={(e) =>
+                        handleItineraryChange(index, "day", e.target.value)
+                      }
+                      placeholder="Ngày"
+                      className="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveItinerary(index)}
+                      className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                    >
+                      Xóa ngày
+                    </button>
+                  </div>
+                  <textarea
+                    value={day.description}
+                    onChange={(e) =>
+                      handleItineraryChange(
+                        index,
+                        "description",
+                        e.target.value
+                      )
+                    }
+                    placeholder="Mô tả hoạt động trong ngày"
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={handleAddItinerary}
+                className="px-3 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600"
+              >
+                Thêm ngày
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div>
+            {/* View mode - existing display code */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2">
+                <img
+                  src={tour.images?.[0]?.url}
+                  alt={tour.name}
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+                <div className="mt-4">
+                  <h3 className="text-lg font-medium mb-2">Mô tả tour</h3>
+                  <p className="text-gray-600">{tour.description}</p>
+                </div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="text-lg font-medium mb-4">Thông tin chi tiết</h3>
+                <div className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Điểm đến:</span>
+                    <span className="font-medium">{tour.location}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Điểm khởi hành:</span>
+                    <span className="font-medium">{tour.start_location}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Thời gian:</span>
+                    <span className="font-medium">{tour.schedule}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Ngày bắt đầu:</span>
+                    <span className="font-medium">
+                      {formatDisplayDate(tour.start_date)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Ngày kết thúc:</span>
+                    <span className="font-medium">
+                      {formatDisplayDate(tour.end_date)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Phương tiện:</span>
+                    <span className="font-medium">{tour.transport}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Còn lại:</span>
+                    <span className="font-medium">
+                      {tour.available_slots} chỗ
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Giá tour:</span>
+                    <span className="font-medium text-green-600">
+                      {formatPrice(tour.price)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Trạng thái:</span>
+                    <span
+                      className={`font-medium ${
+                        tour.status === "available"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {tour.status === "available"
+                        ? "Có sẵn"
+                        : "Ngưng hoạt động"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Destinations Section */}
+            {tour.destinations && tour.destinations.length > 0 && (
+              <div className="mt-8 border-t pt-6">
+                <h3 className="text-lg font-medium mb-4">Điểm tham quan</h3>
+                <div className="flex flex-wrap gap-2">
+                  {tour.destinations.map((destination, index) => (
+                    <span
+                      key={index}
+                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
+                    >
+                      {destination}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="mt-8 border-t pt-6">
+              <h3 className="text-lg font-medium mb-4">
+                Bao gồm & Không bao gồm
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-medium text-green-600 mb-2">Bao gồm:</h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {tour.includes?.map((item, index) => (
+                      <li key={index} className="text-gray-600">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-medium text-red-600 mb-2">
+                    Không bao gồm:
+                  </h4>
+                  <ul className="list-disc pl-5 space-y-1">
+                    {tour.excludes?.map((item, index) => (
+                      <li key={index} className="text-gray-600">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 border-t pt-6">
+              <h3 className="text-lg font-medium mb-4">Lịch trình tour</h3>
+              <div className="space-y-4">
+                {tour.itinerary?.map((day, index) => (
+                  <div key={index} className="bg-gray-50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">{day.day}</h4>
+                    <p className="text-gray-600">{day.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Policies Section */}
+            {tour.policies && (
+              <div className="mt-8 border-t pt-6">
+                <h3 className="text-lg font-medium mb-4">
+                  Chính sách hủy tour
+                </h3>
+                <div className="bg-yellow-50 p-4 rounded-lg">
+                  <p className="text-gray-700">{tour.policies}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

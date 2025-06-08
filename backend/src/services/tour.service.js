@@ -1,5 +1,6 @@
 const Tour = require("../models/tour.model");
 const cloudinary = require("cloudinary").v2;
+const slugify = require("slugify");
 
 const getAllTours = async (filter) => {
   let query = {};
@@ -71,7 +72,9 @@ const createTour = async (tourData, files) => {
     })
   );
 
-  const newTour = new Tour({ ...tourData, images });
+  const slug = slugify(tourData.name, { lower: true, strict: true });
+
+  const newTour = new Tour({ ...tourData, images, slug });
   return await newTour.save();
 };
 

@@ -1,24 +1,9 @@
 function RefundPage() {
-  const refunds = [
-    {
-      id: 1,
-      bookingId: 1,
-      customer: "Nguyễn Văn A",
-      amount: "2,000,000đ",
-      reason: "Hủy tour",
-    },
-    {
-      id: 2,
-      bookingId: 2,
-      customer: "Trần Thị B",
-      amount: "1,500,000đ",
-      reason: "Không thể tham gia",
-    },
-  ];
-
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Quản lý Hoàn tiền</h1>
+      Tính năng quản lý hoàn tiền hiện tại đang được phát triển. Vui lòng quay
+      lại sau để xem cập nhật mới nhất.
+      {/* <h1 className="text-2xl font-bold mb-6">Quản lý Hoàn tiền</h1>
       <table className="min-w-full table-auto">
         <thead>
           <tr className="bg-gray-200">
@@ -40,7 +25,7 @@ function RefundPage() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
     </div>
   );
 }

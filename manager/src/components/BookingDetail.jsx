@@ -1,44 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import apiClient from "../services/apiClient";
 
-const BookingDetail = ({ booking, close }) => {
-  const [activities, setActivities] = useState([
-    {
-      id: 1,
-      day: "Ngày 1",
-      description: "Check-in khách sạn",
-      completed: false,
-    },
-    {
-      id: 2,
-      day: "Ngày 1",
-      description: "Đón khách tại sân bay",
-      completed: true,
-    },
-    {
-      id: 3,
-      day: "Ngày 2",
-      description: "Tham quan điểm đến chính",
-      completed: false,
-    },
-    {
-      id: 4,
-      day: "Ngày 2",
-      description: "Ăn trưa tại nhà hàng địa phương",
-      completed: false,
-    },
-    {
-      id: 5,
-      day: "Ngày 3",
-      description: "Hoạt động giải trí",
-      completed: false,
-    },
-    {
-      id: 6,
-      day: "Ngày 4",
-      description: "Check-out và đưa về sân bay",
-      completed: false,
-    },
-  ]);
+const BookingDetail = ({ id, close }) => {
+  const [booking, setBooking] = useState(null);
+
+  useEffect(() => {
+    const fetchBooking = async () => {
+      try {
+        const res = await apiClient.get(`/bookings/${id}`);
+        setBooking(res.data); // assume axios, not need `.json()`
+      } catch (error) {
+        console.error("Failed to fetch booking:", error);
+      }
+    };
+
+    fetchBooking();
+  }, [id]);
+
+  const toggleActivity = (activityId) => {
+    setBooking((prev) => ({
+      ...prev,
+      itineraryProgress: prev.itineraryProgress.map((activity) =>
+        activity._id === activityId
+          ? { ...activity, completed: !activity.completed }
+          : activity
+      ),
+    }));
+  };
+
+  if (!booking) return null;
+
+  const { user_id, tour_id, itineraryProgress, payment } = booking;
+  const completedCount = itineraryProgress.filter((a) => a.completed).length;
+  const completionPercentage = Math.round(
+    (completedCount / itineraryProgress.length) * 100
+  );
 
   const getStatusText = (status) => {
     switch (status) {
@@ -48,21 +44,6 @@ const BookingDetail = ({ booking, close }) => {
         return "Chờ xác nhận";
       case "cancelled":
         return "Đã hủy";
-      default:
-        return status;
-    }
-  };
-
-  const getPaymentStatusText = (status) => {
-    switch (status) {
-      case "pending":
-        return "Chờ thanh toán";
-      case "deposited":
-        return "Đã cọc";
-      case "completed":
-        return "Đã thanh toán";
-      case "failed":
-        return "Thanh toán thất bại";
       default:
         return status;
     }
@@ -81,6 +62,21 @@ const BookingDetail = ({ booking, close }) => {
     }
   };
 
+  const getPaymentStatusText = (status) => {
+    switch (status) {
+      case "pending":
+        return "Chờ thanh toán";
+      case "deposited":
+        return "Đã cọc";
+      case "completed":
+        return "Đã thanh toán";
+      case "failed":
+        return "Thanh toán thất bại";
+      default:
+        return status;
+    }
+  };
+
   const getPaymentColor = (status) => {
     switch (status) {
       case "pending":
@@ -95,21 +91,6 @@ const BookingDetail = ({ booking, close }) => {
         return "text-gray-600";
     }
   };
-
-  const toggleActivity = (activityId) => {
-    setActivities(
-      activities.map((activity) =>
-        activity.id === activityId
-          ? { ...activity, completed: !activity.completed }
-          : activity
-      )
-    );
-  };
-
-  const completedCount = activities.filter((a) => a.completed).length;
-  const completionPercentage = Math.round(
-    (completedCount / activities.length) * 100
-  );
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -126,26 +107,42 @@ const BookingDetail = ({ booking, close }) => {
           </div>
 
           {/* Thông tin cơ bản */}
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div>
+          <div className="p-2 gap-4 mb-6">
+            {/* <div>
               <span className="font-medium text-gray-700">ID:</span>
-              <span className="ml-2">{booking.id}</span>
-            </div>
+              <span className="ml-2">{booking._id}</span>
+            </div> */}
             <div>
               <span className="font-medium text-gray-700">Khách hàng:</span>
-              <span className="ml-2">{booking.customerName}</span>
+              <span className="ml-2">{user_id?.name}</span>
+            </div>
+            <div>
+              <span className="font-medium text-gray-700">Email:</span>
+              <span className="ml-2">{user_id?.email}</span>
+            </div>
+            <div>
+              <span className="font-medium text-gray-700">Số điện thoại:</span>
+              <span className="ml-2">{user_id?.phone}</span>
             </div>
             <div>
               <span className="font-medium text-gray-700">Tour:</span>
-              <span className="ml-2">{booking.tourName}</span>
+              <span className="ml-2">{tour_id?.name}</span>
             </div>
             <div>
-              <span className="font-medium text-gray-700">Ngày:</span>
-              <span className="ml-2">{booking.date}</span>
+              <span className="font-medium text-gray-700">Ngày bắt đầu:</span>
+              <span className="ml-2">
+                {new Date(tour_id?.start_date).toLocaleDateString("vi-VN")}
+              </span>
+            </div>
+            <div>
+              <span className="font-medium text-gray-700">Ngày bắt đầu:</span>
+              <span className="ml-2">
+                {new Date(tour_id?.end_date).toLocaleDateString("vi-VN")}
+              </span>
             </div>
             <div>
               <span className="font-medium text-gray-700">Số người:</span>
-              <span className="ml-2">{booking.participants}</span>
+              <span className="ml-2">{booking.num_people}</span>
             </div>
             <div>
               <span className="font-medium text-gray-700">Trạng thái:</span>
@@ -159,20 +156,21 @@ const BookingDetail = ({ booking, close }) => {
               <span className="font-medium text-gray-700">Thanh toán:</span>
               <span
                 className={`ml-2 font-medium ${getPaymentColor(
-                  booking.paymentStatus
+                  payment?.payment_status
                 )}`}
               >
-                {getPaymentStatusText(booking.paymentStatus)}
+                {getPaymentStatusText(payment?.payment_status)}
               </span>
             </div>
           </div>
 
-          {/* Progress */}
+          {/* Tiến độ hoạt động */}
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
               <h4 className="font-semibold text-gray-800">Tiến độ hoạt động</h4>
               <span className="text-sm text-gray-600">
-                {completedCount}/{activities.length} ({completionPercentage}%)
+                {completedCount}/{itineraryProgress.length} (
+                {completionPercentage}%)
               </span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
@@ -183,15 +181,15 @@ const BookingDetail = ({ booking, close }) => {
             </div>
           </div>
 
-          {/* Danh sách hoạt động */}
+          {/* Lịch trình tour */}
           <div className="mb-6">
             <h4 className="font-semibold text-gray-800 mb-3">
               Lịch trình tour
             </h4>
             <div className="space-y-2">
-              {activities.map((activity) => (
+              {itineraryProgress.map((activity) => (
                 <div
-                  key={activity.id}
+                  key={activity._id}
                   className={`flex items-center p-3 rounded-lg border ${
                     activity.completed
                       ? "bg-green-50 border-green-200"
@@ -199,7 +197,7 @@ const BookingDetail = ({ booking, close }) => {
                   }`}
                 >
                   <button
-                    onClick={() => toggleActivity(activity.id)}
+                    onClick={() => toggleActivity(activity._id)}
                     className={`flex-shrink-0 w-5 h-5 rounded border-2 mr-3 flex items-center justify-center transition-colors ${
                       activity.completed
                         ? "bg-green-500 border-green-500 text-white"
