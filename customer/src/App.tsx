@@ -9,6 +9,7 @@ import TourDetailPage from "@/pages/tour-detail-page";
 import ToursPage from "@/pages/tours-page";
 import ProfilePage from "@/pages/profile-page";
 import BookingHistoryPage from "@/pages/booking-history-page";
+import CategoriesPage from "@/pages/categories-page";
 import DestinationsPage from "@/pages/destinations-page";
 import ContactPage from "@/pages/contact-page";
 import AboutPage from "@/pages/about-page";
@@ -24,6 +25,8 @@ import GeneralSettingsPage from "@/pages/general-settings-page";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "./hooks/use-auth";
 import DashboardLayout from "./components/layout/dashboard-layout";
+import CartPage from "@/pages/cart-page";
+import WishlistPage from "@/pages/wishlist-page";
 
 function Router() {
   return (
@@ -34,11 +37,14 @@ function Router() {
         <Route path="/auth" component={AuthPage} />
         <Route path="/tours" component={ToursPage} />
         <Route path="/tours/:id" component={TourDetailPage} />
+        <Route path="/categories" component={CategoriesPage} />
         <Route path="/destinations" component={DestinationsPage} />
         <Route path="/about" component={AboutPage} />
         <Route path="/contact" component={ContactPage} />
         <ProtectedRoute path="/profile" component={ProfilePage} />
         <ProtectedRoute path="/bookings" component={BookingHistoryPage} />
+        <ProtectedRoute path="/cart" component={CartPage} />
+        <ProtectedRoute path="/wishlist" component={WishlistPage} />
         <ProtectedRoute
           path="/payment-methods"
           component={PaymentMethodsPage}

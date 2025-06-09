@@ -32,7 +32,7 @@ const Sidebar = ({ activeView, setActiveView }) => {
       view: "payments",
       path: "/payments",
     },
-    { name: "Refunds", icon: <FaUndo />, view: "refunds", path: "/refunds" },
+    // { name: "Refunds", icon: <FaUndo />, view: "refunds", path: "/refunds" },
   ];
 
   return (

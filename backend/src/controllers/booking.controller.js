@@ -30,6 +30,22 @@ const getBookings = async (req, res) => {
   }
 };
 
+const getCustomerBookings = async (req, res) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const user_id = req.user._id;
+    const bookings = await bookingService.getBookingsByUserId(user_id);
+    await session.commitTransaction();
+    res.json(bookings);
+  } catch (err) {
+    await session.abortTransaction();
+    res.status(500).json({ error: err.message });
+  } finally {
+    session.endSession();
+  }
+};
+
 // Lấy booking theo id
 // User chỉ xem được booking của mình, admin xem được tất
 const getBooking = async (req, res) => {
@@ -233,6 +249,7 @@ const updatePayment = async (req, res) => {
 
 module.exports = {
   getBookings,
+  getCustomerBookings,
   getBooking,
   createBooking,
   updateBooking,

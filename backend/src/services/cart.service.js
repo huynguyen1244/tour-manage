@@ -2,7 +2,12 @@ const Cart = require("../models/cart.model");
 const Tour = require("../models/tour.model");
 
 const getAllCarts = async (user_id) => {
-  return await Cart.find({ user_id }).populate("user_id");
+  return await Cart.find({ user_id })
+    .populate({
+      path: "user_id",
+      select: "-password_hash", // loại bỏ password_hash từ user
+    })
+    .populate("tour_id");
 };
 
 const getCartByIdAndUserId = async (id, user_id) => {

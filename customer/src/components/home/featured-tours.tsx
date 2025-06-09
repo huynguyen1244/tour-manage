@@ -1,17 +1,69 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { apiClient } from "@/services/axios";
 import { Link } from "wouter";
 import TourCard from "@/components/tours/tour-card";
 import { ArrowRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
+interface Image {
+  _id: string;
+  url: string;
+  public_id: string;
+}
+
+interface ItineraryItem {
+  _id: string;
+  day: string;
+  description: string;
+}
+
+interface Tour {
+  _id: string;
+  name: string;
+  slug: string;
+  category: string;
+  description: string;
+  location: string;
+  start_location: string;
+  destinations: string[];
+  price: number;
+  available_slots: number;
+  schedule: string;
+  start_date: string;
+  end_date: string;
+  transport: string;
+  includes: string[];
+  excludes: string[];
+  policies: string;
+  itinerary: ItineraryItem[];
+  images: Image[];
+  status: string;
+  created_at: string;
+  updated_at: string;
+  __v: number;
+}
+
 const FeaturedTours = () => {
-  const {
-    data: tours,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["/api/tours/featured"],
-  });
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      setIsLoading(true);
+      setError(false);
+      try {
+        const response = await apiClient.get("/tours");
+        setTours(response as any);
+      } catch (error) {
+        setError(true);
+        console.error("Lỗi khi lấy tours:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchTours();
+  }, []);
 
   if (error) {
     return (
@@ -41,7 +93,7 @@ const FeaturedTours = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {isLoading
             ? // Skeleton loading state
               Array(3)
@@ -71,7 +123,10 @@ const FeaturedTours = () => {
                   </div>
                 ))
             : // Actual tours
-              tours?.map((tour: any) => <TourCard key={tour.id} tour={tour} />)}
+              tours
+                ?.sort(() => Math.random() - 0.5)
+                ?.slice(0, 4)
+                .map((tour) => <TourCard key={tour._id} {...tour} />)}
         </div>
       </div>
     </section>

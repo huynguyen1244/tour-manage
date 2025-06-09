@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { 
+import {
   Carousel,
   CarouselContent,
   CarouselItem,
@@ -17,11 +17,12 @@ import { Button } from "@/components/ui/button";
 import { Images } from "lucide-react";
 
 interface TourGalleryProps {
-  images: string[];
+  images: any[];
   title: string;
 }
 
 const TourGallery = ({ images, title }: TourGalleryProps) => {
+  console.log(images);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { theme } = useTheme();
@@ -29,15 +30,18 @@ const TourGallery = ({ images, title }: TourGalleryProps) => {
   if (!images || images.length === 0) {
     return null;
   }
+  const flatImages = Array.isArray(images[0]) ? images[0] : images;
 
   const openGallery = (index: number = 0) => {
     setCurrentImageIndex(index);
     setDialogOpen(true);
   };
 
-  const mainImage = images[0];
-  const galleryImages = images.slice(1);
-  
+  if (!flatImages || flatImages.length === 0) return null;
+
+  const mainImage = flatImages[0];
+  const galleryImages = flatImages.slice(1);
+
   // Handle case where there are fewer than 4 additional images
   const filledGalleryImages = [...galleryImages];
   if (filledGalleryImages.length < 4) {
@@ -53,31 +57,31 @@ const TourGallery = ({ images, title }: TourGalleryProps) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div className="md:col-span-2 rounded-xl overflow-hidden h-80 md:h-96">
           <img
-            src={mainImage}
+            src={mainImage.url}
             alt={`${title} main image`}
             className="w-full h-full object-cover"
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
           {filledGalleryImages.slice(0, 3).map((image, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="rounded-xl overflow-hidden cursor-pointer"
               onClick={() => openGallery(index + 1)}
             >
               <img
-                src={image}
+                src={image.url}
                 alt={`${title} gallery image ${index + 1}`}
                 className="w-full h-full object-cover"
               />
             </div>
           ))}
-          <div 
+          <div
             className="rounded-xl overflow-hidden relative group cursor-pointer"
             onClick={() => openGallery(0)}
           >
             <img
-              src={filledGalleryImages[3]}
+              src={filledGalleryImages[3].url}
               alt={`${title} gallery image 4`}
               className="w-full h-full object-cover"
             />
@@ -94,15 +98,17 @@ const TourGallery = ({ images, title }: TourGalleryProps) => {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-4xl">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold">{title} Bộ sưu tập</DialogTitle>
+            <DialogTitle className="text-xl font-bold">
+              {title} Bộ sưu tập
+            </DialogTitle>
           </DialogHeader>
           <Carousel className="w-full max-w-3xl mx-auto">
             <CarouselContent>
-              {images.map((image, index) => (
+              {flatImages.map((image, index) => (
                 <CarouselItem key={index}>
                   <div className="flex items-center justify-center p-1">
                     <img
-                      src={image}
+                      src={image.url}
                       alt={`${title} image ${index + 1}`}
                       className="max-h-[70vh] w-auto object-contain rounded-md"
                     />
@@ -113,7 +119,11 @@ const TourGallery = ({ images, title }: TourGalleryProps) => {
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
-          <Button variant="outline" onClick={() => setDialogOpen(false)} className="mx-auto">
+          <Button
+            variant="outline"
+            onClick={() => setDialogOpen(false)}
+            className="mx-auto"
+          >
             Đóng bộ sưu tập
           </Button>
         </DialogContent>

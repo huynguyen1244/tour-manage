@@ -112,6 +112,7 @@ function TourDetail({ id }) {
         location: editForm.location,
         start_location: editForm.start_location,
         destinations: editForm.destinations,
+        capacity: editForm.capacity,
         price: Number(editForm.price),
         available_slots: Number(editForm.available_slots),
         schedule: editForm.schedule,
@@ -264,7 +265,18 @@ function TourDetail({ id }) {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Số người
+                </label>
+                <input
+                  type="number"
+                  name="capacity"
+                  value={editForm.capacity || ""}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Giá tour (VND)
@@ -564,6 +576,10 @@ function TourDetail({ id }) {
                     <span className="font-medium">
                       {formatDisplayDate(tour.end_date)}
                     </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Số người:</span>
+                    <span className="font-medium">{tour.capacity}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Phương tiện:</span>

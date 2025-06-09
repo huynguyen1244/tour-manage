@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Helmet } from "react-helmet";
-import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest, queryClient } from "@/lib/queryClient";
+import { apiClient } from "@/services/axios";
 
 import {
   Form,
@@ -32,46 +31,54 @@ import { User, Mail, Phone, Shield, LogOut, AlertCircle } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "wouter";
 
-// Create schema for profile form
 const profileFormSchema = z.object({
-  firstName: z.string().optional(),
-  lastName: z.string().optional(),
-  phoneNumber: z.string().optional(),
+  name: z.string().optional(),
+  phone: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 const ProfilePage = () => {
-  const { user, logoutMutation } = useAuth();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("profile");
+
+  const { data: userData, isLoading } = useQuery({
+    queryKey: ["customer-infor"],
+    queryFn: async () => {
+      const res = await apiClient.get("/api/customers/get-infor");
+      return (res as any).data;
+    },
+  });
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      firstName: user?.firstName || "",
-      lastName: user?.lastName || "",
-      phoneNumber: user?.phoneNumber || "",
+      name: "",
+      phone: "",
     },
   });
 
+  useEffect(() => {
+    if (userData) {
+      form.reset({
+        name: userData.name || "",
+        phone: userData.phone || "",
+      });
+    }
+  }, [userData]);
+
   const updateProfileMutation = useMutation({
     mutationFn: async (data: ProfileFormValues) => {
-      const res = await apiRequest("PUT", "/api/user/profile", data);
-      return await res.json();
+      const res = await apiClient.put("/api/customers/update-infor", data);
+      return (res as any).data;
     },
-    onSuccess: (updatedUser) => {
-      queryClient.setQueryData(["/api/user"], {
-        ...user,
-        ...updatedUser,
-      });
-
+    onSuccess: () => {
       toast({
-        title: "Hồ sơ đã cập nhật",
-        description: "Thông tin hồ sơ của bạn đã được cập nhật thành công.",
+        title: "Cập nhật thành công",
+        description: "Thông tin đã được cập nhật.",
       });
     },
-    onError: (error: Error) => {
+    onError: (error: any) => {
       toast({
         title: "Cập nhật thất bại",
         description: error.message,
@@ -84,23 +91,26 @@ const ProfilePage = () => {
     updateProfileMutation.mutate(data);
   };
 
-  const handleLogout = () => {
-    logoutMutation.mutate();
+  const getInitials = () => {
+    if (userData?.name) {
+      return userData.name
+        .split(" ")
+        .map((word: string) => word[0])
+        .join("")
+        .toUpperCase();
+    }
+    return "U";
   };
 
-  const getInitials = () => {
-    if (user?.firstName && user?.lastName) {
-      return `${user.firstName[0]}${user.lastName[0]}`;
-    }
-    return user?.username ? user.username[0].toUpperCase() : "U";
-  };
+  if (isLoading) return <div className="p-6">Đang tải thông tin...</div>;
+
   return (
     <>
       <Helmet>
         <title>Hồ Sơ Của Tôi | TravelTour</title>
         <meta
           name="description"
-          content="Quản lý tài khoản TravelTour và thông tin hồ sơ của bạn."
+          content="Quản lý tài khoản TravelTour của bạn."
         />
       </Helmet>
 
@@ -111,7 +121,7 @@ const ProfilePage = () => {
           </h1>
           <p className="text-muted-foreground">
             Quản lý tài khoản và thông tin cá nhân của bạn
-          </p>{" "}
+          </p>
         </div>
 
         <Tabs
@@ -130,46 +140,39 @@ const ProfilePage = () => {
                       {getInitials()}
                     </AvatarFallback>
                   </Avatar>
-                  <h2 className="text-lg font-bold">
-                    {user?.firstName
-                      ? `${user.firstName} ${user.lastName || ""}`
-                      : user?.username}
-                  </h2>
-                  <p className="text-sm text-muted-foreground">{user?.email}</p>
+                  <h2 className="text-lg font-bold">{userData?.name}</h2>
+                  <p className="text-sm text-muted-foreground">
+                    {userData?.email}
+                  </p>
                 </div>
 
                 <TabsList className="flex flex-col h-auto bg-transparent p-0 space-y-1">
                   <TabsTrigger
                     value="profile"
-                    className="justify-start data-[state=active]:bg-muted w-full px-3"
+                    className="justify-start w-full px-3 data-[state=active]:bg-muted"
                   >
-                    <User className="h-4 w-4 mr-2" />
-                    Thông Tin Cá Nhân
+                    <User className="h-4 w-4 mr-2" /> Thông Tin Cá Nhân
                   </TabsTrigger>
                   <TabsTrigger
                     value="security"
-                    className="justify-start data-[state=active]:bg-muted w-full px-3"
+                    className="justify-start w-full px-3 data-[state=active]:bg-muted"
                   >
-                    <Shield className="h-4 w-4 mr-2" />
-                    Bảo Mật
+                    <Shield className="h-4 w-4 mr-2" /> Bảo Mật
                   </TabsTrigger>
                   <TabsTrigger
                     value="preferences"
-                    className="justify-start data-[state=active]:bg-muted w-full px-3"
+                    className="justify-start w-full px-3 data-[state=active]:bg-muted"
                   >
-                    <Mail className="h-4 w-4 mr-2" />
-                    Tùy Chọn
+                    <Mail className="h-4 w-4 mr-2" /> Tùy Chọn
                   </TabsTrigger>
                 </TabsList>
 
                 <div className="mt-6 pt-6 border-t border-border">
                   <Button
                     variant="outline"
-                    className="w-full justify-start text-destructive hover:text-destructive"
-                    onClick={handleLogout}
+                    className="w-full justify-start text-destructive"
                   >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Đăng Xuất
+                    <LogOut className="h-4 w-4 mr-2" /> Đăng Xuất
                   </Button>
                 </div>
               </div>
@@ -206,7 +209,7 @@ const ProfilePage = () => {
                   <CardHeader>
                     <CardTitle>Thông Tin Cá Nhân</CardTitle>
                     <CardDescription>
-                      Cập nhật thông tin cá nhân và thông tin liên hệ của bạn.
+                      Cập nhật thông tin cá nhân của bạn.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -215,38 +218,22 @@ const ProfilePage = () => {
                         onSubmit={form.handleSubmit(onSubmit)}
                         className="space-y-6"
                       >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <FormField
-                            control={form.control}
-                            name="firstName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Tên</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Văn" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="lastName"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Họ</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Nguyễn" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-
                         <FormField
                           control={form.control}
-                          name="phoneNumber"
+                          name="name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Họ và Tên</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Nguyễn Văn A" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="phone"
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Số Điện Thoại</FormLabel>
@@ -261,21 +248,19 @@ const ProfilePage = () => {
                                 </div>
                               </FormControl>
                               <FormDescription>
-                                Được sử dụng cho xác nhận đặt chỗ và cập nhật
-                                tour.
+                                Dùng để xác nhận đặt chỗ và thông báo.
                               </FormDescription>
                               <FormMessage />
                             </FormItem>
                           )}
                         />
-
                         <div className="flex justify-end">
                           <Button
                             type="submit"
                             disabled={updateProfileMutation.isPending}
                           >
                             {updateProfileMutation.isPending
-                              ? "Đang Lưu..."
+                              ? "Đang lưu..."
                               : "Lưu Thay Đổi"}
                           </Button>
                         </div>
@@ -287,116 +272,72 @@ const ProfilePage = () => {
                 <Card className="mt-6">
                   <CardHeader>
                     <CardTitle>Thông Tin Tài Khoản</CardTitle>
-                    <CardDescription>
-                      Xem chi tiết tài khoản của bạn.
-                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <div className="text-sm font-medium text-muted-foreground mb-1">
-                          Tên Người Dùng
+                          Email
                         </div>
-                        <div className="font-medium">{user?.username}</div>
+                        <div className="font-medium">{userData?.email}</div>
                       </div>
                       <div>
                         <div className="text-sm font-medium text-muted-foreground mb-1">
-                          Địa Chỉ Email
-                        </div>
-                        <div className="font-medium">{user?.email}</div>
-                      </div>
-                      <div>
-                        <div className="text-sm font-medium text-muted-foreground mb-1">
-                          Tài Khoản Được Tạo
+                          Tài khoản tạo ngày
                         </div>
                         <div className="font-medium">
-                          {user?.createdAt
-                            ? new Date(user.createdAt).toLocaleDateString()
-                            : "N/A"}
+                          {new Date(userData?.created_at).toLocaleDateString(
+                            "vi-VN"
+                          )}
                         </div>
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-muted-foreground mb-1">
+                          Vai trò
+                        </div>
+                        <div className="font-medium">{userData?.role}</div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </TabsContent>
+
               <TabsContent value="security" className="mt-0">
                 <Card>
                   <CardHeader>
                     <CardTitle>Bảo Mật Tài Khoản</CardTitle>
-                    <CardDescription>
-                      Quản lý mật khẩu và cài đặt bảo mật của bạn.
-                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Alert className="mb-6">
                       <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>Tính Năng Sắp Ra Mắt</AlertTitle>
+                      <AlertTitle>Tính năng sắp ra mắt</AlertTitle>
                       <AlertDescription>
-                        Chức năng thay đổi mật khẩu sẽ có trong bản cập nhật
-                        tương lai.
+                        Thay đổi mật khẩu sẽ sớm có mặt.
                       </AlertDescription>
                     </Alert>
-
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-lg font-medium mb-2">Mật Khẩu</h3>
-                        <p className="text-muted-foreground mb-4">
-                          Mật khẩu thay đổi lần cuối: Chưa bao giờ
-                        </p>
-                        <Button variant="outline" disabled>
-                          Thay Đổi Mật Khẩu
-                        </Button>
-                      </div>
-
-                      <div className="pt-6 border-t border-border">
-                        <h3 className="text-lg font-medium mb-2">
-                          Xác Thực Hai Yếu Tố
-                        </h3>
-                        <p className="text-muted-foreground mb-4">
-                          Thêm một lớp bảo mật cho tài khoản của bạn bằng cách
-                          bật xác thực hai yếu tố.
-                        </p>
-                        <Button variant="outline" disabled>
-                          Bật 2FA
-                        </Button>
-                      </div>
-                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
+
               <TabsContent value="preferences" className="mt-0">
                 <Card>
                   <CardHeader>
                     <CardTitle>Tùy Chọn Email</CardTitle>
-                    <CardDescription>
-                      Quản lý cách chúng tôi liên lạc với bạn.
-                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <Alert className="mb-6">
                       <AlertCircle className="h-4 w-4" />
-                      <AlertTitle>Tính Năng Sắp Ra Mắt</AlertTitle>
+                      <AlertTitle>Sắp có</AlertTitle>
                       <AlertDescription>
                         Cài đặt tùy chọn email sẽ có trong bản cập nhật tương
                         lai.
                       </AlertDescription>
                     </Alert>
-
-                    <div className="space-y-4">
-                      <p className="text-muted-foreground">
-                        Cấu hình loại email bạn nhận được từ chúng tôi, bao gồm
-                        các ưu đãi khuyến mãi, xác nhận đặt tour, và thông báo
-                        du lịch.
-                      </p>
-                      <Button variant="outline" disabled>
-                        Cập Nhật Tùy Chọn
-                      </Button>
-                    </div>
                   </CardContent>
-                </Card>{" "}
-              </TabsContent>{" "}
+                </Card>
+              </TabsContent>
             </div>
-          </div>{" "}
+          </div>
         </Tabs>
       </div>
     </>

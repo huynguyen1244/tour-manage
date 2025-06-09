@@ -19,7 +19,7 @@ router.get(
   authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
   bookingController.getBookings
 );
-
+router.get("/customer", verifyToken, bookingController.getCustomerBookings);
 // Api lấy thông tin booking theo id
 router.get("/:id", verifyToken, bookingController.getBooking);
 

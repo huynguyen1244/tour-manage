@@ -1,44 +1,55 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2, MapPin, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useIsMobile } from "@/hooks/use-mobile";
+import apiClient from "@/services/axios";
 
-type Destination = {
-  destination: string;
-  country: string;
-  image: string;
-  tourCount: number;
-  rating: number;
+type Tour = {
+  location: string;
+  images: any;
+  available_slots: number;
 };
 
 const DestinationsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredDestinations, setFilteredDestinations] = useState<
-    Destination[]
-  >([]);
-  const isMobile = useIsMobile();
+  const [filteredDestinations, setFilteredDestinations] = useState<Tour[]>([]);
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
   const { toast } = useToast();
 
-  const { data: destinations, isLoading } = useQuery<Destination[]>({
-    queryKey: ["/api/destinations"],
-  });
+  useEffect(() => {
+    const fetchTours = async () => {
+      setIsLoading(true);
+      setError(false);
+      try {
+        const response = await apiClient.get("/tours");
+        setTours(response as any);
+      } catch (err) {
+        setError(true);
+        console.error("Lỗi khi lấy tours:", err);
+        toast({
+          variant: "destructive",
+          title: "Lỗi khi tải dữ liệu",
+          description: "Không thể tải danh sách điểm đến. Vui lòng thử lại.",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTours();
+  }, []);
 
   useEffect(() => {
-    if (destinations) {
-      setFilteredDestinations(
-        destinations.filter(
-          (dest) =>
-            dest.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            dest.country.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
-    }
-  }, [searchTerm, destinations]);
+    const filtered = tours.filter((dest) =>
+      dest.location.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredDestinations(filtered);
+  }, [searchTerm, tours]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +57,6 @@ const DestinationsPage = () => {
 
   return (
     <>
-      {" "}
       <Helmet>
         <title>Khám Phá Điểm Đến | WanderWise</title>
         <meta
@@ -54,13 +64,14 @@ const DestinationsPage = () => {
           content="Khám phá những điểm đến tuyệt vời khắp thế giới và lên kế hoạch cho cuộc phiêu lưu tiếp theo của bạn."
         />
       </Helmet>
+
       <div className="min-h-screen bg-background">
-        {/* Header Banner */}
+        {/* Banner */}
         <div
           className="relative h-[300px] md:h-[400px] w-full bg-cover bg-center"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80')",
+              "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://vietmaptravel.vn/wp-content/uploads/2024/09/rung-cuc-phuong-ninh-binh.jpeg')",
           }}
         >
           <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
@@ -91,15 +102,34 @@ const DestinationsPage = () => {
           </div>
         </div>
 
-        {/* Destinations Grid */}
+        {/* Grid */}
         <div className="container mx-auto py-12 px-4">
-          {" "}
           <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-8">
             Điểm Đến Phổ Biến
           </h2>
+
           {isLoading ? (
             <div className="flex justify-center items-center py-12">
               <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <p className="text-xl text-muted-foreground">
+                Đã xảy ra lỗi khi tải dữ liệu. Vui lòng thử lại sau.
+              </p>
+            </div>
+          ) : filteredDestinations.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-xl text-muted-foreground">
+                Không tìm thấy điểm đến phù hợp với "{searchTerm}"
+              </p>
+              <Button
+                variant="link"
+                onClick={() => setSearchTerm("")}
+                className="mt-2"
+              >
+                Xóa tìm kiếm
+              </Button>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -110,26 +140,28 @@ const DestinationsPage = () => {
                 >
                   <div
                     className="h-48 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${destination.image})` }}
-                  ></div>
+                    style={{
+                      backgroundImage: `url(${destination.images[0].url})`,
+                    }}
+                  />
                   <CardContent className="p-5">
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <h3 className="text-xl font-semibold">
-                          {destination.destination}
+                          {destination.location}
                         </h3>
                         <div className="flex items-center text-muted-foreground">
                           <MapPin className="h-4 w-4 mr-1" />
-                          <span>{destination.country}</span>
+                          <span>{destination.location}</span>
                         </div>
                       </div>
                       <div className="bg-primary/10 text-primary font-medium text-sm py-1 px-2 rounded">
-                        {destination.rating}/5
+                        {destination.available_slots}
                       </div>
                     </div>
                     <div className="mt-4 flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        {destination.tourCount} tour có sẵn
+                        {destination.available_slots} tour có sẵn
                       </span>
                       <Button variant="outline" size="sm">
                         Khám Phá
@@ -140,29 +172,15 @@ const DestinationsPage = () => {
               ))}
             </div>
           )}
-          {filteredDestinations.length === 0 && !isLoading && (
-            <div className="text-center py-12">
-              <p className="text-xl text-muted-foreground">
-                Không tìm thấy điểm đến phù hợp "{searchTerm}"
-              </p>
-              <Button
-                variant="link"
-                onClick={() => setSearchTerm("")}
-                className="mt-2"
-              >
-                Xóa tìm kiếm
-              </Button>
-            </div>
-          )}
         </div>
 
-        {/* Featured Content */}
+        {/* Featured Section */}
         <div className="bg-muted py-16 px-4">
           <div className="container mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
               <div>
                 <h2 className="text-2xl md:text-3xl font-bold font-poppins mb-4">
-                  Du lịch đến những địa điểm kỳ lạ nhất thế giới
+                  Du lịch đến những địa điểm du lịch nổi tiếng ở Việt Nam
                 </h2>
                 <p className="text-muted-foreground mb-6">
                   Du lịch đến thế giới, các hướng dẫn viên chuyên nghiệp của
@@ -244,24 +262,24 @@ const DestinationsPage = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
                   <img
-                    src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    src="https://vj-prod-website-cms.s3.ap-southeast-1.amazonaws.com/r2-1716261627487.jpg"
                     alt="Travel destination"
                     className="rounded-lg h-40 w-full object-cover"
                   />
                   <img
-                    src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    src="https://sakos.vn/wp-content/uploads/2023/11/nhung-dam-sen-dep-hut-hon-o-quang-nam-2.jpg"
                     alt="Travel destination"
                     className="rounded-lg h-56 w-full object-cover"
                   />
                 </div>
                 <div className="space-y-4">
                   <img
-                    src="https://images.unsplash.com/photo-1519922639192-e73293ca430e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    src="https://cdn3.ivivu.com/2024/08/du-lich-ha-noi-ivivu-9.jpg"
                     alt="Travel destination"
                     className="rounded-lg h-56 w-full object-cover"
                   />
                   <img
-                    src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"
+                    src="https://imghappyvietnam.vnanet.vn/MediaUpload/Org/2024/07/04/101119-vna_potal_du_lich_viet_nam_1_nam_sau_ngay_mo_cua_6628525.jpg"
                     alt="Travel destination"
                     className="rounded-lg h-40 w-full object-cover"
                   />

@@ -24,6 +24,20 @@ const getAllBookings = async () => {
   return bookingsWithPayments;
 };
 
+getBookingsByUserId = async (user_id) => {
+  const bookings = await Booking.find({ user_id }).populate("tour_id");
+  const bookingsWithPayments = await Promise.all(
+    bookings.map(async (booking) => {
+      const payment = await Payment.findOne({ booking_id: booking._id });
+      return {
+        ...booking.toObject(), // convert Mongoose Document to plain JS object
+        payment,
+      };
+    })
+  );
+  return bookingsWithPayments;
+};
+
 const getBookingById = async (id) => {
   const booking = await Booking.findById(id)
     .populate({
@@ -120,6 +134,7 @@ const deleteBooking = async (id) => {
 
 module.exports = {
   getAllBookings,
+  getBookingsByUserId,
   getBookingById,
   createBooking,
   updateBooking,

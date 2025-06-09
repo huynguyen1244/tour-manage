@@ -29,18 +29,20 @@ import {
   Edit,
   CreditCard,
   Key,
+  ShoppingCart,
+  Heart,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const Header = () => {
   const [location] = useLocation();
-  const { user, logoutMutation } = useAuth();
+  const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [theme, setTheme] = useState("system"); // "light", "dark", "system"
 
   const handleLogout = () => {
-    logoutMutation.mutate();
+    logout();
   };
 
   const handleThemeChange = (newTheme: string) => {
@@ -125,6 +127,16 @@ const Header = () => {
                 Tours
               </Link>
               <Link
+                href="/categories"
+                className={`font-medium ${
+                  location === "/categories"
+                    ? "text-primary"
+                    : "text-foreground hover:text-primary"
+                } transition`}
+              >
+                Danh mục
+              </Link>
+              <Link
                 href="/destinations"
                 className={`font-medium ${
                   location === "/destinations"
@@ -158,6 +170,79 @@ const Header = () => {
           </div>{" "}
           <div className="flex items-center space-x-4">
             {" "}
+            <div className="hidden md:flex items-center gap-x-4">
+              {/* Cart & Wishlist */}
+              <Link
+                href="/cart"
+                className="flex items-center gap-2 bg-primary/10 text-primary hover:bg-primary/20 px-4 py-2 rounded-lg transition"
+              >
+                <ShoppingCart className="h-5 w-5" />
+              </Link>
+
+              <Link
+                href="/wishlist"
+                className="flex items-center gap-2 bg-pink-100 text-pink-600 hover:bg-pink-200 px-4 py-2 rounded-lg transition"
+              >
+                <Heart className="h-5 w-5" />
+              </Link>
+
+              {/* Avatar hoặc Đăng nhập/Đăng ký */}
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center space-x-2 focus:outline-none">
+                      <Avatar>
+                        <AvatarFallback>{getInitials(user)}</AvatarFallback>
+                      </Avatar>
+                      <span className="font-medium">{user.name}</span>
+                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="cursor-pointer w-full">
+                        Hồ sơ của tôi
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/bookings" className="cursor-pointer w-full">
+                        Đặt chỗ của tôi
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      className="cursor-pointer"
+                    >
+                      Đăng xuất
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <div className="flex space-x-3">
+                  <Button
+                    variant="ghost"
+                    className="text-primary hover:bg-blue-50"
+                    asChild
+                  >
+                    <Link href="/auth">Đăng nhập</Link>
+                  </Button>
+                  <Button asChild>
+                    <Link href="/auth">Đăng ký</Link>
+                  </Button>
+                </div>
+              )}
+            </div>
+            <button
+              className="md:hidden text-foreground"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
             {/* Page Settings Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -318,63 +403,6 @@ const Header = () => {
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
-            <div className="hidden md:block">
-              {user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button className="flex items-center space-x-2 focus:outline-none">
-                      <Avatar>
-                        <AvatarFallback>{getInitials(user)}</AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium">{user.name}</span>
-                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48">
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" className="cursor-pointer w-full">
-                        Hồ sơ của tôi
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/bookings" className="cursor-pointer w-full">
-                        Đặt chỗ của tôi
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={handleLogout}
-                      className="cursor-pointer"
-                    >
-                      Đăng xuất
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <div className="flex space-x-3">
-                  <Button
-                    variant="ghost"
-                    className="text-primary hover:bg-blue-50"
-                    asChild
-                  >
-                    <Link href="/auth">Đăng nhập</Link>
-                  </Button>
-                  <Button asChild>
-                    <Link href="/auth">Đăng ký</Link>
-                  </Button>
-                </div>
-              )}
-            </div>
-            <button
-              className="md:hidden text-foreground"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
           </div>
         </div>
       </div>

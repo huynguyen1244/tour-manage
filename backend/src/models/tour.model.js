@@ -29,6 +29,10 @@ const TourSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    capacity: {
+      type: Number,
+      required: true,
+    },
     available_slots: {
       type: Number,
       required: true,

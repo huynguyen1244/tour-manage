@@ -1,6 +1,15 @@
 import { useState, useEffect } from "react";
 import apiClient from "../services/apiClient";
-import { Calendar, MapPin, Users, Clock, Camera, Plus, X } from "lucide-react";
+import {
+  Calendar,
+  MapPin,
+  Users,
+  Ticket,
+  Clock,
+  Camera,
+  Plus,
+  X,
+} from "lucide-react";
 
 export default function AddTourForm() {
   const [tour, setTour] = useState({
@@ -11,6 +20,7 @@ export default function AddTourForm() {
     start_location: "",
     destinations: [""],
     price: 0,
+    capacity: 1,
     available_slots: 0,
     schedule: "",
     start_date: "",
@@ -87,6 +97,7 @@ export default function AddTourForm() {
       formData.append("location", tour.location);
       formData.append("start_location", tour.start_location);
       formData.append("price", tour.price);
+      formData.append("capacity", tour.capacity);
       formData.append("available_slots", tour.available_slots);
       formData.append("schedule", tour.schedule);
       formData.append("start_date", tour.start_date);
@@ -122,6 +133,7 @@ export default function AddTourForm() {
         start_location: "",
         destinations: [""],
         price: 0,
+        capacity: 1,
         available_slots: 0,
         schedule: "",
         start_date: "",
@@ -283,6 +295,27 @@ export default function AddTourForm() {
               </label>
               <div className="relative">
                 <Users
+                  className="absolute left-3 top-3.5 text-gray-400"
+                  size={20}
+                />
+                <input
+                  type="number"
+                  name="capacity"
+                  value={tour.capacity}
+                  onChange={handleChange}
+                  placeholder="30"
+                  min="1"
+                  required
+                  className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Số slot *
+              </label>
+              <div className="relative">
+                <Ticket
                   className="absolute left-3 top-3.5 text-gray-400"
                   size={20}
                 />

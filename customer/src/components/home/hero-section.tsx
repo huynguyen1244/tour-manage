@@ -34,7 +34,7 @@ const HeroSection = () => {
     <section className="relative bg-gradient-to-r from-blue-900 to-blue-700 h-96 md:h-[32rem]">
       <div className="absolute inset-0 overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&h=600&q=80"
+          src="https://puluongexcursions.com/wp-content/uploads/2023/03/vinh-ha-long-01.jpg"
           alt="Điểm đến du lịch"
           className="w-full h-full object-cover opacity-40"
         />
@@ -44,7 +44,7 @@ const HeroSection = () => {
         <div className="flex flex-col justify-center h-full max-w-3xl">
           {" "}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white font-poppins mb-4">
-            Khám Phá Những Tour Du Lịch Tuyệt Vời Trên Thế Giới
+            Khám Phá Những Tour Du Lịch Tuyệt Vời
           </h1>
           <p className="text-lg md:text-xl text-white opacity-90 mb-8">
             Khám phá những điểm đến độc đáo với những trải nghiệm du lịch được

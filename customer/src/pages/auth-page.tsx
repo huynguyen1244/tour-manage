@@ -16,12 +16,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Globe, Mail, Lock, User, Phone } from "lucide-react";
+import { Globe, Mail, Lock, User, Phone, Check } from "lucide-react";
 import { Link } from "wouter";
+import apiClient from "@/services/axios";
 
 const AuthPage = () => {
   const [activeTab, setActiveTab] = useState("login");
-  const { loginMutation, registerMutation, user } = useAuth();
+  const { loginMutation, registerMutation, logout, user } = useAuth();
+  const [veriftOTP, setVerify] = useState<string>();
+  const [otp, setOtp] = useState(false);
 
   // Redirect if already logged in
   useEffect(() => {
@@ -33,6 +36,8 @@ const AuthPage = () => {
         user.role === "admin" ||
         user.role === "staff"
       ) {
+        window.alert("Bạn đang đăng nhập bằng tài khoản của quản lý");
+        logout();
         window.location.href = "http://localhost:3005";
       }
     }
@@ -51,11 +56,11 @@ const AuthPage = () => {
   const registerForm = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
-      phoneNumber: "",
+      phone: "",
     },
   });
 
@@ -64,7 +69,21 @@ const AuthPage = () => {
   };
 
   const onRegisterSubmit = (data: any) => {
-    registerMutation.mutate(data);
+    registerMutation.mutate(data, {
+      onSuccess: () => setOtp(true),
+      onError: (error) => {
+        window.alert("Đăng ký thất bại");
+      },
+    });
+  };
+
+  const handleVerify = async () => {
+    const data = {
+      email: registerForm.getValues("email"),
+      otp: veriftOTP,
+    };
+    await apiClient.post("/auth/verify-otp", data);
+    setOtp(false);
   };
 
   return (
@@ -73,305 +92,331 @@ const AuthPage = () => {
         <title>Đăng nhập hoặc Đăng ký | WanderWise</title>
         <meta
           name="description"
-          content="Đăng nhập hoặc tạo tài khoản để đặt tour và quản lý trải nghiệm du lịch của bạn."
+          content="Đăng nhập hoặc tạo tài khoản để đặt và quản lý trải nghiệm du lịch của bạn."
         />
       </Helmet>
 
       <div className="min-h-screen flex flex-col">
         <div className="flex-grow grid md:grid-cols-2">
-          {/* Auth Form Section */}
-          <div className="flex items-center justify-center p-6 md:p-10">
-            <div className="w-full max-w-md">
-              <div className="mb-8 text-center md:text-left">
-                <Link
-                  href="/"
-                  className="flex items-center justify-center md:justify-start"
-                >
-                  <Globe className="h-8 w-8 text-primary mr-2" />
-                  <span className="text-2xl font-bold font-poppins text-primary">
-                    BK-Tour
-                  </span>
-                </Link>
-                <h1 className="mt-6 text-3xl font-bold font-poppins text-foreground">
-                  {activeTab === "login"
-                    ? "Chào mừng trở lại"
-                    : "Tạo tài khoản"}
-                </h1>
-                <p className="mt-2 text-muted-foreground">
-                  {activeTab === "login"
-                    ? "Đăng nhập để truy cập tài khoản của bạn"
-                    : "Tham gia với chúng tôi để khám phá những điểm đến tuyệt vời"}
-                </p>
+          <div>
+            {otp ? (
+              <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                <div className="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm">
+                  <h2 className="text-xl font-semibold mb-4 text-center">
+                    Xác nhận OTP
+                  </h2>
+                  <input
+                    type="text"
+                    value={veriftOTP}
+                    onChange={(e) => setVerify(e.target.value)}
+                    maxLength={6}
+                    placeholder="Nhập mã OTP 6 chữ số"
+                    className="w-full px-4 py-2 text-lg border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-center"
+                  />
+                  <button
+                    onClick={handleVerify}
+                    className="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+                  >
+                    Xác nhận
+                  </button>
+                </div>
               </div>
-
-              <Tabs
-                defaultValue="login"
-                value={activeTab}
-                onValueChange={setActiveTab}
-                className="w-full"
-              >
-                {" "}
-                <TabsList className="grid grid-cols-2 mb-6">
-                  <TabsTrigger value="login">Đăng nhập</TabsTrigger>
-                  <TabsTrigger value="register">Đăng ký</TabsTrigger>
-                </TabsList>
-                <TabsContent value="login">
-                  <Form {...loginForm}>
-                    <form
-                      onSubmit={loginForm.handleSubmit(onLoginSubmit)}
-                      className="space-y-4"
+            ) : (
+              // Auth Form Section
+              <div className="flex items-center justify-center p-6 md:p-10">
+                <div className="w-full max-w-md">
+                  <div className="mb-8 text-center md:text-left">
+                    <Link
+                      href="/"
+                      className="flex items-center justify-center md:justify-start"
                     >
-                      <FormField
-                        control={loginForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Nhập email của bạn</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                  placeholder="Nhập email của bạn"
-                                  className="pl-10"
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <Globe className="h-8 w-8 text-primary mr-2" />
+                      <span className="text-2xl font-bold font-poppins text-primary">
+                        BK-Tour
+                      </span>
+                    </Link>
+                    <h1 className="mt-6 text-3xl font-bold font-poppins text-foreground">
+                      {activeTab === "login"
+                        ? "Chào mừng trở lại"
+                        : "Tạo tài khoản"}
+                    </h1>
+                    <p className="mt-2 text-muted-foreground">
+                      {activeTab === "login"
+                        ? "Đăng nhập để truy cập tài khoản của bạn"
+                        : "Tham gia với chúng tôi để khám phá những điểm đến tuyệt vời"}
+                    </p>
+                  </div>
 
-                      <FormField
-                        control={loginForm.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <div className="flex justify-between items-center">
-                              <FormLabel>Mật khẩu</FormLabel>
+                  <Tabs
+                    defaultValue="login"
+                    value={activeTab}
+                    onValueChange={setActiveTab}
+                    className="w-full"
+                  >
+                    {" "}
+                    <TabsList className="grid grid-cols-2 mb-6">
+                      <TabsTrigger value="login">Đăng nhập</TabsTrigger>
+                      <TabsTrigger value="register">Đăng ký</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="login">
+                      <Form {...loginForm}>
+                        <form
+                          onSubmit={loginForm.handleSubmit(onLoginSubmit)}
+                          className="space-y-4"
+                        >
+                          <FormField
+                            control={loginForm.control}
+                            name="email"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Nhập email của bạn</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                      placeholder="Nhập email của bạn"
+                                      className="pl-10"
+                                      {...field}
+                                    />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={loginForm.control}
+                            name="password"
+                            render={({ field }) => (
+                              <FormItem>
+                                <div className="flex justify-between items-center">
+                                  <FormLabel>Mật khẩu</FormLabel>
+                                  <Link
+                                    href="#"
+                                    className="text-sm text-primary hover:underline"
+                                  >
+                                    Quên mật khẩu?
+                                  </Link>
+                                </div>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />{" "}
+                                    <Input
+                                      type="password"
+                                      placeholder="Nhập mật khẩu"
+                                      className="pl-10"
+                                      {...field}
+                                    />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <div className="flex items-center">
+                            <Checkbox id="remember" />
+                            <label
+                              htmlFor="remember"
+                              className="ml-2 text-sm text-muted-foreground"
+                            >
+                              Ghi nhớ đăng nhập
+                            </label>
+                          </div>
+
+                          <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={loginMutation.isPending}
+                          >
+                            {loginMutation.isPending
+                              ? "Đang đăng nhập..."
+                              : "Đăng nhập"}
+                          </Button>
+                        </form>
+                      </Form>
+
+                      <div className="mt-6 text-center">
+                        <p className="text-sm text-muted-foreground">
+                          Chưa có tài khoản?{" "}
+                          <button
+                            onClick={() => setActiveTab("register")}
+                            className="text-primary hover:underline font-medium"
+                          >
+                            Đăng ký
+                          </button>
+                        </p>
+                      </div>
+                    </TabsContent>
+                    <TabsContent value="register">
+                      <Form {...registerForm}>
+                        <form
+                          onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
+                          className="space-y-4"
+                        >
+                          <FormField
+                            control={registerForm.control}
+                            name="name"
+                            render={({ field }) => (
+                              <FormItem>
+                                {" "}
+                                <FormLabel>Tên người dùng</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                      placeholder="Chọn tên người dùng"
+                                      className="pl-10"
+                                      {...field}
+                                    />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={registerForm.control}
+                            name="email"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Email</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />{" "}
+                                    <Input
+                                      type="email"
+                                      placeholder="Nhập email của bạn"
+                                      className="pl-10"
+                                      {...field}
+                                    />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={registerForm.control}
+                            name="phone"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>
+                                  Số điện thoại (Không bắt buộc)
+                                </FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                      placeholder="0912 345 678"
+                                      className="pl-10"
+                                      {...field}
+                                    />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={registerForm.control}
+                            name="password"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Mật khẩu</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                      type="password"
+                                      placeholder="Tạo mật khẩu mạnh"
+                                      className="pl-10"
+                                      {...field}
+                                    />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={registerForm.control}
+                            name="confirmPassword"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Xác nhận mật khẩu</FormLabel>
+                                <FormControl>
+                                  <div className="relative">
+                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                                    <Input
+                                      type="password"
+                                      placeholder="Xác nhận mật khẩu của bạn"
+                                      className="pl-10"
+                                      {...field}
+                                    />
+                                  </div>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <div className="flex items-center">
+                            <Checkbox id="terms" />
+                            <label
+                              htmlFor="terms"
+                              className="ml-2 text-sm text-muted-foreground"
+                            >
+                              Tôi đồng ý với{" "}
                               <Link
                                 href="#"
-                                className="text-sm text-primary hover:underline"
+                                className="text-primary hover:underline"
                               >
-                                Quên mật khẩu?
+                                Điều khoản và Điều kiện
+                              </Link>{" "}
+                              and{" "}
+                              <Link
+                                href="#"
+                                className="text-primary hover:underline"
+                              >
+                                Chính sách bảo mật
                               </Link>
-                            </div>
-                            <FormControl>
-                              <div className="relative">
-                                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />{" "}
-                                <Input
-                                  type="password"
-                                  placeholder="Nhập mật khẩu"
-                                  className="pl-10"
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                            </label>
+                          </div>
 
-                      <div className="flex items-center">
-                        <Checkbox id="remember" />
-                        <label
-                          htmlFor="remember"
-                          className="ml-2 text-sm text-muted-foreground"
-                        >
-                          Ghi nhớ đăng nhập
-                        </label>
-                      </div>
-
-                      <Button
-                        type="submit"
-                        className="w-full"
-                        disabled={loginMutation.isPending}
-                      >
-                        {loginMutation.isPending
-                          ? "Đang đăng nhập..."
-                          : "Đăng nhập"}
-                      </Button>
-                    </form>
-                  </Form>
-
-                  <div className="mt-6 text-center">
-                    <p className="text-sm text-muted-foreground">
-                      Chưa có tài khoản?{" "}
-                      <button
-                        onClick={() => setActiveTab("register")}
-                        className="text-primary hover:underline font-medium"
-                      >
-                        Đăng ký
-                      </button>
-                    </p>
-                  </div>
-                </TabsContent>
-                <TabsContent value="register">
-                  <Form {...registerForm}>
-                    <form
-                      onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
-                      className="space-y-4"
-                    >
-                      <FormField
-                        control={registerForm.control}
-                        name="username"
-                        render={({ field }) => (
-                          <FormItem>
-                            {" "}
-                            <FormLabel>Tên người dùng</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                  placeholder="Chọn tên người dùng"
-                                  className="pl-10"
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={registerForm.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />{" "}
-                                <Input
-                                  type="email"
-                                  placeholder="Nhập email của bạn"
-                                  className="pl-10"
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={registerForm.control}
-                        name="phoneNumber"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>
-                              Số điện thoại (Không bắt buộc)
-                            </FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                  placeholder="0912 345 678"
-                                  className="pl-10"
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={registerForm.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Mật khẩu</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                  type="password"
-                                  placeholder="Tạo mật khẩu mạnh"
-                                  className="pl-10"
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={registerForm.control}
-                        name="confirmPassword"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Xác nhận mật khẩu</FormLabel>
-                            <FormControl>
-                              <div className="relative">
-                                <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                  type="password"
-                                  placeholder="Xác nhận mật khẩu của bạn"
-                                  className="pl-10"
-                                  {...field}
-                                />
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <div className="flex items-center">
-                        <Checkbox id="terms" />
-                        <label
-                          htmlFor="terms"
-                          className="ml-2 text-sm text-muted-foreground"
-                        >
-                          Tôi đồng ý với{" "}
-                          <Link
-                            href="#"
-                            className="text-primary hover:underline"
+                          <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={registerMutation.isPending}
                           >
-                            Điều khoản và Điều kiện
-                          </Link>{" "}
-                          and{" "}
-                          <Link
-                            href="#"
-                            className="text-primary hover:underline"
+                            {registerMutation.isPending
+                              ? "Đang tạo tài khoản..."
+                              : "Đăng ký"}
+                          </Button>
+                        </form>
+                      </Form>
+
+                      <div className="mt-6 text-center">
+                        <p className="text-sm text-muted-foreground">
+                          Đã có tài khoản?{" "}
+                          <button
+                            onClick={() => setActiveTab("login")}
+                            className="text-primary hover:underline font-medium"
                           >
-                            Chính sách bảo mật
-                          </Link>
-                        </label>
+                            Đăng nhập
+                          </button>
+                        </p>
                       </div>
-
-                      <Button
-                        type="submit"
-                        className="w-full"
-                        disabled={registerMutation.isPending}
-                      >
-                        {registerMutation.isPending
-                          ? "Đang tạo tài khoản..."
-                          : "Đăng ký"}
-                      </Button>
-                    </form>
-                  </Form>
-
-                  <div className="mt-6 text-center">
-                    <p className="text-sm text-muted-foreground">
-                      Đã có tài khoản?{" "}
-                      <button
-                        onClick={() => setActiveTab("login")}
-                        className="text-primary hover:underline font-medium"
-                      >
-                        Đăng nhập
-                      </button>
-                    </p>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Hero Section */}
@@ -385,10 +430,10 @@ const AuthPage = () => {
             </div>
             <div className="relative h-full flex flex-col justify-center p-10 text-white">
               <h2 className="text-4xl font-bold font-poppins mb-4">
-                Your Journey Begins Here
+                HÃY TẬN HƯỞNG CHUYẾN ĐI
               </h2>
               <p className="text-xl opacity-90 mb-6">
-                Khám phá những điểm đến tuyệt vời với WanderWise
+                Khám phá những điểm đến tuyệt vời với BK TOUR
               </p>
               <ul className="space-y-4">
                 <li className="flex items-center">
