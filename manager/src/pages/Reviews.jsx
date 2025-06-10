@@ -25,12 +25,19 @@ function ReviewsPage() {
 
     fetchData();
   }, []);
+  const handleDelete = async (id) => {
+    const confirm = window.confirm("Bạn có chắc muốn xóa đánh giá này?");
+    if (!confirm) return;
 
-  const getTourName = (tourId) => {
-    const tour = tours.find((t) => t.id === tourId);
-    return tour ? tour.name : `Tour #${tourId}`;
+    try {
+      await apiClient.delete(`/reviews/${id}`);
+      setReviews((prev) => prev.filter((review) => review._id !== id));
+      window.alert("Xóa đánh giá thành công!");
+    } catch (error) {
+      console.error(error);
+      window.alert("Xóa thất bại. Vui lòng thử lại!");
+    }
   };
-
   const renderStars = (rating) => {
     return Array.from({ length: 5 }, (_, index) => (
       <span
@@ -123,6 +130,9 @@ function ReviewsPage() {
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Ngày tạo
                     </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      xóa bình luận
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -134,14 +144,14 @@ function ReviewsPage() {
                       }`}
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        #{review.id}
+                        #{review._id.slice(-4)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
-                          {getTourName(review.tourId)}
+                          {review.tour_id.name}
                         </div>
                         <div className="text-sm text-gray-500">
-                          ID: {review.tourId}
+                          ID: {review.tour_id._id.slice(-4)}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -149,14 +159,15 @@ function ReviewsPage() {
                           <div className="flex-shrink-0 h-10 w-10">
                             <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
                               <span className="text-white font-medium text-sm">
-                                {review.customer?.charAt(0)?.toUpperCase() ||
-                                  "K"}
+                                {review.user_id.name
+                                  ?.charAt(0)
+                                  ?.toUpperCase() || "K"}
                               </span>
                             </div>
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {review.customer || "Khách hàng"}
+                              {review.user_id.name || "Khách hàng"}
                             </div>
                           </div>
                         </div>
@@ -164,7 +175,7 @@ function ReviewsPage() {
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900 max-w-xs">
                           <p className="line-clamp-3">
-                            {review.content || "Không có nội dung"}
+                            {review.comment || "Không có nội dung"}
                           </p>
                         </div>
                       </td>
@@ -177,11 +188,19 @@ function ReviewsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {review.createdAt
-                          ? new Date(review.createdAt).toLocaleDateString(
+                        {review.review_date
+                          ? new Date(review.review_date).toLocaleDateString(
                               "vi-VN"
                             )
                           : "N/A"}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <button
+                          onClick={() => handleDelete(review._id)} // Gắn sự kiện nếu có
+                          className="bg-red-100 text-red-600 hover:bg-red-200 hover:text-red-700 px-3 py-1 rounded-lg text-sm transition-colors duration-200"
+                        >
+                          Xóa
+                        </button>
                       </td>
                     </tr>
                   ))}

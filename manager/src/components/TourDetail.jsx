@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/apiClient";
-
+import TourDetailImage from "./TourDetailImage";
+import { Camera } from "lucide-react";
 function TourDetail({ id }) {
   const [tour, setTour] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({});
   const [saving, setSaving] = useState(false);
+  const [newImage, setNewImage] = useState();
 
   useEffect(() => {
     if (!id) {
@@ -101,6 +103,16 @@ function TourDetail({ id }) {
     }));
   };
 
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setNewImage(files);
+    console.log(files);
+    setTour((prev) => ({
+      ...prev,
+      images: [...prev.images, ...files],
+    }));
+  };
+
   const handleSave = async () => {
     try {
       setSaving(true);
@@ -130,12 +142,35 @@ function TourDetail({ id }) {
 
       const response = await apiClient.put(`/tours/${id}`, updateData);
       console.log("Update response:", response);
+      const formData = new FormData();
+
+      if (newImage && newImage.length > 0) {
+        const formData = new FormData();
+
+        newImage.forEach((file) => {
+          formData.append("images", file); // key "images" backend nhận dạng
+        });
+
+        try {
+          const response = await apiClient.put(`/tours/${id}`, formData, {
+            // Không cần set Content-Type thủ công, axios tự xử lý
+            headers: {
+              // 'Content-Type': 'multipart/form-data', // để axios tự thêm
+            },
+          });
+
+          console.log("Upload images response:", response.data);
+        } catch (error) {
+          console.error("Error uploading images:", error);
+        }
+      }
 
       // Cập nhật tour data
       const updatedTour = response.data?.data || response.data;
       setTour(updatedTour);
       setEditForm(updatedTour);
       setIsEditing(false);
+      setNewImage(null);
 
       alert("Cập nhật tour thành công!");
     } catch (error) {
@@ -534,22 +569,53 @@ function TourDetail({ id }) {
                 Thêm ngày
               </button>
             </div>
+            <div>
+              <label className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Camera className="mr-2 text-gray-600" size={20} />
+                Thêm ảnh cho tour
+              </label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                <Camera className="mx-auto mb-4 text-gray-400" size={48} />
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleImageChange}
+                  className="hidden"
+                  id="images"
+                  accept="image/*"
+                />
+                <label htmlFor="images" className="cursor-pointer">
+                  <span className="text-blue-600 font-medium hover:text-blue-500">
+                    Chọn hình ảnh
+                  </span>
+                  <span className="text-gray-500"> hoặc kéo thả vào đây</span>
+                </label>
+                <p className="text-sm text-gray-500 mt-2">
+                  PNG, JPG, GIF up to 10MB
+                </p>
+                {tour.images.length > 0 && (
+                  <p className="text-sm text-green-600 mt-2">
+                    Đã chọn {tour.images.length} hình ảnh
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         ) : (
           <div>
             {/* View mode - existing display code */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-2">
-                <img
-                  src={tour.images?.[0]?.url}
-                  alt={tour.name}
-                  className="w-full h-64 object-cover rounded-lg"
-                />
+                <div className="flex gap-4">
+                  <TourDetailImage images={tour.images} />
+                </div>
+
                 <div className="mt-4">
                   <h3 className="text-lg font-medium mb-2">Mô tả tour</h3>
                   <p className="text-gray-600">{tour.description}</p>
                 </div>
               </div>
+
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="text-lg font-medium mb-4">Thông tin chi tiết</h3>
                 <div className="space-y-3">

@@ -8,7 +8,7 @@ const BookingDetail = ({ id, close }) => {
     const fetchBooking = async () => {
       try {
         const res = await apiClient.get(`/bookings/${id}`);
-        setBooking(res.data); // assume axios, not need `.json()`
+        setBooking(res.data);
       } catch (error) {
         console.error("Failed to fetch booking:", error);
       }
@@ -26,6 +26,54 @@ const BookingDetail = ({ id, close }) => {
           : activity
       ),
     }));
+  };
+
+  const updateActivity = async () => {
+    try {
+      // Tạo mảng index của các activity đã hoàn thành
+      const itineraryIndex = [];
+
+      booking.itineraryProgress.forEach((activity, index) => {
+        if (activity.completed === true) {
+          itineraryIndex.push(index);
+        }
+      });
+
+      const data = {
+        itineraryIndex,
+        completed: true,
+      };
+
+      // Gửi yêu cầu PUT
+      await apiClient.put(`/bookings/${booking._id}`, data);
+      alert("Cập nhật hoạt động thành công!");
+    } catch (error) {
+      console.error("Lỗi khi cập nhật hoạt động:", error);
+      alert("Có lỗi xảy ra khi cập nhật hoạt động.");
+    }
+  };
+
+  const completeActivity = async () => {
+    try {
+      // Tạo mảng index của các activity đã hoàn thành
+      const itineraryIndex = [];
+
+      booking.itineraryProgress.forEach((activity, index) => {
+        itineraryIndex.push(index);
+      });
+
+      const data = {
+        itineraryIndex,
+        completed: true,
+      };
+
+      // Gửi yêu cầu PUT
+      await apiClient.put(`/bookings/${booking._id}`, data);
+      alert("Cập nhật hoạt động thành công!");
+    } catch (error) {
+      console.error("Lỗi khi cập nhật hoạt động:", error);
+      alert("Có lỗi xảy ra khi cập nhật hoạt động.");
+    }
   };
 
   if (!booking) return null;
@@ -268,10 +316,16 @@ const BookingDetail = ({ id, close }) => {
               >
                 Đóng
               </button>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+              <button
+                onClick={() => updateActivity()}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
                 Lưu thay đổi
               </button>
-              <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+              <button
+                onClick={() => completeActivity()}
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              >
                 Hoàn thành Tour
               </button>
             </div>
