@@ -4,55 +4,99 @@ const slugify = require("slugify");
 
 const getAllTours = async (filter) => {
   let query = {};
+
+  // Lọc theo tên tour
   if (filter.name) {
-    query.name = { $regex: filter.name, $options: "i" }; // tìm theo tên, không phân biệt hoa thường
+    query.name = { $regex: filter.name, $options: "i" };
   }
+
+  // Lọc theo địa điểm chính (location)
   if (filter.location) {
     query.location = { $regex: filter.location, $options: "i" };
   }
-  if (filter.price) {
-    const priceRange = filter.price.split("-");
-    if (priceRange.length === 2) {
-      const minPrice = parseFloat(priceRange[0]);
-      const maxPrice = parseFloat(priceRange[1]);
-      query.price = { $gte: minPrice, $lte: maxPrice };
-    }
+
+  // Lọc theo điểm xuất phát
+  if (filter.start_location) {
+    query.start_location = { $regex: filter.start_location, $options: "i" };
   }
-  if (filter.duration) {
-    const durationRange = filter.duration.split("-");
-    if (durationRange.length === 2) {
-      const minDuration = parseInt(durationRange[0]);
-      const maxDuration = parseInt(durationRange[1]);
-      query.duration = { $gte: minDuration, $lte: maxDuration };
-    }
+
+  // Lọc theo điểm đến (nằm trong mảng destinations)
+  if (filter.destination) {
+    query.destinations = {
+      $elemMatch: { $regex: filter.destination, $options: "i" },
+    };
   }
-  if (filter.rating) {
-    const rating = parseFloat(filter.rating);
-    query.rating = { $gte: rating };
+
+  // Lọc theo khoảng giá
+  if (filter.price && /^\d+(\.\d+)?-\d+(\.\d+)?$/.test(filter.price)) {
+    const [minPrice, maxPrice] = filter.price.split("-").map(Number);
+    query.price = { $gte: minPrice, $lte: maxPrice };
   }
-  if (filter.is_active) {
-    query.is_active = filter.is_active === "true";
+
+  // Lọc theo thời lượng (duration số)
+  if (filter.duration && /^\d+-\d+$/.test(filter.duration)) {
+    const [minDuration, maxDuration] = filter.duration.split("-").map(Number);
+    query.duration = { $gte: minDuration, $lte: maxDuration };
   }
-  if (filter.is_featured) {
-    query.is_featured = filter.is_featured === "true";
+
+  // Hoặc lọc theo lịch trình dạng chuỗi (schedule)
+  if (filter.schedule) {
+    query.schedule = { $regex: filter.schedule, $options: "i" };
   }
-  if (filter.start_date) {
-    const startDate = new Date(filter.start_date);
-    query.start_date = { $gte: startDate };
+
+  // Lọc theo trạng thái tour
+  if (filter.status) {
+    query.status = filter.status;
   }
-  if (filter.end_date) {
-    const endDate = new Date(filter.end_date);
-    query.end_date = { $lte: endDate };
+
+  // Lọc theo sức chứa tối đa
+  if (filter.capacity && !isNaN(filter.capacity)) {
+    query.capacity = { $lte: parseInt(filter.capacity) };
   }
+
+  // Lọc theo số slot còn trống (available_slots >= x)
+  if (filter.slots_gte && !isNaN(filter.slots_gte)) {
+    query.available_slots = { $gte: parseInt(filter.slots_gte) };
+  }
+
+  // Lọc theo ngày bắt đầu
+  if (filter.start_date && filter.end_date) {
+    query.start_date = {
+      $gte: new Date(filter.start_date),
+      $lte: new Date(filter.end_date),
+    };
+  } else if (filter.start_date) {
+    query.start_date = { $gte: new Date(filter.start_date) };
+  } else if (filter.end_date) {
+    query.start_date = { $lte: new Date(filter.end_date) };
+  }
+
+  // Lọc theo phương tiện di chuyển
+  if (filter.transport) {
+    query.transport = { $regex: filter.transport, $options: "i" };
+  }
+
+  // Lọc theo loại tour (category ID)
   if (filter.category) {
-    query.category = { $regex: filter.category, $options: "i" };
+    query.category = filter.category;
   }
-  if (filter.sort_by) {
-    const sortField = filter.sort_by;
-    const sortOrder = filter.sort_order === "desc" ? -1 : 1;
-    return await Tour.find(query).sort({ [sortField]: sortOrder });
+
+  // Lọc theo các tiện ích bao gồm (mảng includes)
+  if (filter.include) {
+    query.includes = { $elemMatch: { $regex: filter.include, $options: "i" } };
   }
-  return await Tour.find(query).sort({ createdAt: -1 });
+
+  // Lọc theo những gì không bao gồm (mảng excludes)
+  if (filter.exclude) {
+    query.excludes = { $elemMatch: { $regex: filter.exclude, $options: "i" } };
+  }
+
+  // Xử lý sắp xếp
+  const sortOptions = filter.sort_by
+    ? { [filter.sort_by]: filter.sort_order === "desc" ? -1 : 1 }
+    : { created_at: -1 };
+
+  return await Tour.find(query).sort(sortOptions);
 };
 
 const getTourById = async (id) => {

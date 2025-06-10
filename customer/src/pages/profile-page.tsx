@@ -33,7 +33,9 @@ import { Link } from "wouter";
 
 const profileFormSchema = z.object({
   name: z.string().optional(),
+  password: z.string().optional(),
   phone: z.string().optional(),
+  address: z.string().optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -45,8 +47,8 @@ const ProfilePage = () => {
   const { data: userData, isLoading } = useQuery({
     queryKey: ["customer-infor"],
     queryFn: async () => {
-      const res = await apiClient.get("/api/customers/get-infor");
-      return (res as any).data;
+      const res = await apiClient.get("/customers/get-infor");
+      return res as any;
     },
   });
 
@@ -54,7 +56,9 @@ const ProfilePage = () => {
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: "",
+      password: "",
       phone: "",
+      address: "",
     },
   });
 
@@ -63,13 +67,14 @@ const ProfilePage = () => {
       form.reset({
         name: userData.name || "",
         phone: userData.phone || "",
+        address: userData.address || "",
       });
     }
   }, [userData]);
 
   const updateProfileMutation = useMutation({
     mutationFn: async (data: ProfileFormValues) => {
-      const res = await apiClient.put("/api/customers/update-infor", data);
+      const res = await apiClient.put("/customers/update-infor", data);
       return (res as any).data;
     },
     onSuccess: () => {
@@ -196,7 +201,7 @@ const ProfilePage = () => {
                     className="w-full justify-start"
                     asChild
                   >
-                    <Link href="/tours">Duyệt Các Tour</Link>
+                    <Link href="/cart">Đặt Các Tour</Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -226,6 +231,32 @@ const ProfilePage = () => {
                               <FormLabel>Họ và Tên</FormLabel>
                               <FormControl>
                                 <Input placeholder="Nguyễn Văn A" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="password"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Mật khẩu</FormLabel>
+                              <FormControl>
+                                <Input placeholder="******" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="address"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Địa chỉ</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Hà Nội" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>

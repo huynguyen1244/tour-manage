@@ -199,7 +199,7 @@ function PaymentsPage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -260,7 +260,6 @@ function PaymentsPage() {
               </div>
             </div>
           </div>
-
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -291,6 +290,63 @@ function PaymentsPage() {
               </div>
             </div>
           </div>
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-500">Đã cọc</p>
+                <p className="text-2xl font-semibold text-gray-900">
+                  {
+                    payments.filter((p) => p.payment_status === "deposited")
+                      .length
+                  }
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                  <svg
+                    className="w-4 h-4 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-500">Thất bại</p>
+                <p className="text-2xl font-semibold text-gray-900">
+                  {payments.filter((p) => p.payment_status === "failed").length}
+                </p>
+              </div>
+            </div>
+          </div>
 
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center">
@@ -313,7 +369,7 @@ function PaymentsPage() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-500">Tổng thu</p>
-                <p className="text-2xl font-semibold text-gray-900">
+                <p className="text-xl font-semibold text-gray-900">
                   {formatCurrency(
                     payments
                       .filter((p) => p.payment_status === "completed")

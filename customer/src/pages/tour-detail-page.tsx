@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/use-auth";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -24,6 +25,7 @@ import {
   Send,
   MessageCircle,
   TrendingUp,
+  ShoppingCart,
 } from "lucide-react";
 
 import { apiClient } from "@/services/axios";
@@ -95,6 +97,9 @@ const TourDetailPage = () => {
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [error, setError] = useState(false);
   const [isLoading] = useState(false);
+  const { user } = useAuth();
+  const [isAdded, setIsAdded] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -114,6 +119,30 @@ const TourDetailPage = () => {
     if (id) fetchTour();
   }, [id]);
 
+  const handleAddToCart = async (id: string) => {
+    try {
+      const response = await apiClient.post(`/carts/${id}`, {
+        num_people: 1,
+      });
+      window.alert("Bạn đã thêm thành công");
+      console.log("Đã thêm vào giỏ:", (response as any).data);
+    } catch (error) {
+      window.alert("Bạn đã thêm thất bại");
+      console.error("Lỗi khi thêm vào giỏ hàng:", error);
+    }
+  };
+  const handleAddToWishlist = async () => {
+    try {
+      setLoading(true);
+      await apiClient.post(`/wishlists/${tour._id}`);
+      setIsAdded(true);
+      window.alert("Thêm vào danh sách yêu thích thành công");
+    } catch (error) {
+      console.error("Lỗi khi thêm wishlist:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("vi-VN", {
@@ -129,19 +158,38 @@ const TourDetailPage = () => {
       : reviews.reduce((acc: number, curr: Review) => acc + curr.rating, 0) /
         reviews.length;
 
-  const handleSubmit = (): void => {
+  const handleSubmit = async (id: string) => {
     if (!newReview.trim() || newReview.length < 10) return;
-    setReviews([
-      {
+    try {
+      await apiClient.post("/reviews", {
+        tour_id: id,
         rating: newRating,
         comment: newReview,
-        date: new Date().toISOString().split("T")[0],
-      },
-      ...reviews,
-    ]);
-    setNewReview("");
-    setNewRating(5);
-    setHoverRating(0);
+      });
+      setReviews([
+        {
+          rating: newRating,
+          comment: newReview,
+          date: new Date().toISOString().split("T")[0],
+        },
+        ...reviews,
+      ]);
+      setNewReview("");
+      setNewRating(5);
+      setHoverRating(0);
+    } catch (error) {
+      console.error("Failed to submit review:", error);
+      // Optional: show error message to user
+    }
+  };
+  const handleDeleteReview = async (reviewId: string) => {
+    try {
+      await apiClient.delete(`/reviews/${reviewId}`);
+      setReviews(reviews.filter((r) => r._id !== reviewId));
+    } catch (error) {
+      console.error("Lỗi khi xóa đánh giá:", error);
+      // Optional: hiện toast hoặc alert
+    }
   };
 
   const StarRating: React.FC<StarRatingProps> = ({
@@ -276,7 +324,21 @@ const TourDetailPage = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Button variant="outline" size="sm">
+                      <Button
+                        variant="outline"
+                        onClick={() => handleAddToCart(tour._id)}
+                        size="sm"
+                      >
+                        <ShoppingCart className="h-4 w-4 mr-2" />
+                        <span>Thêm vào giỏ hàng</span>
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        disabled={loading || isAdded}
+                        onClick={() => handleAddToWishlist()}
+                        size="sm"
+                      >
                         <Heart className="h-4 w-4 mr-2" />
                         <span>Lưu</span>
                       </Button>
@@ -655,9 +717,9 @@ const TourDetailPage = () => {
                                           (review: Review, index: number) => (
                                             <div
                                               key={index}
-                                              className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm space-y-2"
+                                              className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm space-y-2 relative"
                                             >
-                                              {/* Phần tiêu đề: tên người dùng, ngày đánh giá, sao */}
+                                              {/* Tiêu đề: Tên, ngày, sao */}
                                               <div className="flex items-center justify-between flex-wrap gap-2">
                                                 <p className="text-base font-semibold text-gray-900">
                                                   {review.user_id?.name ||
@@ -678,14 +740,27 @@ const TourDetailPage = () => {
                                                 interactive={false}
                                                 size="w-4 h-4"
                                               />
-
-                                              {/* Phần nội dung bình luận */}
                                               <p className="text-gray-700 text-sm leading-relaxed">
                                                 {review.comment}
                                               </p>
+                                              {/* Nút Xóa nếu là review của mình */}
+                                              {review.user_id?._id ===
+                                                user?.id && (
+                                                <button
+                                                  onClick={() =>
+                                                    handleDeleteReview(
+                                                      review._id
+                                                    )
+                                                  }
+                                                  className="absolute top-2 right-2 text-xs text-red-500 hover:underline"
+                                                >
+                                                  Xóa
+                                                </button>
+                                              )}
                                             </div>
                                           )
                                         )}
+
                                       {reviews.length > 3 && (
                                         <div className="text-center pt-2">
                                           <span className="text-sm text-purple-600 font-medium">
@@ -751,7 +826,7 @@ const TourDetailPage = () => {
 
                                   {/* Submit button */}
                                   <button
-                                    onClick={handleSubmit}
+                                    onClick={() => handleSubmit(tour._id)}
                                     disabled={
                                       !newReview.trim() || newReview.length < 10
                                     }

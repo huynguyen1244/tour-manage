@@ -2,7 +2,7 @@ const Wishlist = require("../models/wishlist.model");
 
 // Lấy tất cả wishlist của 1 người dùng
 const getAllWishlists = async (user_id) => {
-  return await Wishlist.findOne({ user_id }).populate("tour_id");
+  return await Wishlist.find({ user_id }).populate("tour_id");
 };
 
 // Thêm tour vào wishlist của người dùng

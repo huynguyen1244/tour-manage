@@ -24,7 +24,7 @@ const getAllBookings = async () => {
   return bookingsWithPayments;
 };
 
-getBookingsByUserId = async (user_id) => {
+const getBookingsByUserId = async (user_id) => {
   const bookings = await Booking.find({ user_id }).populate("tour_id");
   const bookingsWithPayments = await Promise.all(
     bookings.map(async (booking) => {
@@ -124,8 +124,13 @@ const updateBooking = async (id, updateData) => {
       await tour.save();
     }
   }
-
-  return await Booking.findByIdAndUpdate(id, updateData, { new: true });
+  const updatedBooking = await Booking.findByIdAndUpdate(id, updateData, {
+    new: true,
+  });
+  if (!updatedBooking) {
+    throw new Error("Booking not found after update");
+  }
+  return updatedBooking;
 };
 
 const deleteBooking = async (id) => {

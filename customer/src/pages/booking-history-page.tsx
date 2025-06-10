@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClient } from "@/services/axios";
 import { Helmet } from "react-helmet";
@@ -42,22 +42,51 @@ const BookingHistoryPage = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [bookingToCancel, setBookingToCancel] = useState<string | null>(null);
+  const [bookings, setBooking] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const {
-    data: bookings,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["/bookings/customer"],
-    queryFn: async () => {
-      const res = await apiClient.get("/bookings/customer");
-      return (res as any).data;
-    },
-  });
+  useEffect(() => {
+    const fetchBookings = async () => {
+      setIsLoading(true);
+      setError(false);
+      try {
+        const response = await apiClient.get("/bookings/customer");
+        setBooking(response as any);
+      } catch (error) {
+        setError(true);
+        console.error("Lỗi khi lấy bookings:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchBookings();
+  }, []);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
 
+  const handleShowImage = (
+    type: "full" | "deposit",
+    id: string,
+    amount: number
+  ) => {
+    let total_amount;
+    let message;
+    if (type === "full") {
+      message = encodeURIComponent(`Thanh toán cho booking có mã ${id}`);
+      total_amount = amount;
+    } else {
+      message = encodeURIComponent(`Đặt cọc cho booking có mã ${id}`);
+      total_amount = (amount * 30) / 100;
+    }
+
+    const url = `https://img.vietqr.io/image/TPB-06272039601-compact.jpg?amount=${total_amount}&addInfo=${message}`;
+    setImageSrc(url);
+  };
+
+  const closeModal = () => setImageSrc(null);
   const cancelBookingMutation = useMutation({
     mutationFn: async (bookingId: string) => {
-      const res = await apiClient.post(`/bookings/${bookingId}`, "");
+      const res = await apiClient.put(`/bookings/cancel/${bookingId}`);
       return (res as any).data;
     },
     onSuccess: () => {
@@ -67,6 +96,7 @@ const BookingHistoryPage = () => {
         description: "Đặt tour của bạn đã được hủy thành công.",
       });
       setBookingToCancel(null);
+      window.location.reload();
     },
     onError: (error: Error) => {
       toast({
@@ -147,7 +177,7 @@ const BookingHistoryPage = () => {
           <div className="text-center py-16">{/* empty code giữ nguyên */}</div>
         ) : (
           <div className="grid gap-6">
-            {bookings.map((booking: any) => (
+            {bookings?.map((booking: any) => (
               <Card key={booking._id} className="overflow-hidden">
                 <CardHeader>
                   <div className="flex flex-wrap justify-between items-center">
@@ -188,7 +218,7 @@ const BookingHistoryPage = () => {
                         <span>Số Người</span>
                       </div>
                       <div className="font-medium">
-                        {booking.number_of_travelers} Người
+                        {booking.num_people} Người
                       </div>
                     </div>
                     <div className="flex flex-col p-3 bg-muted rounded-lg">
@@ -215,6 +245,7 @@ const BookingHistoryPage = () => {
                   <Button variant="outline" asChild>
                     <Link href={`/tours/${booking.tour_id._id}`}>Xem Tour</Link>
                   </Button>
+
                   {booking.status === "confirmed" && (
                     <Button
                       variant="destructive"
@@ -228,6 +259,81 @@ const BookingHistoryPage = () => {
                     </Button>
                   )}
                 </CardFooter>
+
+                <>
+                  <div className="flex gap-3 mb-4 ml-4">
+                    <Button
+                      variant="outline"
+                      className="px-6 py-2 rounded-md border-blue-600 text-blue-600 hover:bg-blue-50 transition"
+                      onClick={() =>
+                        handleShowImage(
+                          "full",
+                          booking._id,
+                          booking.total_price
+                        )
+                      }
+                    >
+                      Thanh toán đầy đủ
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="px-6 py-2 rounded-md border-green-600 text-green-600 hover:bg-green-50 transition"
+                      onClick={() =>
+                        handleShowImage(
+                          "deposit",
+                          booking._id,
+                          booking.total_price
+                        )
+                      }
+                    >
+                      Thanh toán cọc
+                    </Button>
+                  </div>
+
+                  {/* Modal hiển thị ảnh */}
+                  {imageSrc && (
+                    <div
+                      className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center"
+                      onClick={closeModal}
+                    >
+                      <div
+                        className="relative max-w-[90vw] max-h-[90vh] p-4 bg-white rounded-xl shadow-2xl animate-fade-in"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <img
+                          src={imageSrc}
+                          alt="Hình ảnh thanh toán"
+                          className="max-w-full max-h-[75vh] rounded-md object-contain"
+                          onError={(e) => {
+                            console.error("Không thể tải ảnh:", imageSrc);
+                            e.currentTarget.src = "/fallback-image.png"; // fallback nếu cần
+                          }}
+                        />
+
+                        {/* Nút đóng góc trên bên phải */}
+                        <button
+                          className="absolute top-2 right-2 text-gray-500 hover:text-red-500 transition"
+                          onClick={closeModal}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-6 h-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </>
               </Card>
             ))}
           </div>

@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,14 +17,41 @@ const HeroSection = () => {
   const [travelers, setTravelers] = useState("1");
   const [_, setLocation] = useLocation();
 
-  const handleSearch = (e: FormEvent) => {
+  const handleSearch = (e: any) => {
     e.preventDefault();
 
-    // Build query string for search
+    // Build query string for search - mapping to backend filter parameters
     const searchParams = new URLSearchParams();
-    if (destination) searchParams.set("destination", destination);
-    if (dateRange) searchParams.set("dates", dateRange);
-    if (travelers) searchParams.set("travelers", travelers);
+
+    // Map destination to location filter
+    if (destination) {
+      searchParams.set("location", destination);
+    }
+
+    // Handle date range - split into start_date and end_date
+    if (dateRange) {
+      // Assuming dateRange format is "YYYY-MM-DD to YYYY-MM-DD" or similar
+      const dates = dateRange.split(" to ");
+      if (dates.length === 2) {
+        searchParams.set("start_date", dates[0]);
+        searchParams.set("end_date", dates[1]);
+      } else {
+        // If single date, use it as start_date
+        searchParams.set("start_date", dateRange);
+      }
+    }
+
+    // Map travelers to a custom parameter (since backend doesn't have direct travelers filter)
+    if (travelers) {
+      searchParams.set("travelers", travelers);
+    }
+
+    // Add default sorting
+    searchParams.set("sort_by", "createdAt");
+    searchParams.set("sort_order", "desc");
+
+    // Only show active tours
+    searchParams.set("is_active", "true");
 
     // Navigate to tours page with search params
     setLocation(`/tours?${searchParams.toString()}`);
@@ -42,7 +69,6 @@ const HeroSection = () => {
 
       <div className="container mx-auto px-4 relative h-full">
         <div className="flex flex-col justify-center h-full max-w-3xl">
-          {" "}
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white font-poppins mb-4">
             Khám Phá Những Tour Du Lịch Tuyệt Vời
           </h1>
@@ -50,13 +76,11 @@ const HeroSection = () => {
             Khám phá những điểm đến độc đáo với những trải nghiệm du lịch được
             tuyển chọn của chúng tôi
           </p>
+
+          {/* Enhanced Search Form */}
           <div className="bg-white p-4 md:p-6 rounded-xl shadow-xl">
-            <form
-              onSubmit={handleSearch}
-              className="flex flex-col md:flex-row gap-4"
-            >
+            <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
-                {" "}
                 <label
                   htmlFor="destination"
                   className="block text-sm font-medium text-muted-foreground mb-1"
@@ -76,17 +100,17 @@ const HeroSection = () => {
               </div>
 
               <div className="flex-1 md:w-40">
-                {" "}
                 <label
                   htmlFor="daterange"
                   className="block text-sm font-medium text-muted-foreground mb-1"
                 >
-                  Ngày
+                  Ngày khởi hành
                 </label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="daterange"
+                    type="date"
                     className="pl-10"
                     placeholder="Chọn ngày"
                     value={dateRange}
@@ -109,7 +133,6 @@ const HeroSection = () => {
                       <SelectValue placeholder="Chọn số khách" />
                     </SelectTrigger>
                     <SelectContent>
-                      {" "}
                       <SelectItem value="1">1 Người lớn</SelectItem>
                       <SelectItem value="2">2 Người lớn</SelectItem>
                       <SelectItem value="3">3 Người lớn</SelectItem>
@@ -120,12 +143,15 @@ const HeroSection = () => {
               </div>
 
               <div className="md:self-end">
-                <Button type="submit" className="w-full md:mt-6">
+                <Button
+                  onClick={handleSearch}
+                  className="w-full md:mt-6 bg-blue-600 hover:bg-blue-700"
+                >
                   <Search className="h-4 w-4 mr-2" />
                   Tìm kiếm
                 </Button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>

@@ -10,9 +10,26 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import apiClient from "@/services/axios";
+import { useState } from "react";
 
 const TourCard = (tour: any) => {
-  console.log(tour);
+  const [isAdded, setIsAdded] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleAddToWishlist = async () => {
+    try {
+      setLoading(true);
+      await apiClient.post(`/wishlists/${tour._id}`);
+      setIsAdded(true);
+      window.alert("Thêm vào danh sách yêu thích thành công");
+    } catch (error) {
+      console.error("Lỗi khi thêm wishlist:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("vi-VN", {
@@ -52,9 +69,16 @@ const TourCard = (tour: any) => {
           <Button
             variant="outline"
             size="icon"
+            disabled={loading || isAdded}
+            onClick={() => handleAddToWishlist()}
             className="bg-white/90 backdrop-blur-sm hover:bg-white border-0 h-9 w-9 rounded-full shadow-md"
           >
-            <Heart className="h-4 w-4 text-gray-600 hover:text-red-500 transition-colors" />
+            <Heart
+              className={`h-4 w-4 transition-colors ${
+                isAdded ? "text-red-500" : "text-gray-600 hover:text-red-500"
+              }`}
+              fill={isAdded ? "red" : "none"}
+            />
           </Button>
         </div>
 

@@ -105,6 +105,7 @@ const CartPage = () => {
     try {
       const data = { cart_id: id, payment_method: "banking" };
       await apiClient.post("/bookings", data);
+      window.alert("Bạn đã book tour thành công");
       setCartItems((items) => items.filter((item) => item._id !== id));
     } catch (error) {
       console.error("Checkout error:", error);
@@ -149,9 +150,12 @@ const CartPage = () => {
             <p className="text-gray-600 mb-6">
               Hãy thêm một số tour du lịch để bắt đầu!
             </p>
-            <button className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+            <a
+              href="/tours"
+              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+            >
               Khám phá tours
-            </button>
+            </a>
           </div>
         ) : (
           <div className=" gap-8">

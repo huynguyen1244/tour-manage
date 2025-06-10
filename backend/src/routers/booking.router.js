@@ -22,7 +22,7 @@ router.get(
 router.get("/customer", verifyToken, bookingController.getCustomerBookings);
 // Api lấy thông tin booking theo id
 router.get("/:id", verifyToken, bookingController.getBooking);
-
+router.put("/cancel/:id", verifyToken, bookingController.cancelBooking);
 // Api tạo mới booking
 router.post("/", verifyToken, bookingController.createBooking);
 // Api cập nhật thông tin booking

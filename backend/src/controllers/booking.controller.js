@@ -247,6 +247,32 @@ const updatePayment = async (req, res) => {
   }
 };
 
+const cancelBooking = async (req, res) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const bookingId = req.params.id;
+    const booking = await bookingService.getBookingById(bookingId);
+    if (!booking) {
+      await session.abortTransaction();
+      return res.status(404).json({ error: "Booking not found" });
+    }
+    const updatedPayment = await bookingService.updateBooking(
+      bookingId,
+      { status: "cancelled" },
+      session
+    );
+
+    await session.commitTransaction();
+    res.json(updatedPayment);
+  } catch (err) {
+    await session.abortTransaction();
+    res.status(500).json({ error: err.message });
+  } finally {
+    session.endSession();
+  }
+};
+
 module.exports = {
   getBookings,
   getCustomerBookings,
@@ -255,4 +281,5 @@ module.exports = {
   updateBooking,
   deleteBooking,
   updatePayment,
+  cancelBooking,
 };

@@ -16,8 +16,11 @@ const getCartByIdAndUserId = async (id, user_id) => {
 
 const createCart = async (user_id, tour_id, data) => {
   const tour = await Tour.findById(tour_id);
+  if (!tour || tour.status !== "available") {
+    throw new Error("Không thể thêm tour này vào giỏ hàng");
+  }
   const cartData = { user_id, tour_id, total_price: tour.price, ...data };
-  const newCart = new Cart({ ...cartData });
+  const newCart = new Cart(cartData);
   return await newCart.save();
 };
 
