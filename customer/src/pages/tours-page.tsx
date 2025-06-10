@@ -111,20 +111,13 @@ const SORT_OPTIONS = [
   { value: "created_at-asc", label: "Cũ nhất" },
 ];
 
-const CATEGORY_OPTIONS = [
-  { value: "adventure", label: "Phiêu lưu" },
-  { value: "cultural", label: "Văn hóa" },
-  { value: "beach", label: "Biển đảo" },
-  { value: "mountain", label: "Núi rừng" },
-  { value: "city", label: "Thành phố" },
-];
-
 const TRANSPORT_OPTIONS = [
-  { value: "bus", label: "Xe khách" },
-  { value: "plane", label: "Máy bay" },
-  { value: "train", label: "Tàu hỏa" },
-  { value: "car", label: "Ô tô" },
-  { value: "motorbike", label: "Xe máy" },
+  { value: "Xe khách", label: "Xe khách" },
+  { value: "Máy bay", label: "Máy bay" },
+  { value: "Tàu hỏa", label: "Tàu hỏa" },
+  { value: "Ô tô", label: "Ô tô" },
+  { value: "Xe máy", label: "Xe máy" },
+  { value: "Xe du lịch", label: "Xe du lịch" },
 ];
 
 // Utility function to build query params
@@ -168,11 +161,28 @@ const ToursPage: React.FC = () => {
   const [location, setLocation] = useLocation();
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
   const [quickSearch, setQuickSearch] = useState("");
+  const [CATEGORY_OPTIONS, setCategories] = useState([]);
 
   // Parse URL parameters on mount and location change
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const urlFilters = parseUrlParams(urlParams);
+
+    const fetchCategories = async () => {
+      try {
+        const res = await apiClient.get("/categories");
+        const categories = (res as any) || [];
+        const mapped = categories.map((cat: any) => ({
+          value: cat._id,
+          label: cat.name,
+        }));
+        setCategories(mapped);
+      } catch (err) {
+        console.error("Lỗi khi fetch categories:", err);
+      }
+    };
+
+    fetchCategories();
 
     if (Object.keys(urlFilters).length > 0) {
       setFilters((prev) => ({ ...prev, ...urlFilters }));
@@ -192,7 +202,8 @@ const ToursPage: React.FC = () => {
         const params = customFilters
           ? buildQueryParams(customFilters)
           : queryParams;
-        const response = await apiClient.get("/tours", { params });
+        console.log(params);
+        const response = await apiClient.get("/tours/filter", { params });
 
         if (Array.isArray(response)) {
           setTours(response);
@@ -387,7 +398,7 @@ const ToursPage: React.FC = () => {
                 <div>
                   <label className="block text-sm font-medium mb-2">
                     <MapPin className="inline h-4 w-4 mr-1" />
-                    Địa điểm
+                    Địa điểm chính
                   </label>
                   <Input
                     placeholder="Nhập địa điểm..."
@@ -446,14 +457,17 @@ const ToursPage: React.FC = () => {
                   <Select
                     value={filters.category}
                     onValueChange={(value) =>
-                      setFilters((prev) => ({ ...prev, category: value }))
+                      setFilters((prev) => ({
+                        ...prev,
+                        category: value === "all" ? "" : value,
+                      }))
                     }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Chọn danh mục" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Tất cả danh mục</SelectItem>
+                      <SelectItem value="all">Tất cả danh mục</SelectItem>
                       {CATEGORY_OPTIONS.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
@@ -471,14 +485,17 @@ const ToursPage: React.FC = () => {
                   <Select
                     value={filters.transport}
                     onValueChange={(value) =>
-                      setFilters((prev) => ({ ...prev, transport: value }))
+                      setFilters((prev) => ({
+                        ...prev,
+                        transport: value === "all" ? "" : value,
+                      }))
                     }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Chọn phương tiện" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Tất cả phương tiện</SelectItem>
+                      <SelectItem value="all">Tất cả phương tiện</SelectItem>
                       {TRANSPORT_OPTIONS.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}

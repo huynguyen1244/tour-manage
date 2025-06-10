@@ -15,6 +15,7 @@ const router = express.Router();
 
 // public routes
 router.get("/", tourController.getAllTours);
+router.get("/filter", tourController.getFilter);
 router.get("/:id", tourController.getTourById);
 
 // manager routes

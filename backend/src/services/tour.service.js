@@ -61,14 +61,12 @@ const getAllTours = async (filter) => {
 
   // Lọc theo ngày bắt đầu
   if (filter.start_date && filter.end_date) {
-    query.start_date = {
-      $gte: new Date(filter.start_date),
-      $lte: new Date(filter.end_date),
-    };
+    query.start_date = { $gt: new Date(filter.start_date) }; // start_date phải > ngày được chọn
+    query.end_date = { $lt: new Date(filter.end_date) }; // end_date phải < ngày được chọn
   } else if (filter.start_date) {
-    query.start_date = { $gte: new Date(filter.start_date) };
+    query.start_date = { $gt: new Date(filter.start_date) }; // start_date > ngày được chọn
   } else if (filter.end_date) {
-    query.start_date = { $lte: new Date(filter.end_date) };
+    query.end_date = { $lt: new Date(filter.end_date) }; // end_date < ngày được chọn
   }
 
   // Lọc theo phương tiện di chuyển
@@ -95,7 +93,6 @@ const getAllTours = async (filter) => {
   const sortOptions = filter.sort_by
     ? { [filter.sort_by]: filter.sort_order === "desc" ? -1 : 1 }
     : { created_at: -1 };
-
   return await Tour.find(query).sort(sortOptions);
 };
 

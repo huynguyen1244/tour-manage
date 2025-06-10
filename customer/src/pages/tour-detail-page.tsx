@@ -318,7 +318,8 @@ const TourDetailPage = () => {
                         <div className="flex items-center text-muted-foreground">
                           <MapPin className="h-4 w-4 mr-1" />
                           <span>
-                            {tour.location || ""}, {tour.destinations || ""}
+                            {tour.location || ""}
+                            {/* , {tour.destinations || ""} */}
                           </span>
                         </div>
                       </div>

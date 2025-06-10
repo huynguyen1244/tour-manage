@@ -9,7 +9,7 @@ import { apiClient } from "@/services/axios";
 type Category = {
   name: string;
   description: string;
-  image: string;
+  images: any;
 };
 
 const CategoriesPage = () => {
@@ -57,7 +57,7 @@ const CategoriesPage = () => {
       <div
         className="relative h-[300px] md:h-[400px] w-full bg-cover bg-center"
         style={{
-          backgroundImage:
+          background:
             "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://stories.baothanhhoa.vn/assets/2fpVwTpxPE/sam-son-4096x2304.jpg')",
         }}
       >
@@ -106,7 +106,7 @@ const CategoriesPage = () => {
               >
                 <div
                   className="h-48 bg-cover bg-center"
-                  style={{ backgroundImage: `url(${category.image})` }}
+                  style={{ background: `url(${category.images[0].url})` }}
                 ></div>
                 <CardContent className="p-5">
                   <div className="mb-2">
@@ -116,9 +116,11 @@ const CategoriesPage = () => {
                     </p>
                   </div>
                   <div className="mt-4 flex justify-between items-center">
-                    <Button variant="outline" size="sm">
-                      Khám Phá
-                    </Button>
+                    <a href="/tours">
+                      <Button variant="outline" size="sm">
+                        Khám Phá
+                      </Button>
+                    </a>
                   </div>
                 </CardContent>
               </Card>

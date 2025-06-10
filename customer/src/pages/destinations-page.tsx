@@ -161,7 +161,7 @@ const DestinationsPage = () => {
                     </div>
                     <div className="mt-4 flex justify-between items-center">
                       <span className="text-sm text-muted-foreground">
-                        {destination.available_slots} tour có sẵn
+                        còn {destination.available_slots} suất tham quan
                       </span>
                       <Button variant="outline" size="sm">
                         Khám Phá

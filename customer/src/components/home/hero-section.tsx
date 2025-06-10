@@ -14,7 +14,7 @@ import { MapPin, Calendar, Users, Search } from "lucide-react";
 const HeroSection = () => {
   const [destination, setDestination] = useState("");
   const [dateRange, setDateRange] = useState("");
-  const [travelers, setTravelers] = useState("1");
+  const [capacity, setcapacity] = useState("1");
   const [_, setLocation] = useLocation();
 
   const handleSearch = (e: any) => {
@@ -41,9 +41,9 @@ const HeroSection = () => {
       }
     }
 
-    // Map travelers to a custom parameter (since backend doesn't have direct travelers filter)
-    if (travelers) {
-      searchParams.set("travelers", travelers);
+    // Map capacity to a custom parameter (since backend doesn't have direct capacity filter)
+    if (capacity) {
+      searchParams.set("capacity", capacity);
     }
 
     // Add default sorting
@@ -121,22 +121,22 @@ const HeroSection = () => {
 
               <div className="flex-1 md:w-36">
                 <label
-                  htmlFor="travelers"
+                  htmlFor="capacity"
                   className="block text-sm font-medium text-muted-foreground mb-1"
                 >
                   Khách
                 </label>
                 <div className="relative">
                   <Users className="absolute left-3 top-3 h-4 w-4 text-muted-foreground z-10" />
-                  <Select value={travelers} onValueChange={setTravelers}>
-                    <SelectTrigger id="travelers" className="pl-10">
+                  <Select value={capacity} onValueChange={setcapacity}>
+                    <SelectTrigger id="capacity" className="pl-10">
                       <SelectValue placeholder="Chọn số khách" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1">1 Người lớn</SelectItem>
-                      <SelectItem value="2">2 Người lớn</SelectItem>
-                      <SelectItem value="3">3 Người lớn</SelectItem>
-                      <SelectItem value="4">4+ Người lớn</SelectItem>
+                      <SelectItem value="1">1 Người</SelectItem>
+                      <SelectItem value="2">2 Người</SelectItem>
+                      <SelectItem value="3">3 Người</SelectItem>
+                      <SelectItem value="4">4+ Người</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

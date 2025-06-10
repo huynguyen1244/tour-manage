@@ -421,7 +421,7 @@ const CategoryList = () => {
                           <img
                             src={cat.images[0].url}
                             alt={cat.name}
-                            className="w-12 h-12 rounded-full object-cover border-2 border-gray-200"
+                            className="w-30 h-30 object-cover border-2 border-gray-200"
                           />
                         ) : (
                           <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">

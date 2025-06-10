@@ -17,6 +17,22 @@ const getAllTours = async (req, res) => {
   }
 };
 
+const getFilter = async (req, res) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const filter = req.query;
+    const tours = await tourService.getAllTours(filter);
+    await session.commitTransaction();
+    res.json(tours);
+  } catch (error) {
+    await session.abortTransaction();
+    res.status(500).json({ error: error.message });
+  } finally {
+    session.endSession();
+  }
+};
+
 const getTourById = async (req, res) => {
   const session = await mongoose.startSession();
   try {
@@ -118,6 +134,7 @@ const deleteTourImage = async (req, res) => {
 
 module.exports = {
   getAllTours,
+  getFilter,
   getTourById,
   createTour,
   updateTour,

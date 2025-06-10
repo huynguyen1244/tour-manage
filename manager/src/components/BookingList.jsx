@@ -141,7 +141,7 @@ const BookingList = () => {
   return (
     <div className="bg-white shadow-lg rounded-xl overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r px-6 py-4">
+      <div className="bg-gradient-to-r px-4 py-4">
         <h2 className="text-xl font-semibold text-black">Danh sách đặt tour</h2>
       </div>
 
@@ -195,28 +195,28 @@ const BookingList = () => {
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 ID
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Khách hàng
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Tour
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Ngày đặt
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Số người
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Trạng thái
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Thanh toán
               </th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Thao tác
               </th>
             </tr>
@@ -229,10 +229,10 @@ const BookingList = () => {
                   index % 2 === 0 ? "bg-white" : "bg-gray-25"
                 }`}
               >
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
+                <td className="px-4 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
                   #{booking._id.slice(-6)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
                       {(booking.user_id?.name || "N").charAt(0).toUpperCase()}
@@ -244,26 +244,26 @@ const BookingList = () => {
                     </div>
                   </div>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-4 py-4">
                   <div className="text-sm text-gray-900 font-medium">
                     {booking.tour_id?.name || "N/A"}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">
                   {new Date(booking.booking_date).toLocaleDateString("vi-VN")}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4 whitespace-nowrap">
                   <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
                     {booking.num_people} người
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4 whitespace-nowrap">
                   {renderBookingStatus(booking.status)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-4 py-4 whitespace-nowrap">
                   {renderPaymentStatus(booking.payment?.payment_status)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
                   <div className="flex space-x-2">
                     <button
                       onClick={() => {
