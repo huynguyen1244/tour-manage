@@ -16,19 +16,19 @@ router.get("/:id", promotionController.getPromotion);
 router.post(
   "/",
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager),
+  authorization([RoleManager.admin, RoleManager.manager]),
   promotionController.createPromotion
 );
 router.put(
   "/:id",
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager),
+  authorization([RoleManager.admin, RoleManager.manager]),
   promotionController.updatePromotion
 );
 router.delete(
   "/:id",
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager),
+  authorization([RoleManager.admin, RoleManager.manager]),
   promotionController.deletePromotion
 );
 

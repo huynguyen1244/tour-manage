@@ -12,11 +12,8 @@ const getBookings = async (req, res) => {
     session.startTransaction();
 
     let bookings;
-    if (req.user.role === "admin") {
-      bookings = await bookingService.getAllBookings();
-    } else {
-      bookings = await bookingService.getBookingsByUserId(req.user._id);
-    }
+
+    bookings = await bookingService.getAllBookings();
 
     await session.commitTransaction();
 
@@ -59,6 +56,8 @@ const getBooking = async (req, res) => {
 
     if (
       req.user.role !== "admin" &&
+      req.user.role !== "manager" &&
+      req.user.role !== "staff" &&
       booking.user_id.toString() !== req.user._id.toString()
     ) {
       return res.status(403).json({ error: "Forbidden: Access denied" });
@@ -140,6 +139,8 @@ const updateBooking = async (req, res) => {
 
     if (
       req.user.role !== "admin" &&
+      req.user.role !== "manager" &&
+      req.user.role !== "staff" &&
       booking.user_id.toString() !== req.user._id.toString()
     ) {
       return res.status(403).json({ error: "Forbidden: Access denied" });
@@ -181,12 +182,6 @@ const updateBooking = async (req, res) => {
 // Xóa booking
 // Chỉ admin mới được xóa
 const deleteBooking = async (req, res) => {
-  if (req.user.role !== "admin") {
-    return res
-      .status(403)
-      .json({ error: "Forbidden: Only admin can delete bookings" });
-  }
-
   const session = await mongoose.startSession();
 
   try {

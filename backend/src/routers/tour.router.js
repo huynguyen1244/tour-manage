@@ -22,7 +22,7 @@ router.get("/:id", tourController.getTourById);
 router.use(isManager);
 router.use(verifyToken);
 router.use(
-  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff)
+  authorization([RoleManager.admin, RoleManager.manager, RoleManager.staff])
 );
 
 router.post("/", upload.any(), tourController.createTour);

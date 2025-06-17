@@ -345,7 +345,7 @@ const ToursPage: React.FC = () => {
         <div className="container mx-auto px-4 py-8">
           {/* Filter Controls */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-            <div className="flex flex-col sm:flex-row gap-3 w-full">
+            <div className="flex flex-col sm:flex-row gap-4 w-full">
               <Button
                 variant="outline"
                 size="sm"
@@ -393,7 +393,7 @@ const ToursPage: React.FC = () => {
           {/* Advanced Filters Panel */}
           {filterOpen && (
             <div className="bg-white rounded-lg border p-6 mb-6 shadow-sm">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 {/* Location Filter */}
                 <div>
                   <label className="block text-sm font-medium mb-2">
@@ -528,12 +528,12 @@ const ToursPage: React.FC = () => {
                     Thời gian (ngày)
                   </label>
                   <Input
-                    placeholder="Ví dụ: 3-7"
-                    value={filters.duration}
+                    placeholder="Ví dụ: 2 ngày 1 đêm"
+                    value={filters.schedule}
                     onChange={(e) =>
                       setFilters((prev) => ({
                         ...prev,
-                        duration: e.target.value,
+                        schedule: e.target.value,
                       }))
                     }
                   />
@@ -606,23 +606,6 @@ const ToursPage: React.FC = () => {
                       }
                     />
                   </div>
-                </div>
-
-                {/* Schedule Filter */}
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Lịch trình
-                  </label>
-                  <Input
-                    placeholder="Tìm kiếm lịch trình..."
-                    value={filters.schedule}
-                    onChange={(e) =>
-                      setFilters((prev) => ({
-                        ...prev,
-                        schedule: e.target.value,
-                      }))
-                    }
-                  />
                 </div>
 
                 {/* Include Filter */}

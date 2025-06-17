@@ -18,7 +18,7 @@ router.get("/:id", categoryController.getCategoryById);
 router.use(isManager);
 router.use(verifyToken);
 router.use(
-  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff)
+  authorization([RoleManager.admin, RoleManager.manager, RoleManager.staff])
 );
 
 router.post("/", upload.any(), categoryController.addCategory);

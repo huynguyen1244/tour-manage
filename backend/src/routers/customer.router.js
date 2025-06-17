@@ -20,21 +20,21 @@ router.get(
   "/",
   isManager,
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
+  authorization([RoleManager.admin, RoleManager.manager]),
   customerController.getAllCustomers
 );
 router.put(
   "/:id",
   isManager,
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
+  authorization([RoleManager.admin, RoleManager.manager]),
   customerController.blockCustomer
 );
 router.delete(
   "/:id",
   isManager,
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
+  authorization([RoleManager.admin, RoleManager.manager]),
   customerController.deleteCustomer
 );
 

@@ -16,7 +16,7 @@ router.get(
   "/",
   isManager,
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
+  authorization([RoleManager.admin, RoleManager.manager, RoleManager.staff]),
   bookingController.getBookings
 );
 router.get("/customer", verifyToken, bookingController.getCustomerBookings);
@@ -30,14 +30,14 @@ router.put(
   "/:id",
   isManager,
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
+  authorization([RoleManager.admin, RoleManager.manager, RoleManager.staff]),
   bookingController.updateBooking
 );
 router.delete(
   "/:id",
   isManager,
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
+  authorization([RoleManager.admin, RoleManager.manager, RoleManager.staff]),
   bookingController.deleteBooking
 );
 
@@ -45,7 +45,7 @@ router.put(
   "/update-payment/:id",
   isManager,
   verifyToken,
-  authorization(RoleManager.admin, RoleManager.manager, RoleManager.staff),
+  authorization([RoleManager.admin, RoleManager.manager, RoleManager.staff]),
   bookingController.updatePayment
 );
 module.exports = router;

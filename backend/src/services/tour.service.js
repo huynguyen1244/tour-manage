@@ -33,13 +33,7 @@ const getAllTours = async (filter) => {
     query.price = { $gte: minPrice, $lte: maxPrice };
   }
 
-  // Lọc theo thời lượng (duration số)
-  if (filter.duration && /^\d+-\d+$/.test(filter.duration)) {
-    const [minDuration, maxDuration] = filter.duration.split("-").map(Number);
-    query.duration = { $gte: minDuration, $lte: maxDuration };
-  }
-
-  // Hoặc lọc theo lịch trình dạng chuỗi (schedule)
+  // Lọc theo thời lượng (schedule)
   if (filter.schedule) {
     query.schedule = { $regex: filter.schedule, $options: "i" };
   }
@@ -51,7 +45,7 @@ const getAllTours = async (filter) => {
 
   // Lọc theo sức chứa tối đa
   if (filter.capacity && !isNaN(filter.capacity)) {
-    query.capacity = { $lte: parseInt(filter.capacity) };
+    query.capacity = { $gte: parseInt(filter.capacity) };
   }
 
   // Lọc theo số slot còn trống (available_slots >= x)

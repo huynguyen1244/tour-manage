@@ -14,7 +14,7 @@ const router = express.Router();
 
 router.use(verifyToken);
 router.use(isManager);
-router.use(authorization(RoleManager.admin));
+router.use(authorization([RoleManager.admin]));
 
 // Lấy danh sách nhân viên
 router.get("/", employeeController.getAllEmployees);
